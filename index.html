@@ -143,11 +143,52 @@
         <h1>Ansatzero</h1>
         <p class="tagline">The first step towards AGI.</p>
 
-        <!-- NETLIFY FORM -->
-        <form name="interest" method="POST" action="/success.html" data-netlify="true" class="signup-form">
-            <input type="email" name="email" placeholder="email address" required />
-            <button type="submit">Join</button>
-        </form>
+<!-- EMAIL CAPTURE FORM (Connects to Netlify Function) -->
+<form id="joinForm" class="signup-form">
+    <input type="email" id="email" name="email" placeholder="email address" required />
+    <button type="submit">Join</button>
+</form>
+
+<script>
+document.getElementById("joinForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById("email");
+    const btn = e.target.querySelector("button");
+    const originalText = btn.textContent;
+
+    // Visual feedback
+    btn.textContent = "Processing...";
+    btn.disabled = true;
+
+    try {
+        // Send data to your new function
+        const response = await fetch("/.netlify/functions/add-subscriber", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: emailInput.value })
+        });
+
+        if (response.ok) {
+            // Success! Go to the black card page
+            window.location.href = "/success.html";
+        } else {
+            // If the function returns an error (e.g., 500 or 400)
+            const data = await response.json();
+            console.error("Error:", data);
+            alert("Something went wrong. Please try again.");
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        console.error("Network Error:", error);
+        alert("Unable to connect. Please check your internet.");
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+});
+</script>
+
+
 
         <p class="footnote">We are building a stepwise ansatz for AGI. A beta implementation will be available soon. Sign up to receive deployment updates.</p>
     </div>

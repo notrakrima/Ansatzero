@@ -60,11 +60,22 @@
             animation: slideUp 1s ease-out 0.5s forwards;
         }
 
+        .footnote {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--subtle-color);
+            margin-top: 80px;
+            max-width: 500px;
+            line-height: 1.5;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1.5s forwards; /* Appear last */
+        }
+
         /* FORM STYLES */
         .signup-form {
             margin-top: 40px;
             opacity: 0;
-            animation: slideUp 1s ease-out 1s forwards; /* Delays until after text */
+            animation: slideUp 1s ease-out 1s forwards; 
             display: flex;
             gap: 10px;
         }
@@ -133,10 +144,12 @@
         <p class="tagline">The first step towards AGI.</p>
 
         <!-- NETLIFY FORM -->
-        <form name="interest" method="POST" data-netlify="true" class="signup-form">
+        <form name="interest" method="POST" action="/success.html" data-netlify="true" class="signup-form">
             <input type="email" name="email" placeholder="email address" required />
             <button type="submit">Join</button>
         </form>
+
+        <p class="footnote">We are building a stepwise ansatz for AGI. A beta implementation will be available soon. Sign up to receive deployment updates.</p>
     </div>
 
 </body>
