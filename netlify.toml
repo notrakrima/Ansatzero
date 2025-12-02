@@ -1,0 +1,9 @@
+[build]
+  publish = "."  # Publish the root directory directly
+  command = "echo 'Deploying Placeholder'"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
