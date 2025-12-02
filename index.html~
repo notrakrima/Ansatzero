@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ansatzero | AGI from First Principles</title>
+    <style>
+        /* RESET & BASE */
+        :root {
+            --bg-color: #050505;
+            --text-color: #ededed;
+            --accent-color: #ffffff;
+            --subtle-color: #666666;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden; /* No scroll for landing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* LAYOUT */
+        .container {
+            text-align: center;
+            padding: 0 20px;
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin: 0;
+            background: linear-gradient(180deg, #FFFFFF 0%, #888888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: fadeIn 1.2s ease-out forwards;
+        }
+
+        p.tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: var(--subtle-color);
+            margin-top: 20px;
+            letter-spacing: 0.02em;
+            opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BACKGROUND EFFECTS */
+        .gradient-orb {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gradient-orb"></div>
+
+    <div class="container">
+        <h1>Ansatzero</h1>
+        <p class="tagline">The first step towards AGI.</p>
+    </div>
+
+</body>
+</html>
