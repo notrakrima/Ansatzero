@@ -1,0 +1,199 @@
+<!DOCTYPE html>                                                 <!DOCTYPE html>
+<html lang="en">                                                <html lang="en">
+<head>                                                          <head>
+    <meta charset="UTF-8">                                          <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initia       <meta name="viewport" content="width=device-width, initia
+    <title>Ansatzero | AGI from First Principles</title>            <title>Ansatzero | AGI from First Principles</title>
+    <style>                                                         <style>
+                                                              >         /* RESET & BASE */
+        :root {                                                         :root {
+            --bg-color: #050505;                                            --bg-color: #050505;
+            --text-color: #ededed;                                          --text-color: #ededed;
+            --accent-color: #ffffff;                                        --accent-color: #ffffff;
+            --subtle-color: #666666;                                        --subtle-color: #666666;
+            --input-border: #333333;                                        --input-border: #333333;
+        }                                                               }
+        body, html {                                                    body, html {
+            margin: 0;                                                      margin: 0;
+            padding: 0;                                                     padding: 0;
+            height: 100%;                                                   height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "               font-family: -apple-system, BlinkMacSystemFont, "
+            background-color: var(--bg-color);                              background-color: var(--bg-color);
+            color: var(--text-color);                                       color: var(--text-color);
+            overflow: hidden;                                               overflow: hidden;
+            display: flex;                                                  display: flex;
+            align-items: center;                                            align-items: center;
+            justify-content: center;                                        justify-content: center;
+        }                                                               }
+                                                                
+        .container {                                                    .container {
+            text-align: center;                                             text-align: center;
+            padding: 0 20px;                                                padding: 0 20px;
+            max-width: 900px;                                               max-width: 900px;
+            position: relative;                                             position: relative;
+            z-index: 2;                                                     z-index: 2;
+            display: flex;                                                  display: flex;
+            flex-direction: column;                                         flex-direction: column;
+            align-items: center;                                            align-items: center;
+        }                                                               }
+                                                                
+                                                              >         /* TYPOGRAPHY */
+        h1 {                                                            h1 {
+            font-size: 5rem;                                                font-size: 5rem;
+            font-weight: 800;                                               font-weight: 800;
+            letter-spacing: -0.04em;                                        letter-spacing: -0.04em;
+            margin: 0;                                                      margin: 0;
+            background: linear-gradient(180deg, #FFFFFF 0%, #               background: linear-gradient(180deg, #FFFFFF 0%, #
+            -webkit-background-clip: text;                                  -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;                           -webkit-text-fill-color: transparent;
+            opacity: 0;                                                     opacity: 0;
+            animation: fadeIn 1.2s ease-out forwards;                       animation: fadeIn 1.2s ease-out forwards;
+        }                                                               }
+                                                                
+        p.tagline {                                                     p.tagline {
+            font-size: 1.5rem;                                              font-size: 1.5rem;
+            font-weight: 300;                                               font-weight: 300;
+            color: var(--subtle-color);                                     color: var(--subtle-color);
+            margin-top: 20px;                                               margin-top: 20px;
+            letter-spacing: 0.02em;                                         letter-spacing: 0.02em;
+            opacity: 0;                                                     opacity: 0;
+            animation: slideUp 1s ease-out 0.5s forwards;                   animation: slideUp 1s ease-out 0.5s forwards;
+        }                                                               }
+                                                                
+        .footnote {                                                     .footnote {
+            font-size: 0.9rem;                                              font-size: 0.9rem;
+            font-weight: 300;                                               font-weight: 300;
+            color: var(--subtle-color);                                     color: var(--subtle-color);
+            margin-top: 80px;                                               margin-top: 80px;
+            max-width: 460px;                                               max-width: 460px;
+            line-height: 1.5;                                               line-height: 1.5;
+            opacity: 0;                                                     opacity: 0;
+            animation: slideUp 1s ease-out 1.5s forwards;     |             animation: slideUp 1s ease-out 1.5s forwards; /* 
+        }                                                               }
+                                                                
+                                                              >         /* FORM LAYOUT */
+        .signup-form {                                                  .signup-form {
+            margin-top: 40px;                                               margin-top: 40px;
+            opacity: 0;                                                     opacity: 0;
+            animation: slideUp 1s ease-out 1s forwards;                     animation: slideUp 1s ease-out 1s forwards;
+            display: flex;                                                  display: flex;
+            flex-direction: column;                                         flex-direction: column;
+            align-items: flex-start;                          |             align-items: flex-start;   /* center whole form b
+            gap: 18px;                                                      gap: 18px;
+        }                                                               }
+                                                                
+        .signup-row {                                                   .signup-row {
+            display: flex;                                                  display: flex;
+            gap: 10px;                                                      gap: 10px;
+        }                                                               }
+                                                                
+                                                              >         /* Dark card behind captcha, aligned with email input
+        .captcha-wrapper {                                              .captcha-wrapper {
+            background: #101010;                                            background: #101010;
+            border: 1px solid #333333;                                      border: 1px solid #333333;
+            border-radius: 4px;                                             border-radius: 4px;
+            padding: 1px 1px;                                 |             padding: 1px 1px;                  /* smaller pad
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);                      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+            display: inline-flex;                             | 
+                                                              >             display: inline-flex;              /* shrink-wrap
+            justify-content: flex-start;                                    justify-content: flex-start;
+            align-items: center;                                            align-items: center;
+        }                                                               }
+                                                                
+                                                              > 
+        .captcha-wrapper > div[data-netlify-recaptcha] {                .captcha-wrapper > div[data-netlify-recaptcha] {
+            transform: scale(0.75);                                         transform: scale(0.75);
+            transform-origin: top left;                                     transform-origin: top left;
+        }                                                               }
+                                                                
+        input[type="email"] {                                           input[type="email"] {
+            background: transparent;                                        background: transparent;
+            border: 1px solid var(--input-border);                          border: 1px solid var(--input-border);
+            color: var(--text-color);                                       color: var(--text-color);
+            padding: 12px 20px;                                             padding: 12px 20px;
+            font-size: 1rem;                                                font-size: 1rem;
+            width: 250px;                                                   width: 250px;
+            border-radius: 4px;                                             border-radius: 4px;
+            outline: none;                                                  outline: none;
+            transition: border-color 0.3s ease;                             transition: border-color 0.3s ease;
+        }                                                               }
+                                                                
+        input[type="email"]:focus {                                     input[type="email"]:focus {
+            border-color: var(--accent-color);                              border-color: var(--accent-color);
+        }                                                               }
+                                                                
+        button {                                                        button {
+            background: var(--bg-color);                      |             background: var(--bg-color);     /* black backgro
+            color: var(--text-color);                         |             color: var(--text-color);        /* light text */
+            border: 1px solid #444444;                        |             border: 1px solid #444444;       /* subtle border
+            padding: 12px 24px;                                             padding: 12px 24px;
+            font-size: 1rem;                                                font-size: 1rem;
+            font-weight: 600;                                               font-weight: 600;
+            border-radius: 4px;                                             border-radius: 4px;
+            cursor: pointer;                                                cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease               transition: background 0.2s ease, color 0.2s ease
+        }                                                               }
+                                                                
+        button:hover {                                                  button:hover {
+            background: #111111;                              |             background: #111111;             /* slightly ligh
+            border-color: #666666;                                          border-color: #666666;
+        }                                                               }
+                                                                
+                                                              >         /* ANIMATIONS */
+        @keyframes fadeIn {                                             @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }                    from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }                         to { opacity: 1; transform: scale(1); }
+        }                                                               }
+                                                              <
+        @keyframes slideUp {                                            @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }               from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }                    to { opacity: 1; transform: translateY(0); }
+        }                                                               }
+                                                                
+        .gradient-orb {                                                 .gradient-orb {
+            position: absolute;                                             position: absolute;
+            width: 800px;                                                   width: 800px;
+            height: 800px;                                                  height: 800px;
+            background: radial-gradient(circle, rgba(255,255,               background: radial-gradient(circle, rgba(255,255,
+            top: 50%;                                                       top: 50%;
+            left: 50%;                                                      left: 50%;
+            transform: translate(-50%, -50%);                               transform: translate(-50%, -50%);
+            z-index: 1;                                                     z-index: 1;
+            pointer-events: none;                                           pointer-events: none;
+        }                                                               }
+    </style>                                                        </style>
+</head>                                                         </head>
+<body>                                                          <body>
+                                                                
+    <div class="gradient-orb"></div>                                <div class="gradient-orb"></div>
+                                                                
+    <div class="container">                                         <div class="container">
+        <h1>Ansatzero</h1>                                              <h1>Ansatzero</h1>
+        <p class="tagline">AGI from first principles.</p>               <p class="tagline">AGI from first principles.</p>
+                                                                
+                                                              >         <!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) --
+        <form id="joinForm"                                             <form id="joinForm"
+              class="signup-form"                                             class="signup-form"
+              name="ansatzero-subscribe"                                      name="ansatzero-subscribe"
+              method="POST"                                                   method="POST"
+              action="/success.html"                                          action="/success.html"
+              data-netlify="true"                                             data-netlify="true"
+              data-netlify-recaptcha="true">                                  data-netlify-recaptcha="true">
+                                                                
+          <div class="signup-row">                                        <div class="signup-row">
+            <input type="email" id="email" name="email" place               <input type="email" id="email" name="email" place
+            <button type="submit">Join</button>                             <button type="submit">Join</button>
+          </div>                                                          </div>
+                                                                
+          <div class="captcha-wrapper">                                   <div class="captcha-wrapper">
+            <div data-netlify-recaptcha="true"></div>                       <div data-netlify-recaptcha="true"></div>
+          </div>                                                          </div>
+        </form>                                                         </form>
+                                                                
+        <p class="footnote">                                            <p class="footnote">
+            Ansatzero is a stepwise, first‑principles program               Ansatzero is a stepwise, first‑principles program
+        </p>                                                            </p>
+    </div>                                                          </div>
+                                                                
+</body>                                                         </body>
+</html>                                                         </html>

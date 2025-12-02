@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ansatzero | AGI from First Principles</title>
     <style>
-        /* RESET & BASE */
         :root {
             --bg-color: #050505;
             --text-color: #ededed;
@@ -37,7 +36,6 @@
             align-items: center;
         }
 
-        /* TYPOGRAPHY */
         h1 {
             font-size: 5rem;
             font-weight: 800;
@@ -68,17 +66,16 @@
             max-width: 460px;
             line-height: 1.5;
             opacity: 0;
-            animation: slideUp 1s ease-out 1.5s forwards; /* Appear last */
+            animation: slideUp 1s ease-out 1.5s forwards;
         }
 
-        /* FORM LAYOUT */
         .signup-form {
             margin-top: 40px;
             opacity: 0;
             animation: slideUp 1s ease-out 1s forwards;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;   /* center whole form block */
+            align-items: flex-start;
             gap: 18px;
         }
 
@@ -87,19 +84,16 @@
             gap: 10px;
         }
 
-        /* Dark card behind captcha, aligned with email input */
         .captcha-wrapper {
             background: #101010;
             border: 1px solid #333333;
             border-radius: 4px;
-            padding: 1px 1px;                  /* smaller padding */
+            padding: 1px 1px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-
-            display: inline-flex;              /* shrink-wrap to content */
+            display: inline-flex;
             justify-content: flex-start;
             align-items: center;
         }
-
 
         .captcha-wrapper > div[data-netlify-recaptcha] {
             transform: scale(0.75);
@@ -123,9 +117,9 @@
         }
 
         button {
-            background: var(--bg-color);     /* black background */
-            color: var(--text-color);        /* light text */
-            border: 1px solid #444444;       /* subtle border to separate from bg */
+            background: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid #444444;
             padding: 12px 24px;
             font-size: 1rem;
             font-weight: 600;
@@ -135,15 +129,15 @@
         }
 
         button:hover {
-            background: #111111;             /* slightly lighter on hover */
+            background: #111111;
             border-color: #666666;
         }
 
-        /* ANIMATIONS */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -170,7 +164,6 @@
         <h1>Ansatzero</h1>
         <p class="tagline">AGI from first principles.</p>
 
-        <!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) -->
         <form id="joinForm"
               class="signup-form"
               name="ansatzero-subscribe"
