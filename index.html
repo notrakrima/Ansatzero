@@ -91,15 +91,15 @@
         .captcha-wrapper {
             background: #101010;
             border: 1px solid #333333;
-            border-radius: 6px;
-            padding: 4px 6px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            border-radius: 4px;
+            padding: 2px 3px;                  /* smaller padding */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
 
-            display: flex;
-            justify-content: flex-start;  /* left-align captcha */
-            width: 100%;
-            max-width: 380px;             /* tune to align with email + Join */
+            display: inline-flex;              /* shrink-wrap to content */
+            justify-content: flex-start;
+            align-items: center;
         }
+
 
         /* shrink captcha slightly, anchored to the left */
         .captcha-wrapper > div[data-netlify-recaptcha] {
