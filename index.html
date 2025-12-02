@@ -11,6 +11,7 @@
             --text-color: #ededed;
             --accent-color: #ffffff;
             --subtle-color: #666666;
+            --input-border: #333333;
         }
         body, html {
             margin: 0;
@@ -19,19 +20,21 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            overflow: hidden; /* No scroll for landing */
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* LAYOUT */
         .container {
             text-align: center;
             padding: 0 20px;
             max-width: 900px;
             position: relative;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         /* TYPOGRAPHY */
@@ -57,6 +60,47 @@
             animation: slideUp 1s ease-out 0.5s forwards;
         }
 
+        /* FORM STYLES */
+        .signup-form {
+            margin-top: 40px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1s forwards; /* Delays until after text */
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="email"] {
+            background: transparent;
+            border: 1px solid var(--input-border);
+            color: var(--text-color);
+            padding: 12px 20px;
+            font-size: 1rem;
+            width: 250px;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="email"]:focus {
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
         /* ANIMATIONS */
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -67,7 +111,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* BACKGROUND EFFECTS */
         .gradient-orb {
             position: absolute;
             width: 800px;
@@ -88,6 +131,12 @@
     <div class="container">
         <h1>Ansatzero</h1>
         <p class="tagline">The first step towards AGI.</p>
+
+        <!-- NETLIFY FORM -->
+        <form name="interest" method="POST" data-netlify="true" class="signup-form">
+            <input type="email" name="email" placeholder="email address" required />
+            <button type="submit">Join</button>
+        </form>
     </div>
 
 </body>
