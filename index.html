@@ -71,33 +71,41 @@
             animation: slideUp 1s ease-out 1.5s forwards; /* Appear last */
         }
 
-        /* FORM STYLES */
-.signup-row {
-    display: flex;
-    gap: 10px;
-}
+        /* FORM LAYOUT */
+        .signup-form {
+            margin-top: 40px;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1s forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;   /* center whole form block */
+            gap: 18px;
+        }
 
-/* Dark card behind captcha */
-.captcha-wrapper {
-    background: #101010;
-    border: 1px solid #333333;
-    border-radius: 6px;
-    padding: 8px 10px;
-    display: inline-block;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
+        .signup-row {
+            display: flex;
+            gap: 10px;
+        }
 
-/* Optional: slightly shrink captcha box */
-.captcha-wrapper > div[data-netlify-recaptcha] {
-    transform: scale(0.5);
-    transform-origin: top center;
-}
+        /* Dark card behind captcha, aligned with email input */
+        .captcha-wrapper {
+            background: #101010;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            padding: 4px 6px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 
-/* Optional: limit captcha width on large screens */
-.signup-form > div[data-netlify-recaptcha] {
-    transform: scale(0.95);   /* subtle shrink */
-    transform-origin: top center;
-}
+            display: flex;
+            justify-content: flex-start;  /* left-align captcha */
+            width: 100%;
+            max-width: 380px;             /* tune to align with email + Join */
+        }
+
+        /* shrink captcha slightly, anchored to the left */
+        .captcha-wrapper > div[data-netlify-recaptcha] {
+            transform: scale(0.8);
+            transform-origin: top left;
+        }
 
         input[type="email"] {
             background: transparent;
@@ -115,22 +123,22 @@
             border-color: var(--accent-color);
         }
 
-button {
-    background: var(--bg-color);     /* black background */
-    color: var(--text-color);        /* light text */
-    border: 1px solid #444444;       /* subtle border to separate from bg */
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
+        button {
+            background: var(--bg-color);     /* black background */
+            color: var(--text-color);        /* light text */
+            border: 1px solid #444444;       /* subtle border to separate from bg */
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
 
-button:hover {
-    background: #111111;             /* slightly lighter on hover */
-    border-color: #666666;
-}
+        button:hover {
+            background: #111111;             /* slightly lighter on hover */
+            border-color: #666666;
+        }
 
         /* ANIMATIONS */
         @keyframes fadeIn {
@@ -163,29 +171,29 @@ button:hover {
         <h1>Ansatzero</h1>
         <p class="tagline">AGI from first principles.</p>
 
-<!-- EMAIL CAPTURE FORM (Connects to Netlify Function) -->
-<!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) -->
-<form id="joinForm"
-      class="signup-form"
-      name="ansatzero-subscribe"
-      method="POST"
-      action="/success.html"
-      data-netlify="true"
-      data-netlify-recaptcha="true">
+        <!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) -->
+        <form id="joinForm"
+              class="signup-form"
+              name="ansatzero-subscribe"
+              method="POST"
+              action="/success.html"
+              data-netlify="true"
+              data-netlify-recaptcha="true">
 
-  <div class="signup-row">
-    <input type="email" id="email" name="email" placeholder="email address" required />
-    <button type="submit">Join</button>
-  </div>
+          <div class="signup-row">
+            <input type="email" id="email" name="email" placeholder="email address" required />
+            <button type="submit">Join</button>
+          </div>
 
-  <div class="captcha-wrapper">
-    <div data-netlify-recaptcha="true"></div>
-  </div>
-</form>
-    <p class="footnote">
-Ansatzero is a stepwise, first‑principles program for artificial general intelligence, built on the premise that beyond a certain parameter count, AGI emerges from architecture, not from a race for unbounded scale. It integrates current LLMs into a unified control architecture. We are preparing a controlled beta release. Register your email to receive deployment updates.
-    </p>
-</div>
+          <div class="captcha-wrapper">
+            <div data-netlify-recaptcha="true"></div>
+          </div>
+        </form>
+
+        <p class="footnote">
+            Ansatzero is a stepwise, first‑principles program for artificial general intelligence, built on the premise that beyond a certain parameter count, AGI emerges from architecture, not from a race for unbounded scale. It integrates current LLMs into a unified control architecture. We are preparing a controlled beta release. Register your email to receive deployment updates.
+        </p>
+    </div>
 
 </body>
 </html>
