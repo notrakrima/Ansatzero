@@ -60,11 +60,22 @@
             animation: slideUp 1s ease-out 0.5s forwards;
         }
 
+        .footnote {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--subtle-color);
+            margin-top: 80px;
+            max-width: 500px;
+            line-height: 1.5;
+            opacity: 0;
+            animation: slideUp 1s ease-out 1.5s forwards; /* Appear last */
+        }
+
         /* FORM STYLES */
         .signup-form {
             margin-top: 40px;
             opacity: 0;
-            animation: slideUp 1s ease-out 1s forwards; /* Delays until after text */
+            animation: slideUp 1s ease-out 1s forwards; 
             display: flex;
             gap: 10px;
         }
@@ -137,6 +148,8 @@
             <input type="email" name="email" placeholder="email address" required />
             <button type="submit">Join</button>
         </form>
+
+        <p class="footnote">We are currently building a new paradigm for AGI from first principles. Sign up to receive critical deployment updates.</p>
     </div>
 
 </body>
