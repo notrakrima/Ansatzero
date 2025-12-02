@@ -72,13 +72,21 @@
         }
 
         /* FORM STYLES */
-        .signup-form {
-            margin-top: 40px;
-            opacity: 0;
-            animation: slideUp 1s ease-out 1s forwards; 
-            display: flex;
-            gap: 10px;
-        }
+.signup-form {
+    margin-top: 40px;
+    opacity: 0;
+    animation: slideUp 1s ease-out 1s forwards;
+    display: flex;
+    flex-direction: column;   /* stack vertically */
+    align-items: center;      /* center contents */
+    gap: 12px;                /* space between elements */
+}
+
+/* Optional: limit captcha width on large screens */
+.signup-form > div[data-netlify-recaptcha] {
+    transform: scale(0.95);   /* subtle shrink */
+    transform-origin: top center;
+}
 
         input[type="email"] {
             background: transparent;
@@ -146,6 +154,7 @@
 <!-- EMAIL CAPTURE FORM (Connects to Netlify Function) -->
 <!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) -->
 <form id="joinForm"
+      class="signup-form"
       name="ansatzero-subscribe"
       method="POST"
       action="/success.html"
@@ -153,7 +162,6 @@
       data-netlify-recaptcha="true">
   <input type="email" id="email" name="email" placeholder="email address" required />
 
-  <!-- Netlify-provided reCAPTCHA placeholder -->
   <div data-netlify-recaptcha="true"></div>
 
   <button type="submit">Join</button>
