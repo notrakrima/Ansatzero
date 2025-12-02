@@ -1,0 +1,11 @@
+.captcha-wrapper {
+    background: #101010;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    padding: 2px 3px;                  /* smaller padding */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+
+    display: inline-flex;              /* shrink-wrap to content */
+    justify-content: flex-start;
+    align-items: center;
+}
