@@ -77,9 +77,25 @@
     opacity: 0;
     animation: slideUp 1s ease-out 1s forwards;
     display: flex;
-    flex-direction: column;   /* stack vertically */
-    align-items: center;      /* center contents */
-    gap: 12px;                /* space between elements */
+    flex-direction: column;     /* stack vertically */
+    align-items: center;
+    gap: 14px;
+}
+
+/* Dark card behind the captcha to integrate it with the design */
+.captcha-wrapper {
+    background: #101010;        /* dark but slightly lifted from #050505 */
+    border: 1px solid #333333;
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: inline-block;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* Optional: slightly shrink the whole captcha */
+.captcha-wrapper > div[data-netlify-recaptcha] {
+    transform: scale(0.9);
+    transform-origin: top center;
 }
 
 /* Optional: limit captcha width on large screens */
@@ -160,9 +176,12 @@
       action="/success.html"
       data-netlify="true"
       data-netlify-recaptcha="true">
+
   <input type="email" id="email" name="email" placeholder="email address" required />
 
-  <div data-netlify-recaptcha="true"></div>
+  <div class="captcha-wrapper">
+    <div data-netlify-recaptcha="true"></div>
+  </div>
 
   <button type="submit">Join</button>
 </form>
