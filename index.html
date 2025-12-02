@@ -144,25 +144,14 @@
         <p class="tagline">The first step towards AGI.</p>
 
 <!-- EMAIL CAPTURE FORM (Connects to Netlify Function) -->
-<form id="joinForm" class="signup-form">
+<form id="joinForm"
+      name="ansatzero-subscribe"
+      method="POST"
+      action="/success.html"
+      data-netlify="true">
   <input type="email" id="email" name="email" placeholder="email address" required />
   <button type="submit">Join</button>
 </form>
-
-<script>
-document.getElementById("joinForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const emailInput = document.getElementById("email");
-  const email = emailInput.value.trim();
-
-  if (!email) return;
-
-  // TODO: wire backend storage when available
-
-  alert("Submission registered. Deployment updates will be sent when the beta is live.");
-  emailInput.value = "";
-});
-</script>
 
 
         <p class="footnote">We are building a stepwise ansatz for AGI. A beta implementation will be available soon. Sign up to receive deployment updates.</p>
