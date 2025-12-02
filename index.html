@@ -72,19 +72,14 @@
         }
 
         /* FORM STYLES */
-.signup-form {
-    margin-top: 40px;
-    opacity: 0;
-    animation: slideUp 1s ease-out 1s forwards;
+.signup-row {
     display: flex;
-    flex-direction: column;     /* stack vertically */
-    align-items: center;
-    gap: 14px;
+    gap: 10px;
 }
 
-/* Dark card behind the captcha to integrate it with the design */
+/* Dark card behind captcha */
 .captcha-wrapper {
-    background: #101010;        /* dark but slightly lifted from #050505 */
+    background: #101010;
     border: 1px solid #333333;
     border-radius: 6px;
     padding: 8px 10px;
@@ -92,7 +87,7 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* Optional: slightly shrink the whole captcha */
+/* Optional: slightly shrink captcha box */
 .captcha-wrapper > div[data-netlify-recaptcha] {
     transform: scale(0.9);
     transform-origin: top center;
@@ -177,15 +172,15 @@
       data-netlify="true"
       data-netlify-recaptcha="true">
 
-  <input type="email" id="email" name="email" placeholder="email address" required />
+  <div class="signup-row">
+    <input type="email" id="email" name="email" placeholder="email address" required />
+    <button type="submit">Join</button>
+  </div>
 
   <div class="captcha-wrapper">
     <div data-netlify-recaptcha="true"></div>
   </div>
-
-  <button type="submit">Join</button>
 </form>
-
     <p class="footnote">
 Ansatzero is a stepwise, first‑principles program for artificial general intelligence, built on the premise that beyond a certain parameter count, AGI emerges from architecture, not from a race for unbounded scale. It integrates current LLMs into a unified control architecture. We are preparing a controlled beta release. Register your email to receive deployment updates.
     </p>
