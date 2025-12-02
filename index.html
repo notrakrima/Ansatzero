@@ -144,15 +144,20 @@
         <p class="tagline">AGI from first principles.</p>
 
 <!-- EMAIL CAPTURE FORM (Connects to Netlify Function) -->
+<!-- EMAIL CAPTURE FORM (Netlify form + reCAPTCHA) -->
 <form id="joinForm"
       name="ansatzero-subscribe"
       method="POST"
       action="/success.html"
-      data-netlify="true">
+      data-netlify="true"
+      data-netlify-recaptcha="true">
   <input type="email" id="email" name="email" placeholder="email address" required />
+
+  <!-- Netlify-provided reCAPTCHA placeholder -->
+  <div data-netlify-recaptcha="true"></div>
+
   <button type="submit">Join</button>
 </form>
-
 
     <p class="footnote">
 Ansatzero is a stepwise, first‑principles program for artificial general intelligence, built on the premise that beyond a certain parameter count, AGI emerges from architecture, not from a race for unbounded scale. It integrates current LLMs into a unified control architecture. We are preparing a controlled beta release. Register your email to receive deployment updates.
