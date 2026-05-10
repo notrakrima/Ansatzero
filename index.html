@@ -1,76 +1,206 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Site Temporarily Offline</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Scroll Background Transition</title>
+    
+    <!-- Meta tags for sharing -->
+    <meta property="og:title" content="Work Trend Insight - Demo">
+    <meta property="og:description" content="A demonstration of scroll-driven background transitions">
+    <meta property="og:image" content="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=abstract+geometric+pattern+modern+minimalist&w=64&h=64">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=minimalist+logo+icon&w=32&h=32">
 
-  <meta name="robots" content="noindex, nofollow">
+    <!-- Tailwind CSS MUST be first -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link href="/chat/cdn/all.min.css" rel="stylesheet">
+    <script src="/chat/cdn/all.min.js" crossorigin></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #050505;
-      color: #ededed;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    .card {
-      padding: 2.5rem 2rem;
-      border-radius: 14px;
-      background: radial-gradient(circle at top left, #1b1b1b, #050505 55%);
-      box-shadow: 0 18px 45px rgba(0,0,0,0.7);
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-    }
-    h1 {
-      font-size: 1.4rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-    }
-    p {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #b8b8b8;
-    }
-    .tagline {
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: #888;
-      margin-bottom: 0.75rem;
-    }
-    .dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      margin-bottom: 1rem;
-      background: radial-gradient(circle at 30% 30%, #00ffa3, #00a36f);
-    }
-  </style>
+    <style>
+        /* Hide scrollbar for cleaner look if desired, but standard is fine */
+        html { scroll-behavior: smooth; }
+        
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-path: '/chat/webfonts/fa-regular-400';
+            src: url('/chat/webfonts/fa-regular-400.woff2') format('woff2'),
+                url('/chat/webfonts/fa-regular-400.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-path: '/chat/webfonts/fa-solid-900';
+            src: url('/chat/webfonts/fa-solid-900.woff2') format('woff2'),
+                url('/chat/webfonts/fa-solid-900.ttf') format('truetype');
+        }
+    </style>
 </head>
-<body>
-  <main class="card" aria-label="Site temporarily offline">
-    <div class="dot" aria-hidden="true"></div>
-    <div class="tagline">Status</div>
-    <h1>Temporarily Offline</h1>
-    <p>
-      This site is currently offline.
-      Please check back later.
-    </p>
-  </main>
+<body id="page-container" class="bg-slate-50 text-slate-900 transition-colors duration-1000 ease-in-out w-full font-sans antialiased overflow-x-hidden">
+
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 w-full p-6 z-50 mix-blend-difference text-white flex justify-between items-center pointer-events-none">
+        <div class="font-bold tracking-widest uppercase text-sm pointer-events-auto cursor-pointer">
+            <i class="fas fa-chart-network mr-2"></i> Trend Index
+        </div>
+        <div class="pointer-events-auto">
+            <button class="px-4 py-2 border border-white rounded-full text-xs font-semibold hover:bg-white hover:text-black transition-colors">
+                Download Report
+            </button>
+        </div>
+    </header>
+
+    <!-- Content Sections -->
+    <main>
+        <!-- Section 1: Standard Light -->
+        <section data-bg="bg-slate-50" data-text="text-slate-900" class="section min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 max-w-7xl mx-auto">
+            <h3 class="text-sm md:text-md uppercase tracking-[0.2em] font-semibold mb-6 flex items-center">
+                <i class="fas fa-arrow-down mr-3 animate-bounce"></i> Scroll to explore
+            </h3>
+            <h1 class="text-5xl md:text-8xl font-bold leading-tight tracking-tight mb-8">
+                Agents, Human Agency,<br>and the Future.
+            </h1>
+            <p class="text-xl md:text-2xl max-w-3xl leading-relaxed text-slate-600 font-light">
+                As artificial intelligence capabilities cross new frontiers, the relationship between human workers and autonomous agents is being fundamentally rewritten.
+            </p>
+        </section>
+
+        <!-- Section 2: Deep Blue / Dark Mode -->
+        <section data-bg="bg-blue-950" data-text="text-blue-50" class="section min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 max-w-7xl mx-auto relative opacity-0 transform translate-y-10 transition-all duration-1000">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6">A New Paradigm in the Workplace.</h2>
+                    <p class="text-lg md:text-xl leading-relaxed opacity-80 mb-6">
+                        We are shifting from viewing AI as a simple tool to interacting with it as a sophisticated collaborator. The background color shifts to reflect a deeper dive into the statistical realities.
+                    </p>
+                    <ul class="space-y-4 text-lg">
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-4"></i> 75% increase in agentic workflows</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-4"></i> 3x productivity in creative tasks</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-4"></i> Reduced cognitive load on human operators</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-900/50 p-8 rounded-3xl border border-blue-800 backdrop-blur-sm">
+                    <img src="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=abstract+blue+data+visualization+nodes+and+connections+modern&w=600&h=400" alt="Data visualization" class="w-full rounded-xl shadow-2xl mix-blend-screen">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Vibrant Highlight / Teal -->
+        <section data-bg="bg-teal-900" data-text="text-teal-50" class="section min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 max-w-7xl mx-auto relative opacity-0 transform translate-y-10 transition-all duration-1000">
+            <div class="text-center max-w-4xl mx-auto">
+                <i class="fas fa-quote-left text-5xl mb-8 opacity-50 text-teal-300"></i>
+                <h2 class="text-4xl md:text-5xl font-medium leading-snug mb-12">
+                    "The opportunity for every organization isn't just about efficiency. It's about expanding human agency through intelligent augmentation."
+                </h2>
+                <div class="flex items-center justify-center space-x-4">
+                    <img src="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=professional+headshot+of+a+researcher+modern&w=64&h=64&style=realistic" alt="Author" class="w-16 h-16 rounded-full border-2 border-teal-400">
+                    <div class="text-left">
+                        <div class="font-bold text-lg">Dr. Elena Rostova</div>
+                        <div class="opacity-70 text-sm tracking-wide uppercase">Lead Researcher, Future Labs</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Stark Contrast / Pure Black -->
+        <section data-bg="bg-black" data-text="text-white" class="section min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 max-w-7xl mx-auto relative opacity-0 transform translate-y-10 transition-all duration-1000">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="col-span-1 md:col-span-3 mb-12">
+                    <h2 class="text-5xl md:text-7xl font-bold">The Path Forward.</h2>
+                </div>
+                
+                <!-- Card 1 -->
+                <div class="p-8 border border-white/20 rounded-2xl hover:border-white/50 transition-colors bg-white/5 backdrop-blur-md">
+                    <i class="fas fa-layer-group text-3xl mb-6 text-gray-400"></i>
+                    <h3 class="text-2xl font-semibold mb-4">Infrastructure</h3>
+                    <p class="opacity-70 leading-relaxed">Building the architectural foundations required to support autonomous AI agents at scale globally.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="p-8 border border-white/20 rounded-2xl hover:border-white/50 transition-colors bg-white/5 backdrop-blur-md">
+                    <i class="fas fa-shield-halved text-3xl mb-6 text-gray-400"></i>
+                    <h3 class="text-2xl font-semibold mb-4">Governance</h3>
+                    <p class="opacity-70 leading-relaxed">Establishing ethical frameworks and security guardrails to ensure alignment with human values.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="p-8 border border-white/20 rounded-2xl hover:border-white/50 transition-colors bg-white/5 backdrop-blur-md">
+                    <i class="fas fa-user-astronaut text-3xl mb-6 text-gray-400"></i>
+                    <h3 class="text-2xl font-semibold mb-4">Empowerment</h3>
+                    <p class="opacity-70 leading-relaxed">Transforming the workforce through continuous education and new modes of cognitive collaboration.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 5: Back to Light Mode -->
+        <section data-bg="bg-slate-100" data-text="text-slate-900" class="section min-h-[50vh] flex flex-col items-center justify-center px-8 md:px-24 py-32 max-w-7xl mx-auto text-center relative opacity-0 transform translate-y-10 transition-all duration-1000">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">Ready to transform?</h2>
+            <button class="bg-black text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-800 transition-colors transform hover:scale-105">
+                Read the Full Methodology
+            </button>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('page-container');
+            const sections = document.querySelectorAll('.section');
+
+            // Set up Intersection Observer for Background Color Changes
+            const bgObserverOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4 // Triggers when 40% of the section is visible
+            };
+
+            const bgObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Extract target colors from data attributes
+                        const bgColor = entry.target.getAttribute('data-bg');
+                        const textColor = entry.target.getAttribute('data-text');
+                        
+                        // Construct the new classlist ensuring transitions are kept
+                        const baseClasses = 'transition-colors duration-1000 ease-in-out w-full font-sans antialiased overflow-x-hidden';
+                        
+                        // Apply the new colors to the body
+                        container.className = `${baseClasses} ${bgColor} ${textColor}`;
+                    }
+                });
+            }, bgObserverOptions);
+
+            // Set up Intersection Observer for Fade/Slide in Content Elements
+            const contentObserverOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const contentObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Reveal element by removing transform/opacity classes
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        
+                        // Optional: Stop observing once revealed
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, contentObserverOptions);
+
+            // Initialize observers on all sections
+            sections.forEach(section => {
+                bgObserver.observe(section);
+                // We skip the first section for the fade-in effect so it's visible on load
+                if (section !== sections[0]) {
+                    contentObserver.observe(section);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -3,195 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ansatzero | AGI from First Principles</title>
+    <title>Institute for Strategic AI</title>
     <style>
-        :root {
-            --bg-color: #050505;
-            --text-color: #ededed;
-            --accent-color: #ffffff;
-            --subtle-color: #666666;
-            --input-border: #333333;
-        }
+        /* Base Aesthetic */
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #050505;
+            color: #ededed;
+            overflow-x: hidden;
         }
 
-        .container {
-            text-align: center;
-            padding: 0 20px;
-            max-width: 900px;
-            position: relative;
-            z-index: 2;
+        /* Fixed Background Layer for Scrollytelling Transitions */
+        #fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            /* The default background */
+            background-color: #050505; 
+            /* This transition creates the smooth crossfade effect! */
+            transition: background 1.5s ease-in-out;
+        }
+
+        /* Gradient Color States mapping to data-bg tags */
+        .bg-hero { background: radial-gradient(circle at center, #161616 0%, #050505 100%); }
+        .bg-vision { background: radial-gradient(circle at top right, #0a1128 0%, #050505 100%); }
+        .bg-stealth { background: radial-gradient(circle at bottom left, #1a0f14 0%, #050505 100%); }
+        .bg-capture { background: #050505; }
+
+        /* Scrollable Content Sections */
+        .section {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            /* Set up slideUp/fadeIn animation starting point */
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        /* Class applied by JS when section is scrolled into view */
+        .section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
         h1 {
-            font-size: 5rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            margin: 0;
-            background: linear-gradient(180deg, #FFFFFF 0%, #888888 100%);
+            font-size: 3.5rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(90deg, #ffffff, #a0a0a0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            opacity: 0;
-            animation: fadeIn 1.2s ease-out forwards;
         }
 
-        p.tagline {
-            font-size: 1.5rem;
-            font-weight: 300;
-            color: var(--subtle-color);
-            margin-top: 20px;
-            letter-spacing: 0.02em;
-            opacity: 0;
-            animation: slideUp 1s ease-out 0.5s forwards;
+        p {
+            font-size: 1.25rem;
+            color: #a0a0a0;
+            max-width: 650px;
+            line-height: 1.7;
+            margin-bottom: 2rem;
         }
 
-        .footnote {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: var(--subtle-color);
-            margin-top: 80px;
-            max-width: 460px;
-            line-height: 1.5;
-            opacity: 0;
-            animation: slideUp 1s ease-out 1.5s forwards;
-        }
-
-        .signup-form {
-            margin-top: 40px;
-            opacity: 0;
-            animation: slideUp 1s ease-out 1s forwards;
+        /* Simple Netlify Form styling matching your aesthetic */
+        .form-container {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 18px;
-        }
-
-        .signup-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .captcha-wrapper {
-            background: #101010;
-            border: 1px solid #333333;
-            border-radius: 4px;
-            padding: 1px 1px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-            display: inline-flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        .captcha-wrapper > div[data-netlify-recaptcha] {
-            transform: scale(0.75);
-            transform-origin: top left;
+            gap: 0.5rem;
+            margin-top: 2rem;
         }
 
         input[type="email"] {
-            background: transparent;
-            border: 1px solid var(--input-border);
-            color: var(--text-color);
-            padding: 12px 20px;
+            background-color: #111111;
+            border: 1px solid #333333;
+            color: #ededed;
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
             font-size: 1rem;
-            width: 250px;
-            border-radius: 4px;
+            min-width: 250px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s;
         }
 
         input[type="email"]:focus {
-            border-color: var(--accent-color);
-        }
-
-        button {
-            background: var(--bg-color);
-            color: var(--text-color);
-            border: 1px solid #444444;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        }
-
-        button:hover {
-            background: #111111;
             border-color: #666666;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        button {
+            background-color: #ededed;
+            color: #050505;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .gradient-orb {
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            pointer-events: none;
+        button:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
-    <div class="gradient-orb"></div>
+    <!-- This is the background layer that sits behind everything and changes color -->
+    <div id="fixed-bg" class="bg-hero"></div>
 
-    <div class="container">
-        <h1>Ansatzero</h1>
-        <p class="tagline">AGI from first principles.</p>
+    <!-- Section 1 -->
+    <section class="section" data-bg="bg-hero">
+        <h1>Institute for Strategic AI</h1>
+        <p>A new paradigm in real-world artificial intelligence applications. We design autonomous systems for high-impact enterprise environments.</p>
+    </section>
 
-        <form id="joinForm"
-              class="signup-form"
-              name="ansatzero-subscribe"
-              method="POST"
-              action="/success.html"
-              data-netlify="true"
-              data-netlify-recaptcha="true">
+    <!-- Section 2 -->
+    <section class="section" data-bg="bg-vision">
+        <h1>First-Principles Design</h1>
+        <p>Moving beyond conversational tools. Our architecture focuses on stealthy, frictionless integration into complex analytical and logistical workflows.</p>
+    </section>
 
-          <div class="signup-row">
-            <input type="email" id="email" name="email" placeholder="email address" required />
+    <!-- Section 3 -->
+    <section class="section" data-bg="bg-stealth">
+        <h1>Institutional Authority</h1>
+        <p>Research-backed deployments bridging the gap between theoretical limits and practical algorithmic efficiency.</p>
+    </section>
+
+    <!-- Section 4: Email Capture -->
+    <section class="section" data-bg="bg-capture">
+        <h1>Operations Stealth</h1>
+        <p>We are currently operating in a closed development phase. Leave your email to be informed of our public launch sequence.</p>
+        
+        <form name="isai-stealth-capture" method="POST" data-netlify="true" class="form-container">
+            <input type="email" name="email" placeholder="name@domain.com" required>
+            <!-- Netlify reCAPTCHA placeholder could be mapped here if desired later -->
             <button type="submit">Join</button>
-          </div>
-
-          <div class="captcha-wrapper">
-            <div data-netlify-recaptcha="true"></div>
-          </div>
         </form>
+    </section>
 
-        <p class="footnote">
-            Ansatzero is a stepwise, first‑principles program for artificial general intelligence, built on the premise that beyond a certain parameter count, AGI emerges from architecture, not from a race for unbounded scale. It integrates current LLMs into a unified control architecture. We are preparing a controlled beta release. Register your email to receive deployment updates.
-        </p>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll(".section");
+            const fixedBg = document.getElementById("fixed-bg");
 
-        <p class="privacy-note">
-            We will only use your email address for beta updates; no tracking scripts, no analytics, no sharing.
-        </p>
+            // Setup Intersection Observer
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.55 // Triggers when 55% of the section is visible vertically in the viewport
+            };
 
-    </div>
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 1. Trigger the text FadeIn/SlideUp animation
+                        entry.target.classList.add("in-view");
+                        
+                        // 2. Grab the background class assigned to this specific section
+                        const bgClass = entry.target.getAttribute("data-bg");
+                        
+                        // 3. Apply it to the fixed background to trigger the CSS crossfade
+                        fixedBg.className = bgClass;
+                    }
+                });
+            }, observerOptions);
 
-
+            // Tell the observer to watch all our sections
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>
