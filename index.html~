@@ -3,181 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institute for Strategic AI</title>
+    <title>Institute for Strategic AI | UNE</title>
     <style>
-        /* Base Aesthetic */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #050505;
-            color: #ededed;
+        /* =========================================
+           1. CSS VARIABLES (THE CLINCAL THEME)
+           ========================================= */
+        :root {
+            --bg-base: #080808;          /* Softened dark background, avoiding pure black */
+            --text-heading: #e2e8f0;     /* Soft cool white for headers */
+            --text-body: #a1a1aa;        /* Highly readable muted grey for dense text */
+            --border-subtle: #1f1f1f;
+            --nav-bg: rgba(8, 8, 8, 0.75);
+            --accent-glow: rgba(79, 70, 229, 0.15); /* Subtle violet/blue intelligence glow */
+            --bento-bg: rgba(20, 20, 22, 0.6);
+        }
+
+        /* =========================================
+           2. BASE RESET & TYPOGRAPHY
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-body);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
 
-        /* Fixed Background Layer for Scrollytelling Transitions */
+        /* Fixed Background for Smooth Color Transitions */
         #fixed-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            /* The default background */
-            background-color: #050505; 
-            /* This transition creates the smooth crossfade effect! */
-            transition: background 1.5s ease-in-out;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background-color: var(--bg-base);
+            transition: background 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Gradient Color States mapping to data-bg tags */
-        .bg-hero { background: radial-gradient(circle at center, #161616 0%, #050505 100%); }
-        .bg-vision { background: radial-gradient(circle at top right, #0a1128 0%, #050505 100%); }
-        .bg-stealth { background: radial-gradient(circle at bottom left, #1a0f14 0%, #050505 100%); }
-        .bg-capture { background: #050505; }
+        /* Subtle Computational Gridlines Overlay */
+        #grid-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            pointer-events: none;
+        }
 
-        /* Scrollable Content Sections */
+        /* Color States triggered by Scroll */
+        .bg-hero { background: radial-gradient(circle at 50% 0%, #15151a 0%, var(--bg-base) 70%); }
+        .bg-pillars { background: radial-gradient(circle at 100% 50%, #0d121c 0%, var(--bg-base) 80%); }
+        .bg-flagship { background: radial-gradient(circle at 0% 100%, #170d1c 0%, var(--bg-base) 80%); }
+        .bg-team { background: radial-gradient(circle at 50% 50%, #0a1114 0%, var(--bg-base) 100%); }
+
+        /* =========================================
+           3. VERCEL-STYLE TOP NAV
+           ========================================= */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 60px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 32px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-weight: 600; color: var(--text-heading); cursor: pointer;
+            text-decoration: none; display: flex; align-items: center; gap: 8px; letter-spacing: 0.02em;
+        }
+
+        .brand-dot { width: 8px; height: 8px; background: #60a5fa; border-radius: 50%; box-shadow: 0 0 10px #60a5fa; }
+
+        .nav-links { display: flex; gap: 28px; }
+        .nav-links a {
+            color: var(--text-body); text-decoration: none; font-size: 0.85rem;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover { color: var(--text-heading); }
+
+        .btn-primary {
+            background-color: var(--text-heading); color: var(--bg-base);
+            padding: 6px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;
+            text-decoration: none; transition: transform 0.1s ease, opacity 0.2s;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* =========================================
+           4. LAYOUT & TYPOGRAPHY
+           ========================================= */
+        main { padding-top: 60px; }
+
         .section {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem 2rem;
-            text-align: center;
-            /* Set up slideUp/fadeIn animation starting point */
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; flex-direction: column; justify-content: center;
+            max-width: 1000px; margin: 0 auto; padding: 6rem 2rem;
+            
+            /* Slide up fade animation initial state */
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .section.in-view { opacity: 1; transform: translateY(0); }
+
+        h1, h2, h3 { color: var(--text-heading); font-weight: 500; letter-spacing: -0.02em; }
+        h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        h2 { font-size: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; }
+        h3 { font-size: 1.25rem; margin-bottom: 0.5rem; color: #cbd5e1; }
+        
+        .subtitle { font-size: 1.2rem; color: #818cf8; margin-bottom: 2rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+        
+        p { margin-bottom: 1.5rem; max-width: 75ch; font-size: 1.05rem; }
+        
+        /* Highlight specific technical terms */
+        strong { color: var(--text-heading); font-weight: 600; }
+
+        /* =========================================
+           5. BENTO GRID (THE PILLARS)
+           ========================================= */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
         }
 
-        /* Class applied by JS when section is scrolled into view */
-        .section.in-view {
-            opacity: 1;
-            transform: translateY(0);
+        .bento-card {
+            background-color: var(--bento-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: border-color 0.3s ease, transform 0.3s ease;
         }
 
-        /* Typography */
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.2rem;
-            background: linear-gradient(90deg, #ffffff, #a0a0a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .bento-card:hover {
+            border-color: #3f3f46;
+            transform: translateY(-2px);
         }
 
-        p {
-            font-size: 1.25rem;
-            color: #a0a0a0;
-            max-width: 650px;
-            line-height: 1.7;
-            margin-bottom: 2rem;
+        /* =========================================
+           6. TEAM & CONTACT SPECIFICS
+           ========================================= */
+        .team-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2rem;
         }
-
-        /* Simple Netlify Form styling matching your aesthetic */
-        .form-container {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 2rem;
+        .team-member { padding-right: 1rem; }
+        .team-role { font-size: 0.9rem; color: #818cf8; margin-bottom: 1rem; display: block; }
+        
+        .contact-box {
+            background: var(--bento-bg); border: 1px solid var(--border-subtle);
+            padding: 3rem; border-radius: 12px; text-align: center; margin-top: 3rem;
         }
+        .contact-box a { color: #818cf8; text-decoration: none; font-weight: 500; }
+        .contact-box a:hover { text-decoration: underline; }
 
-        input[type="email"] {
-            background-color: #111111;
-            border: 1px solid #333333;
-            color: #ededed;
-            padding: 0.8rem 1.2rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            min-width: 250px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input[type="email"]:focus {
-            border-color: #666666;
-        }
-
-        button {
-            background-color: #ededed;
-            color: #050505;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        button:hover {
-            opacity: 0.8;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .bento-grid, .team-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; } /* Hide links on mobile for now */
         }
     </style>
 </head>
 <body>
 
-    <!-- This is the background layer that sits behind everything and changes color -->
     <div id="fixed-bg" class="bg-hero"></div>
+    <div id="grid-overlay"></div>
 
-    <!-- Section 1 -->
-    <section class="section" data-bg="bg-hero">
-        <h1>Institute for Strategic AI</h1>
-        <p>A new paradigm in real-world artificial intelligence applications. We design autonomous systems for high-impact enterprise environments.</p>
-    </section>
+    <nav>
+        <a href="#" class="nav-brand">
+            <div class="brand-dot"></div>
+            ISAI
+        </a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#pillars">Architecture</a>
+            <a href="#flagship">Flagship</a>
+            <a href="#team">Team</a>
+        </div>
+        <div>
+            <a href="#contact" class="btn-primary">Contact Us</a>
+        </div>
+    </nav>
 
-    <!-- Section 2 -->
-    <section class="section" data-bg="bg-vision">
-        <h1>First-Principles Design</h1>
-        <p>Moving beyond conversational tools. Our architecture focuses on stealthy, frictionless integration into complex analytical and logistical workflows.</p>
-    </section>
+    <main>
+        <!-- HERO / ABOUT -->
+        <section id="about" class="section" data-bg="bg-hero">
+            <div class="subtitle">University of New England</div>
+            <h1>The Institute for Strategic AI</h1>
+            <p><strong>AI-Driven Autonomous Research.</strong></p>
+            <p>The Institute for Strategic AI bridges the gap between advanced artificial intelligence and real-world applications. We build autonomous systems designed to solve complex bottlenecks across all sectors of industry, government, and research. By deploying predictive, generative, and agentic AI, we accelerate discovery pipelines and dramatically reduce R&D timelines and costs.</p>
+            <p>Our AI architectures are universally applicable and therefore break through traditional disciplinary boundaries. Our current collaborations range from precision-guided robotic laboratories for advanced manufacturing, to advanced solar panel recycling, to predictive genetics with the Animal Genetics and Breeding Unit (AGBU), and pioneering governance frameworks for Indigenous Data Sovereignty (IDS).</p>
+            <p>Operating strictly at the frontier of applied agentic AI, the Institute translates complex, large-scale challenges into deployable, high-value capabilities.</p>
+        </section>
 
-    <!-- Section 3 -->
-    <section class="section" data-bg="bg-stealth">
-        <h1>Institutional Authority</h1>
-        <p>Research-backed deployments bridging the gap between theoretical limits and practical algorithmic efficiency.</p>
-    </section>
+        <!-- WHAT WE DO (BENTO GRID) -->
+        <section id="pillars" class="section" data-bg="bg-pillars">
+            <div class="subtitle">What We Do</div>
+            <h2>Four Pillars. One Pipeline.</h2>
+            <p>The Institute operates as a high-performance research pipeline, designed to move fundamental discoveries to real-world breakthroughs with maximum velocity.</p>
+            
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <h3>1. Generative AI</h3>
+                    <span style="color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">The Discovery Engine</span>
+                    <p style="margin-top: 1rem; font-size: 0.95rem;">We use closed-source and tailored open-source Generative AI models capable of generating novel scientific hypotheses and synthesizing massive datasets. This capability expands the frontier of what is possible, driving breakthrough discoveries across all target sectors of industry, government, and research.</p>
+                </div>
+                
+                <div class="bento-card">
+                    <h3>2. Predictive AI</h3>
+                    <span style="color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Advanced Pattern Recognition</span>
+                    <p style="margin-top: 1rem; font-size: 0.95rem;">We deploy predictive AI models that efficiently calculate physical properties, analyze vast datasets, and map complex relationships. Our predictive systems augment standard compute models by utilizing historical patterns to generate rapid forecasts for complex, large-scale challenges.</p>
+                </div>
 
-    <!-- Section 4: Email Capture -->
-    <section class="section" data-bg="bg-capture">
-        <h1>Operations Stealth</h1>
-        <p>We are currently operating in a closed development phase. Leave your email to be informed of our public launch sequence.</p>
-        
-        <form name="isai-stealth-capture" method="POST" data-netlify="true" class="form-container">
-            <input type="email" name="email" placeholder="name@domain.com" required>
-            <!-- Netlify reCAPTCHA placeholder could be mapped here if desired later -->
-            <button type="submit">Join</button>
-        </form>
-    </section>
+                <div class="bento-card">
+                    <h3>3. Agentic Workflows</h3>
+                    <span style="color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">The Autonomous Loop</span>
+                    <p style="margin-top: 1rem; font-size: 0.95rem;">We combine generative and predictive AI to build agentic AI frameworks that hypothesise, test against historical data, learn, and iterate. This continuous feedback loop streamlines R&D pipelines and rapidly filters candidates before physical resources are ever expended.</p>
+                </div>
+
+                <div class="bento-card">
+                    <h3>4. Physical Validation</h3>
+                    <span style="color: #60a5fa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">The Reality Check</span>
+                    <p style="margin-top: 1rem; font-size: 0.95rem;">AI predictions require physical proof. We hand off highest-confidence AI outputs directly into "self-driving" automated laboratories. By linking software to robotic synthesis, we close the loop, translating virtual projections into tangible, high-TRL outcomes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLAGSHIP PROJECT -->
+        <section id="flagship" class="section" data-bg="bg-flagship">
+            <div class="subtitle">Flagship Project</div>
+            <h2>AI-Driven Solar Panel Recycling</h2>
+            <p><strong>The Sovereign Bottleneck:</strong> By 2030, Australia will generate 91,000 tonnes of end-of-life solar panel waste annually, representing over $1 billion in locked material value. While standard recycling recovers 95% of mass, high-purity silicon wafers and silver remain securely bonded to resistant substrates. Removing this silicon without destroying purity is a bottleneck for the circular economy.</p>
+            <p><strong>Accelerating Traditional R&D:</strong> Finding solvent combinations capable of breaking bonds between silicon and substrate typically takes years of trial-and-error. ISA accelerates this by deploying fully autonomous AI architecture. Moving beyond human intuition, our predictive AI screens thousands of quantum chemical formulations to identify optimal molecular targets.</p>
+            <p><strong>Closing the Autonomous Loop:</strong> Our agentic workflows hand off high-confidence solvent candidates directly to a $2.7M ARC-funded automated robotic laboratory. The platform executes the synthesis and feeds validation data back to the AI engine, actively steering the discovery of scalable, non-toxic recycling pathways.</p>
+            <p><strong>Translation to Industry:</strong> Engineered for localized deployment within Renewable Energy Zones (REZs), the Institute is converting a national waste crisis into a sovereign, high-value asset alongside major renewable developers.</p>
+        </section>
+
+        <!-- OUR TEAM -->
+        <section id="team" class="section" data-bg="bg-team">
+            <div class="subtitle">Leadership Structure</div>
+            <h2>Our Team</h2>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <h3>Professor Amir Karton</h3>
+                    <span class="team-role">Director, Institute for Strategic AI<br>Professor of Physical and Materials Chemistry</span>
+                    <p style="font-size: 0.95rem;">Professor Amir Karton is the Founding Director of the ISA and Associate Dean of Research at UNE, alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia.</p>
+                    <p style="font-size: 0.95rem;">Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery. His foundatoinal contributions are recognized by prestigious ARC Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal, and ACS/RACI Lectureship Awards.</p>
+                </div>
+
+                <div class="team-member">
+                    <h3>Associate Professor Aaron Driver</h3>
+                    <span class="team-role">Chief AI Officer, University of New England<br>Director, LabNext70</span>
+                    <p style="font-size: 0.95rem;">Associate Professor Aaron Driver is the Founding Deputy Director of the ISA. Aaron leads LabNext70, driving AI integration across teaching, research, and operations. His background spans technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative.</p>
+                    <p style="font-size: 0.95rem;">At UNE, Aaron has been instrumental in building the university's sovereign AI platform. He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section" data-bg="bg-hero">
+            <div class="subtitle">Connect</div>
+            <h2>Deployment & Partnerships</h2>
+            <p style="text-align: center; margin: 0 auto;">We partner with government agencies, industry leaders, and research organisations to solve complex problems with AI. If you have a challenge that needs a breakthrough, get in touch.</p>
+            
+            <div class="contact-box">
+                <h3 style="color: var(--text-heading);">Institute for Strategic AI</h3>
+                <p style="margin-bottom: 0.5rem;">University of New England<br>Armidale NSW 2351, Australia</p>
+                <div style="margin-top: 2rem;">
+                    <p style="margin-bottom: 0.5rem;"><strong>Professor Amir Karton, Director</strong><br><a href="mailto:amir.karton@une.edu.au">amir.karton@une.edu.au</a></p>
+                    <p><strong>Associate Professor Aaron Driver</strong><br><a href="mailto:aaron.driver@une.edu.au">aaron.driver@une.edu.au</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const sections = document.querySelectorAll(".section");
             const fixedBg = document.getElementById("fixed-bg");
 
-            // Setup Intersection Observer
+            // Setup Intersection Observer for Background Colors and Fade In
             const observerOptions = {
                 root: null,
                 rootMargin: "0px",
-                threshold: 0.55 // Triggers when 55% of the section is visible vertically in the viewport
+                threshold: 0.35 // Triggers when 35% of section is visible
             };
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // 1. Trigger the text FadeIn/SlideUp animation
+                        // 1. Text slide-up animation
                         entry.target.classList.add("in-view");
                         
-                        // 2. Grab the background class assigned to this specific section
+                        // 2. Change background color class
                         const bgClass = entry.target.getAttribute("data-bg");
-                        
-                        // 3. Apply it to the fixed background to trigger the CSS crossfade
                         fixedBg.className = bgClass;
                     }
                 });
             }, observerOptions);
 
-            // Tell the observer to watch all our sections
             sections.forEach(section => {
                 observer.observe(section);
             });
