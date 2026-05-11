@@ -72,15 +72,16 @@
 
     <!-- Vercel-style Top Nav -->
     <nav class="fixed top-0 w-full h-[60px] flex items-center justify-between px-8 bg-[#080808]/75 backdrop-blur-md border-b border-isai-border z-50">
-        <a href="#" class="font-semibold text-isai-heading tracking-wide flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div class="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"></div>
-            ISA
+                    <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
+        <a href="#" class="font-semibold tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="Logo_lower_case3-modified.png" alt="Institute for Strategic AI" class="h-8 w-auto">
+            <span class="hidden sm:block text-isai-accent">Institute for Strategic AI</span>
         </a>
         <div class="hidden md:flex gap-8">
             <a href="#about" class="text-sm text-isai-body hover:text-isai-heading transition-colors">About</a>
             <a href="#pillars" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Architecture</a>
             <a href="#flagship" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Flagship</a>
-            <a href="#team" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Team</a>
+            <a href="#team" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Founders</a>
         </div>
         <div>
             <a href="#contact" class="bg-isai-heading text-isai-base px-4 py-1.5 rounded-md text-sm font-semibold hover:opacity-90 hover:-translate-y-px transition-all">
@@ -165,14 +166,21 @@
         <!-- TEAM SECTION -->
         <section id="team" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-team-grad" data-physics="3">
             <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Leadership Structure</div>
-            <h2 class="text-4xl text-isai-heading font-medium mb-8">Our Team</h2>
+            <h2 class="text-4xl text-isai-heading font-medium mb-8">Founding Directors</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 
                 <!-- Amir Card protected in Bento -->
                 <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
-                    <h3 class="text-2xl text-isai-heading font-medium mb-1">Professor Amir Karton</h3>
-                    <span class="block text-[0.95rem] text-isai-accent mb-6">Director, Institute for Strategic AI<br>Professor of Physical and Materials Chemistry</span>
+                    <!-- Stylistic Header with Image -->
+                    <div class="flex items-center gap-6 mb-6">
+                        <img src="amir-karton.png" alt="Prof. Amir Karton" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">Prof. Amir Karton</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Director, Institute for Strategic AI<br>Professor of Physical & Materials Chemistry</span>
+                        </div>
+                    </div>
+                    <!-- Bio Text -->
                     <div class="space-y-4">
                         <p class="text-[0.95rem] leading-[1.7]">Professor Amir Karton is the Founding Director of the ISA and Associate Dean of Research at UNE, alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia.</p>
                         <p class="text-[0.95rem] leading-[1.7]">Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery. His foundational contributions are recognized by prestigious ARC Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal, and ACS/RACI Lectureship Awards.</p>
@@ -181,8 +189,15 @@
 
                 <!-- Aaron Card protected in Bento -->
                 <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
-                    <h3 class="text-2xl text-isai-heading font-medium mb-1">Associate Prof. Aaron Driver</h3>
-                    <span class="block text-[0.95rem] text-isai-accent mb-6">Chief AI Officer, University of New England<br>Director, LabNext70</span>
+                    <!-- Stylistic Header with Image -->
+                    <div class="flex items-center gap-6 mb-6">
+                        <img src="aaron-driver.jpg" alt="A/Prof. Aaron Driver" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">A/Prof. Aaron Driver</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Deputy Director, Institute for Strategic AI; Director, LabNext70<br>Chief AI Officer, UNE</span>
+                        </div>
+                    </div>
+                    <!-- Bio Text -->
                     <div class="space-y-4">
                         <p class="text-[0.95rem] leading-[1.7]">Associate Professor Aaron Driver is the Founding Deputy Director of the ISA. Aaron leads LabNext70, driving AI integration across teaching, research, and operations. His background spans technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative.</p>
                         <p class="text-[0.95rem] leading-[1.7]">At UNE, Aaron has been instrumental in building the university's sovereign AI platform. He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications.</p>
@@ -207,7 +222,7 @@
                     <h3 class="text-2xl text-isai-heading font-medium mb-2">Institute for Strategic AI</h3>
                     <p class="mb-4 text-isai-body">University of New England<br>Armidale NSW 2351, Australia</p>
                     <div class="mt-8 space-y-4">
-                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Professor Amir Karton, Director</strong><a href="mailto:amir.karton@une.edu.au" class="text-isai-accent hover:text-white transition-colors">amir.karton@une.edu.au</a></p>
+                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Professor Amir Karton</strong><a href="mailto:amir.karton@une.edu.au" class="text-isai-accent hover:text-white transition-colors">amir.karton@une.edu.au</a></p>
                         <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Associate Professor Aaron Driver</strong><a href="mailto:aaron.driver@une.edu.au" class="text-isai-accent hover:text-white transition-colors">aaron.driver@une.edu.au</a></p>
                     </div>
                 </div>
