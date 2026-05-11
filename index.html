@@ -5,258 +5,415 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Institute for Strategic AI | UNE</title>
     
-    <!-- Tailwind CSS Core -->
+    <!-- Meta Tags -->
+    <meta property="og:title" content="Institute for Strategic AI">
+    <meta property="og:description" content="AI-Driven Autonomous Research at the University of New England.">
+    <meta property="og:image" content="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=subtle+abstract+geometric+pattern+dark+stealth+blue+glow&w=1200&h=800&style=professional">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Font Awesome -->
-    <link href="/chat/cdn/all.min.css" rel="stylesheet">
-    <script src="/chat/cdn/all.min.js" crossorigin></script>
+    <!-- Papa Parse -->
+    <script src="/chat/cdn/papaparse.min.js"></script>
+
+    <!-- Tailwind Config for Custom Gradients & Colors -->
+    <script>
+            tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isai: {
+                            base: '#080808',
+                            heading: '#e2e8f0',
+                            body: '#cbd5e1', /* INCREASED CONTRAST HERE */
+                            border: '#1f1f1f',
+                            accent: '#818cf8',
+                            bento: 'rgba(20, 20, 22, 0.90)'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-grad': 'radial-gradient(circle at 50% 0%, #15151a 0%, #080808 70%)',
+                        'pillars-grad': 'radial-gradient(circle at 100% 50%, #0d121c 0%, #080808 80%)',
+                        'flagship-grad': 'radial-gradient(circle at 0% 100%, #170d1c 0%, #080808 80%)',
+                        'team-grad': 'radial-gradient(circle at 50% 50%, #0a1114 0%, #080808 100%)',
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* =========================================
-           BACKGROUND EFFECTS: Depth, Noise, Grid, Glow
-           ========================================= */
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
         
-        /* DEPTH: Faint gridlines for a structural, computational feel */
-        .bg-grid {
+        /* Hardware accelerated transitions for sections */
+        .section-animate {
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        
+        /* Subtle Computational Gridlines Overlay */
+        .grid-overlay {
             background-size: 40px 40px;
             background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-            /* Fades the grid out as you scroll down */
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 90%);
-            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 90%);
-        }
-        
-        /* DEPTH: Noise texture for stealth/tactical material feel */
-        .bg-noise {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.05;
-            pointer-events: none;
-        }
-
-        /* GLOW: Subtle simulated computational intelligence glows */
-        .glow-blue {
-            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.07) 0%, transparent 65%);
-        }
-        .glow-violet {
-            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.07) 0%, transparent 65%);
-        }
-
-        /* Readability & Layout Adjustments */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        
-        /* Smooth Entrance Animations */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
     </style>
 </head>
-<!-- Deep Slate/Navy background (slate-900 / #0f172a) - No black -->
-<body class="bg-slate-900 text-slate-200 antialiased overflow-x-hidden min-h-screen relative selection:bg-violet-500/30">
+<body class="bg-isai-base text-isai-body font-sans antialiased overflow-x-hidden selection:bg-isai-accent selection:text-white font-medium tracking-[0.015em]">
+    <!-- Fixed Background Layers -->
+    <div id="fixed-bg" class="fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-1000 ease-in-out bg-hero-grad"></div>
+    
+    <!-- Interactive Physics Canvas (Sits directly above the gradient background, but below the grid and text) -->
+    <canvas id="physics-canvas" class="fixed top-0 left-0 w-screen h-screen pointer-events-none" style="z-index: -15;"></canvas>
+    
+    <div class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-none grid-overlay"></div>
 
-    <!-- Ambient Background Layers -->
-    <div class="fixed inset-0 bg-noise z-0"></div>
-    <div class="fixed inset-0 bg-grid z-0 pointer-events-none"></div>
-    <div class="fixed top-[-10%] left-[-10%] w-[60vw] h-[60vw] glow-blue rounded-full pointer-events-none z-0 blur-3xl"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] glow-violet rounded-full pointer-events-none z-0 blur-3xl"></div>
-
-    <!-- Sticky Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10 transition-all">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <!-- Brand -->
-            <a href="#" class="flex items-center gap-3 text-slate-100 font-semibold text-sm tracking-wide">
-                <div class="w-2.5 h-2.5 rounded-sm bg-gradient-to-br from-blue-400 to-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
-                ISAI
+    <!-- Vercel-style Top Nav -->
+    <nav class="fixed top-0 w-full h-[60px] flex items-center justify-between px-8 bg-[#080808]/75 backdrop-blur-md border-b border-isai-border z-50">
+                    <a href="#" class="flex items-center hover:opacity-80 transition-opacity">
+        <a href="#" class="font-semibold tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="Logo_lower_case3-modified.png" alt="Institute for Strategic AI" class="h-8 w-auto">
+            <span class="hidden sm:block text-isai-accent">Institute for Strategic AI</span>
+        </a>
+        <div class="hidden md:flex gap-8">
+            <a href="#about" class="text-sm text-isai-body hover:text-isai-heading transition-colors">About</a>
+            <a href="#pillars" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Architecture</a>
+            <a href="#flagship" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Flagship</a>
+            <a href="#team" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Founders</a>
+        </div>
+        <div>
+            <a href="#contact" class="bg-isai-heading text-isai-base px-4 py-1.5 rounded-md text-sm font-semibold hover:opacity-90 hover:-translate-y-px transition-all">
+                Contact Us
             </a>
-
-            <!-- Center Links -->
-            <div class="hidden md:flex gap-8">
-                <a href="#about" class="text-sm text-slate-400 hover:text-slate-100 transition-colors">About</a>
-                <a href="#architecture" class="text-sm text-slate-400 hover:text-slate-100 transition-colors">Architecture</a>
-                <a href="#flagship" class="text-sm text-slate-400 hover:text-slate-100 transition-colors">Flagship</a>
-                <a href="#team" class="text-sm text-slate-400 hover:text-slate-100 transition-colors">Team</a>
-            </div>
-
-            <!-- Action -->
-            <div class="flex items-center gap-6 z-10">
-                <a href="#contact" class="text-sm font-medium bg-slate-200 text-slate-900 px-4 py-1.5 rounded hover:bg-white transition-all shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-                    Contact Us
-                </a>
-            </div>
         </div>
     </nav>
 
-    <!-- Main Content Wrapper -->
-    <main class="relative z-10 pt-32 pb-24 px-6 max-w-6xl mx-auto flex flex-col gap-32">
-        
-        <!-- SECTION: HERO & ABOUT -->
-        <section id="about" class="fade-up pt-10 text-center flex flex-col items-center">
-            <h2 class="text-lg md:text-xl text-slate-400 font-medium tracking-widest uppercase mb-4">University of New England</h2>
+    <main class="pt-[60px]">
+        <!-- ABOUT SECTION -->
+        <section id="about" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-hero-grad" data-physics="0">
+<!--            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">University of New England</div> -->
+            <h1 class="text-5xl md:text-[3.5rem] leading-tight font-medium text-isai-heading tracking-tight mb-8">The Institute for Strategic AI</h1>
             
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-slate-100 to-slate-400 mb-6 drop-shadow-sm">
-                The Institute for Strategic AI
-            </h1>
-            
-            <p class="text-xl md:text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400 mb-8 max-w-3xl">
-                AI-Driven Autonomous Research.
-            </p>
-            
-            <div class="prose prose-invert prose-lg text-slate-300 text-left max-w-4xl space-y-6 leading-relaxed bg-slate-800/40 p-8 rounded-2xl border border-white/5 backdrop-blur-sm shadow-xl">
-                <p>The Institute for Strategic AI bridges the gap between advanced artificial intelligence and real-world applications. We build autonomous systems designed to solve complex bottlenecks across all sectors of industry, government, and research. By deploying predictive, generative, and agentic AI, we accelerate discovery pipelines and dramatically reduce R&D timelines and costs.</p>
-                <p>Our AI architectures are universally applicable and therefore break through traditional disciplinary boundaries. Our current collaborations range from precision-guided robotic laboratories for advanced manufacturing, to advanced solar panel recycling, to predictive genetics with the Animal Genetics and Breeding Unit (AGBU), and pioneering governance frameworks for Indigenous Data Sovereignty (IDS).</p>
-                <p>Operating strictly at the frontier of applied agentic AI, the Institute translates complex, large-scale challenges into deployable, high-value capabilities.</p>
+            <!-- Protected Bento Box for About Text -->
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 sm:p-10 shadow-2xl backdrop-blur-md">
+                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold">AI-Driven Autonomous Research.</strong></p>
+                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]">The Institute for Strategic AI bridges advanced artificial intelligence with real-world application. We develop autonomous systems to address complex bottlenecks across industry, government, and research. We build predictive, generative, and agentic AI, for accelerating discovery pipelines and reduce R&D timelines and costs.</p>
+                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]">Our AI architectures are designed to transfer across domains, enabling work that cuts through traditional disciplinary boundaries. Our collaborations bring together technology and real-world impact—from precision robotic laboratories that are reshaping manufacturing, to better solutions for solar panel recycling, to predictive genetics with the Animal Genetics and Breeding Unit (AGBU), and rights-based digital infrastructures that embed Indigenous Data Sovereignty (IDS).</p>
+                <p class="max-w-[65ch] text-lg leading-[1.8]">Operating at the frontier of applied agentic AI, the Institute translates complex, large-scale challenges into high-value capabilities.</p>
             </div>
         </section>
 
-        <!-- SECTION: WHAT WE DO (FOUR PILLARS BENTO GRID) -->
-        <section id="architecture" class="fade-up w-full">
-            <div class="mb-10 border-b border-white/10 pb-4">
-                <p class="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-2">What We Do</p>
-                <h2 class="text-3xl font-semibold text-slate-100">Four Pillars. One Pipeline.</h2>
-                <p class="text-slate-400 mt-3 max-w-3xl">The Institute operates as a high-performance research pipeline, designed to move fundamental discoveries to real-world breakthroughs with maximum velocity.</p>
+        <!-- ARCHITECTURE / PILLARS SECTION -->
+        <section id="pillars" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-pillars-grad" data-physics="1">
+            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">What We Do</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-12">Four Pillars. One Pipeline.</h2>
+            
+            <!-- Protected Bento Box for Intro Text -->
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-2xl backdrop-blur-md mb-8">
+                <p class="max-w-[75ch] text-lg leading-relaxed">The Institute operates as a high-performance research pipeline, designed to move fundamental discoveries to real-world breakthroughs with maximum velocity.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Pillar 1 -->
-                <div class="p-8 rounded-xl bg-slate-800/40 border border-white/5 hover:border-blue-400/30 backdrop-blur-md transition-all duration-300 shadow-lg group">
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">1. Generative AI: <span class="text-blue-400 font-normal">The Discovery Engine</span></h3>
-                    <p class="text-slate-300 text-[0.95rem] leading-relaxed mt-4">We use closed-source and tailored open-source Generative AI models capable of generating novel scientific hypotheses and synthesizing massive datasets. This capability expands the frontier of what is possible, driving breakthrough discoveries across all target sectors of industry, government, and research.</p>
+                <!-- Bento Card 1 -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">1. Generative AI</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Discovery Engine</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We use closed-source and tailored open-source Generative AI models capable of generating novel scientific hypotheses and synthesizing massive datasets. This capability expands the frontier of what is possible, driving breakthrough discoveries across all target sectors of industry, government, and research.</p>
                 </div>
                 
-                <!-- Pillar 2 -->
-                <div class="p-8 rounded-xl bg-slate-800/40 border border-white/5 hover:border-blue-400/30 backdrop-blur-md transition-all duration-300 shadow-lg group">
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">2. Predictive AI: <span class="text-blue-400 font-normal">Advanced Pattern Recognition</span></h3>
-                    <p class="text-slate-300 text-[0.95rem] leading-relaxed mt-4">We deploy predictive AI models that efficiently calculate physical properties, analyze vast datasets, and map complex relationships. Our predictive systems augment standard computational models by utilizing historical patterns to generate rapid, highly informed projections for complex, large-scale challenges.</p>
+                <!-- Bento Card 2 -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">2. Predictive AI</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Advanced Pattern Recognition</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We deploy predictive AI models that efficiently calculate physical properties, analyze vast datasets, and map complex relationships. Our predictive systems augment standard compute models by utilizing historical patterns to generate rapid forecasts for complex, large-scale challenges.</p>
                 </div>
 
-                <!-- Pillar 3 -->
-                <div class="p-8 rounded-xl bg-slate-800/40 border border-white/5 hover:border-violet-400/30 backdrop-blur-md transition-all duration-300 shadow-lg group">
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">3. Agentic Workflows: <span class="text-violet-400 font-normal">The Autonomous Loop</span></h3>
-                    <p class="text-slate-300 text-[0.95rem] leading-relaxed mt-4">We combine generative and predictive AI models to build autonomous agentic AI frameworks that generate hypotheses, test them against historical data, learn from the results, and iterate. By orchestrating this continuous feedback loop, our agentic systems streamline complex R&D pipelines and rapidly filter candidates before physical resources are ever expended.</p>
+                <!-- Bento Card 3 -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">3. Agentic Workflows</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Autonomous Loop</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We combine generative and predictive AI to build agentic AI frameworks that hypothesise, test against historical data, learn, and iterate. This continuous feedback loop streamlines R&D pipelines and rapidly filters candidates before physical resources are ever expended.</p>
                 </div>
 
-                <!-- Pillar 4 -->
-                <div class="p-8 rounded-xl bg-slate-800/40 border border-white/5 hover:border-violet-400/30 backdrop-blur-md transition-all duration-300 shadow-lg group">
-                    <h3 class="text-lg font-bold text-slate-100 mb-1">4. Physical Validation: <span class="text-violet-400 font-normal">The Reality Check</span></h3>
-                    <p class="text-slate-300 text-[0.95rem] leading-relaxed mt-4">AI predictions are meaningless without physical proof. We hand off our highest-confidence AI outputs directly into "self-driving" automated laboratories and real-world deployment pipelines. By directly linking our agentic software frameworks to robotic synthesis and physical validation platforms, we close the loop, translating virtual projections into tangible, high-TRL outcomes.</p>
+                <!-- Bento Card 4 -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">4. Physical Validation</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Reality Check</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">AI predictions require physical proof. We hand off highest-confidence AI outputs directly into "self-driving" automated laboratories. By linking software to robotic synthesis, we close the loop, translating virtual projections into tangible, high-TRL outcomes.</p>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: FLAGSHIP PROJECT -->
-        <section id="flagship" class="fade-up w-full">
-            <div class="p-10 rounded-2xl bg-slate-800/50 border border-white/5 backdrop-blur-xl shadow-xl relative overflow-hidden">
-                <!-- Internal background accent -->
-                <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-violet-500/5 to-transparent pointer-events-none"></div>
-                
-                <p class="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-2 relative z-10">Flagship Project</p>
-                <h2 class="text-3xl font-semibold text-slate-100 mb-8 relative z-10">AI-Driven Solar Panel Recycling</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10 text-slate-300 leading-relaxed text-[0.95rem]">
-                    <div>
-                        <h4 class="text-slate-100 font-semibold mb-2">The Sovereign Bottleneck</h4>
-                        <p class="mb-6">By 2030, Australia will generate 91,000 tonnes of end-of-life solar panel waste annually, representing over $1 billion in locked material value. While standard mechanical recycling can recover 95% of a panel's mass, the high-purity silicon wafers and the silver remain securely bonded to weather-resistant substrates. Removing this silicon without destroying its purity is a bottleneck for the renewable circular economy.</p>
-                        
-                        <h4 class="text-slate-100 font-semibold mb-2">Accelerating Traditional R&D</h4>
-                        <p>Finding solvent combinations capable of breaking the bonds between the silicon wafers and the substrate using traditional laboratory approaches may take years of trial-and-error. ISA accelerates this discovery by deploying our fully autonomous AI architecture. Moving beyond human intuition, our predictive AI models screen thousands of quantum chemical formulations to identify optimal molecular targets capable of cleanly isolating the silicon.</p>
-                    </div>
-                    <div>
-                        <h4 class="text-slate-100 font-semibold mb-2">Closing the Autonomous Loop</h4>
-                        <p class="mb-6">Our agentic workflows orchestrate this pipeline, handing off high-confidence solvent candidates directly to a $2.7M ARC-funded automated robotic laboratory. The robotic platform physically executes the synthesis and feeds experimental validation data directly back into the AI engine. This closed-loop system actively steers the discovery of scalable, efficient, and non-toxic recycling pathways at unprecedented speed.</p>
-                        
-                        <h4 class="text-slate-100 font-semibold mb-2">Translation to Industry</h4>
-                        <p>In collaboration with major renewable developers, this capability translates advanced computational science into regional value. By engineering scalable recycling technologies designed for localized deployment within Renewable Energy Zones (REZs), the Institute is converting a national waste crisis into a sovereign, high-value asset.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: OUR TEAM -->
-        <section id="team" class="fade-up w-full">
-            <div class="mb-10 border-b border-white/10 pb-4">
-                <p class="text-violet-400 text-sm font-semibold tracking-widest uppercase mb-2">Leadership</p>
-                <h2 class="text-3xl font-semibold text-slate-100">Our Team</h2>
-            </div>
+        <!-- FLAGSHIP SECTION -->
+        <section id="flagship" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-flagship-grad" data-physics="2">
+            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Flagship Project</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-8">AI-Driven Solar Panel Recycling</h2>
             
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <!-- Amir Karton -->
-                <div class="bg-slate-800/30 p-8 rounded-xl border border-white/5 shadow-lg">
-                    <h3 class="text-2xl font-semibold text-slate-100">Professor Amir Karton</h3>
-                    <p class="text-blue-400 font-medium mb-4">Director, Institute for Strategic AI<br>Professor of Physical and Materials Chemistry</p>
-                    <div class="text-slate-300 text-[0.95rem] leading-relaxed space-y-4">
-                        <p>Professor Amir Karton is the Founding Director of the Institute for Strategic AI (ISA) and Associate Dean of Research at the University of New England (UNE), alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia. Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery.</p>
-                        <p>By integrating generative, predictive, and agentic AI, his team builds autonomous workflows that overcome traditional research bottlenecks and dramatically accelerate both academic discovery and industrial innovation.</p>
-                        <p>The significance of his foundational contributions to the physical sciences has been recognized by prestigious Australian Research Council Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal from the Australian Academy of Science, the American Chemical Society (ACS) PHYS Division Lectureship Award, the Royal Australian Chemical Institute (RACI) Physical Chemistry Lectureship and Citation Award, and the UNE Research Collaboration Leadership Award. Professor Karton is an Editor for Chemical Physics Letters and is an Associate Editor for the Australian Journal of Chemistry. He is the Vice President of the Association of Molecular Modellers of Australasia (AMMA) and a Board Member of the Australian Association of Theoretical and Computational Chemists (AATACC).</p>
-                    </div>
-                </div>
-
-                <!-- Aaron Driver -->
-                <div class="bg-slate-800/30 p-8 rounded-xl border border-white/5 shadow-lg">
-                    <h3 class="text-2xl font-semibold text-slate-100">Associate Professor Aaron Driver</h3>
-                    <p class="text-violet-400 font-medium mb-4">Chief AI Officer, University of New England<br>Director, LabNext70</p>
-                    <div class="text-slate-300 text-[0.95rem] leading-relaxed space-y-4">
-                        <p>Associate Professor Aaron Driver is the Founding Deputy Director of the Institute for Strategic AI (ISA). Aaron leads LabNext70, UNE's applied AI innovation lab, where he drives AI integration across teaching, research, and operations. His background spans journalism, technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative and real-world deployment.</p>
-                        <p>At UNE, Aaron has been instrumental in building the university's sovereign AI platform and pioneering AI-native approaches to education and academic integrity. He specialises in social marketing, narrative persuasion, and behaviour change, with particular expertise in climate change and biosecurity communications.</p>
-                        <p>He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications, ensuring the Institute's work aligns with UNE's broader strategic vision.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: CONTACT US -->
-        <section id="contact" class="fade-up w-full text-center">
-            <div class="max-w-2xl mx-auto bg-slate-800/40 p-10 rounded-2xl border border-white/5 backdrop-blur-md shadow-xl">
-                <i class="fas fa-network-wired text-3xl mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-violet-400"></i>
-                <h2 class="text-2xl font-semibold text-slate-100 mb-2">Connect with the Institute</h2>
-                <p class="text-slate-300 mb-8 leading-relaxed">We partner with government agencies, industry leaders, and research organisations to solve complex problems with AI. If you have a challenge that needs a breakthrough, get in touch.</p>
+            <!-- Protected Bento Box for Flagship Copy -->
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 sm:p-10 shadow-2xl backdrop-blur-md space-y-6">
+                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">The Sovereign Bottleneck</strong> By 2030, Australia will generate 91,000 tonnes of end-of-life solar panel waste annually, representing over $1 billion in locked material value. While standard recycling recovers 95% of mass, high-purity silicon wafers and silver remain securely bonded to resistant substrates. Removing this silicon without destroying purity is a bottleneck for the circular economy.</p>
                 
-                <address class="not-italic text-slate-200 mb-6">
-                    <strong class="text-lg">Institute for Strategic AI</strong><br>
-                    <span class="text-slate-400">University of New England<br>Armidale NSW 2351, Australia</span>
-                </address>
+                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Accelerating Traditional R&D</strong> Finding solvent combinations capable of breaking bonds between silicon and substrate typically takes years of trial-and-error. ISA accelerates this by deploying fully autonomous AI architecture. Moving beyond human intuition, our predictive AI screens thousands of quantum chemical formulations to identify optimal molecular targets.</p>
+                
+                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Closing the Autonomous Loop</strong> Our agentic workflows hand off high-confidence solvent candidates directly to a $2.7M ARC-funded automated robotic laboratory. The platform executes the synthesis and feeds validation data back to the AI engine, actively steering the discovery of scalable, non-toxic recycling pathways.</p>
+                
+                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Translation to Industry</strong> Engineered for localized deployment within Renewable Energy Zones (REZs), the Institute is converting a national waste crisis into a sovereign, high-value asset alongside major renewable developers.</p>
+            </div>
+        </section>
 
-                <div class="flex flex-col md:flex-row justify-center gap-8 mt-8 border-t border-white/10 pt-8">
-                    <div>
-                        <p class="font-medium text-slate-200">Professor Amir Karton</p>
-                        <a href="mailto:amir.karton@une.edu.au" class="text-blue-400 hover:text-blue-300 transition-colors text-sm">amir.karton@une.edu.au</a>
+        <!-- TEAM SECTION -->
+        <section id="team" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-team-grad" data-physics="3">
+            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Leadership Structure</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-8">Founding Directors</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                
+                <!-- Amir Card protected in Bento -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
+                    <!-- Stylistic Header with Image -->
+                    <div class="flex items-center gap-6 mb-6">
+                        <img src="amir-karton.png" alt="Prof. Amir Karton" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">Prof. Amir Karton</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Director, Institute for Strategic AI<br>Professor of Physical & Materials Chemistry</span>
+                        </div>
                     </div>
-                    <div>
-                        <p class="font-medium text-slate-200">Assoc. Professor Aaron Driver</p>
-                        <a href="mailto:aaron.driver@une.edu.au" class="text-violet-400 hover:text-violet-300 transition-colors text-sm">aaron.driver@une.edu.au</a>
+                    <!-- Bio Text -->
+                    <div class="space-y-4">
+                        <p class="text-[0.95rem] leading-[1.7]">Professor Amir Karton is the Founding Director of the ISA and Associate Dean of Research at UNE, alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia.</p>
+                        <p class="text-[0.95rem] leading-[1.7]">Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery. His foundational contributions are recognized by prestigious ARC Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal, and ACS/RACI Lectureship Awards.</p>
+                    </div>
+                </div>
+
+                <!-- Aaron Card protected in Bento -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
+                    <!-- Stylistic Header with Image -->
+                    <div class="flex items-center gap-6 mb-6">
+                        <img src="aaron-driver.jpg" alt="A/Prof. Aaron Driver" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">A/Prof. Aaron Driver</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Deputy Director, Institute for Strategic AI; Director, LabNext70<br>Chief AI Officer, UNE</span>
+                        </div>
+                    </div>
+                    <!-- Bio Text -->
+                    <div class="space-y-4">
+                        <p class="text-[0.95rem] leading-[1.7]">Associate Professor Aaron Driver is the Founding Deputy Director of the ISA. Aaron leads LabNext70, driving AI integration across teaching, research, and operations. His background spans technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative.</p>
+                        <p class="text-[0.95rem] leading-[1.7]">At UNE, Aaron has been instrumental in building the university's sovereign AI platform. He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications.</p>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="section-animate opacity-0 translate-y-8 min-h-[80vh] flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-hero-grad" data-physics="0">
+            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Connect</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-8">Deployment & Partnerships</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- Intro protected -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
+                    <p class="text-lg leading-[1.8]">We partner with government agencies, industry leaders, and research organisations to solve complex problems with AI. If you have a challenge that needs a breakthrough, get in touch.</p>
+                </div>
+                
+                <!-- Contact info protected -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-2xl backdrop-blur-md text-center md:text-left shadow-[0_0_40px_rgba(129,140,248,0.05)]">
+                    <h3 class="text-2xl text-isai-heading font-medium mb-2">Institute for Strategic AI</h3>
+                    <p class="mb-4 text-isai-body">University of New England<br>Armidale NSW 2351, Australia</p>
+                    <div class="mt-8 space-y-4">
+                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Professor Amir Karton</strong><a href="mailto:amir.karton@une.edu.au" class="text-isai-accent hover:text-white transition-colors">amir.karton@une.edu.au</a></p>
+                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Associate Professor Aaron Driver</strong><a href="mailto:aaron.driver@une.edu.au" class="text-isai-accent hover:text-white transition-colors">aaron.driver@une.edu.au</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Scroll Animation Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll(".section-animate");
+            const fixedBg = document.getElementById("fixed-bg");
+
+            // Setup Intersection Observer for Background Colors and Fade In
             const observerOptions = {
                 root: null,
-                rootMargin: '0px',
-                threshold: 0.15
+                rootMargin: "0px",
+                threshold: 0.35 // Triggers when 35% of section is visible
             };
 
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Trigger only once
+                    if (entry.isIntersecting) {
+                        // 1. Text slide-up animation using Tailwind utility classes dynamically applied
+                        entry.target.classList.remove("opacity-0", "translate-y-8");
+                        entry.target.classList.add("opacity-100", "translate-y-0");
+                        
+                        // 2. Change background color
+                        const bgClass = entry.target.getAttribute("data-bg");
+                        // Reset all possible gradient backgrounds, then apply new one
+                        fixedBg.className = `fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-[1500ms] ease-in-out ${bgClass}`;
                     }
                 });
             }, observerOptions);
 
-            const fadeUpElements = document.querySelectorAll('.fade-up');
-            fadeUpElements.forEach(el => observer.observe(el));
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- DYNAMIC NETWORK BACKGROUND PHYSICS ---
+            const canvas = document.getElementById('physics-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width, height;
+            let particles = [];
+            const numParticles = 70; // Adjust for density
+            
+            // Setup mouse tracking (needs pointer-events handled natively)
+            let mouse = { x: null, y: null, radius: 250 };
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // SCROLL-LINKED PHYSICS STATES
+            let physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+
+            // Tie Physics to the scrolling observer
+            const observerLogicForPhysics = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        const state = entry.target.getAttribute('data-physics');
+                        if (state === "0") {
+                            physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+                        } else if (state === "1") {
+                            physicsConfig = { linkDistance: 200, baseSpeed: 0.8, repulsionStrength: 2 };
+                        } else if (state === "2") {
+                            physicsConfig = { linkDistance: 100, baseSpeed: 1.6, repulsionStrength: 4 };
+                        } else if (state === "3") {
+                            physicsConfig = { linkDistance: 300, baseSpeed: 0.8, repulsionStrength: 1 };
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            document.querySelectorAll('[data-physics]').forEach(el => observerLogicForPhysics.observe(el));
+
+            // Particle Class
+            // Particle Class (Refined Neural Network Style)
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 4 + 3; // Slightly refined core size
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = (Math.random() - 0.5) * 2;
+                    
+                    // Constrain colors to the ISAI brand: Blues, Indigos, and Violets only (no rainbow/distractions)
+                    this.hue = 210 + Math.floor(Math.random() * 50); 
+                }
+
+                draw() {
+                    ctx.setLineDash([]); // Ensure no dashed lines (removes the flower look)
+
+                    // 1. The glowing neural aura (smooth gradient)
+                    ctx.beginPath();
+                    let gradient = ctx.createRadialGradient(this.x, this.y, this.size, this.x, this.y, this.size * 4);
+                    gradient.addColorStop(0, `hsla(${this.hue}, 80%, 65%, 0.3)`); // Inner glow
+                    gradient.addColorStop(1, `hsla(${this.hue}, 80%, 65%, 0)`);   // Fade out
+                    ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    // 2. A crisp, faint orbital ring (tech aesthetic)
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2.2, 0, Math.PI * 2);
+                    ctx.strokeStyle = `hsla(${this.hue}, 80%, 65%, 0.4)`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+
+                    // 3. The solid white core (Soma) with a subtle CSS-like drop shadow
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff'; 
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, 0.8)`;
+                    ctx.fill();
+
+                    // Reset shadow so it doesn't affect the connecting lines
+                    ctx.shadowBlur = 0;
+                }
+
+                update() {
+                    this.x += this.vx * physicsConfig.baseSpeed;
+                    this.y += this.vy * physicsConfig.baseSpeed;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Repulsion
+                    if (mouse.x !== null && mouse.y !== null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouse.radius) {
+                            const forceDirectionX = dx / distance;
+                            const forceDirectionY = dy / distance;
+                            const force = (mouse.radius - distance) / mouse.radius;
+                            
+                            this.x -= forceDirectionX * force * physicsConfig.repulsionStrength;
+                            this.y -= forceDirectionY * force * physicsConfig.repulsionStrength;
+                        }
+                    }
+                    this.draw();
+                }
+            }
+            function init() {
+                particles = [];
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+                        function connect() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < physicsConfig.linkDistance) {
+                            // Calculate opacity based on distance (closer = more solid)
+                            let opacity = 1 - (distance / physicsConfig.linkDistance);
+                            
+                            ctx.beginPath();
+                            // Made the lines a lighter silver/slate and doubled the base opacity
+                            ctx.strokeStyle = `rgba(180, 190, 210, ${opacity * 0.75})`; 
+                            ctx.lineWidth = 1.0; // Thicker lines so they don't vanish
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) { particles[i].update(); }
+                connect();
+            }
+
+            init();
+            animate();
         });
     </script>
 </body>

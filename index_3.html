@@ -19,17 +19,17 @@
 
     <!-- Tailwind Config for Custom Gradients & Colors -->
     <script>
-            tailwind.config = {
+        tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         isai: {
                             base: '#080808',
                             heading: '#e2e8f0',
-                            body: '#cbd5e1', /* INCREASED CONTRAST HERE */
+                            body: '#a1a1aa',
                             border: '#1f1f1f',
                             accent: '#818cf8',
-                            bento: 'rgba(20, 20, 22, 0.90)'
+                            bento: 'rgba(20, 20, 22, 0.6)'
                         }
                     },
                     backgroundImage: {
@@ -61,7 +61,8 @@
         }
     </style>
 </head>
-<body class="bg-isai-base text-isai-body font-sans antialiased overflow-x-hidden selection:bg-isai-accent selection:text-white font-medium tracking-[0.015em]">
+<body class="bg-isai-base text-isai-body font-sans antialiased overflow-x-hidden selection:bg-isai-accent selection:text-white">
+
     <!-- Fixed Background Layers -->
     <div id="fixed-bg" class="fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-1000 ease-in-out bg-hero-grad"></div>
     
@@ -92,124 +93,95 @@
     <main class="pt-[60px]">
         <!-- ABOUT SECTION -->
         <section id="about" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-hero-grad" data-physics="0">
-<!--            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">University of New England</div> -->
-            <h1 class="text-5xl md:text-[3.5rem] leading-tight font-medium text-isai-heading tracking-tight mb-8">The Institute for Strategic AI</h1>
-            
-            <!-- Protected Bento Box for About Text -->
-            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 sm:p-10 shadow-2xl backdrop-blur-md">
-                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold">AI-Driven Autonomous Research.</strong></p>
-                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]">The Institute for Strategic AI bridges advanced artificial intelligence with real-world application. We develop autonomous systems to address complex bottlenecks across industry, government, and research. We build predictive, generative, and agentic AI, for accelerating discovery pipelines and reduce R&D timelines and costs.</p>
-                <p class="mb-6 max-w-[65ch] text-lg leading-[1.8]">Our AI architectures are designed to transfer across domains, enabling work that cuts through traditional disciplinary boundaries. Our collaborations bring together technology and real-world impact—from precision robotic laboratories that are reshaping manufacturing, to better solutions for solar panel recycling, to predictive genetics with the Animal Genetics and Breeding Unit (AGBU), and rights-based digital infrastructures that embed Indigenous Data Sovereignty (IDS).</p>
-                <p class="max-w-[65ch] text-lg leading-[1.8]">Operating at the frontier of applied agentic AI, the Institute translates complex, large-scale challenges into high-value capabilities.</p>
-            </div>
+            <div class="text-lg text-isai-accent mb-8 font-medium tracking-wide uppercase">University of New England</div>
+            <h1 class="text-5xl md:text-[3.5rem] leading-tight font-medium text-isai-heading tracking-tight mb-6">The Institute for Strategic AI</h1>
+            <p class="mb-6 max-w-[75ch] text-lg"><strong class="text-isai-heading font-semibold">AI-Driven Autonomous Research.</strong></p>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed">The Institute for Strategic AI bridges the gap between advanced artificial intelligence and real-world applications. We build autonomous systems designed to solve complex bottlenecks across all sectors of industry, government, and research. By deploying predictive, generative, and agentic AI, we accelerate discovery pipelines and dramatically reduce R&D timelines and costs.</p>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed">Our AI architectures are universally applicable and therefore break through traditional disciplinary boundaries. Our current collaborations range from precision-guided robotic laboratories for advanced manufacturing, to advanced solar panel recycling, to predictive genetics with the Animal Genetics and Breeding Unit (AGBU), and pioneering governance frameworks for Indigenous Data Sovereignty (IDS).</p>
+            <p class="max-w-[75ch] text-lg leading-relaxed">Operating strictly at the frontier of applied agentic AI, the Institute translates complex, large-scale challenges into deployable, high-value capabilities.</p>
         </section>
 
         <!-- ARCHITECTURE / PILLARS SECTION -->
         <section id="pillars" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-pillars-grad" data-physics="1">
-            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">What We Do</div>
-            <h2 class="text-4xl text-isai-heading font-medium mb-12">Four Pillars. One Pipeline.</h2>
+            <div class="text-lg text-isai-accent mb-8 font-medium tracking-wide uppercase">What We Do</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-4 border-b border-isai-border pb-4">Four Pillars. One Pipeline.</h2>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed">The Institute operates as a high-performance research pipeline, designed to move fundamental discoveries to real-world breakthroughs with maximum velocity.</p>
             
-            <!-- Protected Bento Box for Intro Text -->
-            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-2xl backdrop-blur-md mb-8">
-                <p class="max-w-[75ch] text-lg leading-relaxed">The Institute operates as a high-performance research pipeline, designed to move fundamental discoveries to real-world breakthroughs with maximum velocity.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
                 <!-- Bento Card 1 -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
-                    <h3 class="text-xl text-isai-heading font-medium mb-2">1. Generative AI</h3>
-                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Discovery Engine</span>
-                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We use closed-source and tailored open-source Generative AI models capable of generating novel scientific hypotheses and synthesizing massive datasets. This capability expands the frontier of what is possible, driving breakthrough discoveries across all target sectors of industry, government, and research.</p>
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-10 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-xl text-slate-300 font-medium mb-2">1. Generative AI</h3>
+                    <span class="text-blue-400 text-sm uppercase tracking-wide">The Discovery Engine</span>
+                    <p class="mt-4 text-[0.95rem] leading-relaxed">We use closed-source and tailored open-source Generative AI models capable of generating novel scientific hypotheses and synthesizing massive datasets. This capability expands the frontier of what is possible, driving breakthrough discoveries across all target sectors of industry, government, and research.</p>
                 </div>
                 
                 <!-- Bento Card 2 -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
-                    <h3 class="text-xl text-isai-heading font-medium mb-2">2. Predictive AI</h3>
-                    <span class="text-isai-accent text-sm uppercase tracking-wide">Advanced Pattern Recognition</span>
-                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We deploy predictive AI models that efficiently calculate physical properties, analyze vast datasets, and map complex relationships. Our predictive systems augment standard compute models by utilizing historical patterns to generate rapid forecasts for complex, large-scale challenges.</p>
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-10 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-xl text-slate-300 font-medium mb-2">2. Predictive AI</h3>
+                    <span class="text-blue-400 text-sm uppercase tracking-wide">Advanced Pattern Recognition</span>
+                    <p class="mt-4 text-[0.95rem] leading-relaxed">We deploy predictive AI models that efficiently calculate physical properties, analyze vast datasets, and map complex relationships. Our predictive systems augment standard compute models by utilizing historical patterns to generate rapid forecasts for complex, large-scale challenges.</p>
                 </div>
 
                 <!-- Bento Card 3 -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
-                    <h3 class="text-xl text-isai-heading font-medium mb-2">3. Agentic Workflows</h3>
-                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Autonomous Loop</span>
-                    <p class="mt-4 text-[0.95rem] leading-[1.7]">We combine generative and predictive AI to build agentic AI frameworks that hypothesise, test against historical data, learn, and iterate. This continuous feedback loop streamlines R&D pipelines and rapidly filters candidates before physical resources are ever expended.</p>
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-10 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-xl text-slate-300 font-medium mb-2">3. Agentic Workflows</h3>
+                    <span class="text-blue-400 text-sm uppercase tracking-wide">The Autonomous Loop</span>
+                    <p class="mt-4 text-[0.95rem] leading-relaxed">We combine generative and predictive AI to build agentic AI frameworks that hypothesise, test against historical data, learn, and iterate. This continuous feedback loop streamlines R&D pipelines and rapidly filters candidates before physical resources are ever expended.</p>
                 </div>
 
                 <!-- Bento Card 4 -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
-                    <h3 class="text-xl text-isai-heading font-medium mb-2">4. Physical Validation</h3>
-                    <span class="text-isai-accent text-sm uppercase tracking-wide">The Reality Check</span>
-                    <p class="mt-4 text-[0.95rem] leading-[1.7]">AI predictions require physical proof. We hand off highest-confidence AI outputs directly into "self-driving" automated laboratories. By linking software to robotic synthesis, we close the loop, translating virtual projections into tangible, high-TRL outcomes.</p>
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-10 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-xl text-slate-300 font-medium mb-2">4. Physical Validation</h3>
+                    <span class="text-blue-400 text-sm uppercase tracking-wide">The Reality Check</span>
+                    <p class="mt-4 text-[0.95rem] leading-relaxed">AI predictions require physical proof. We hand off highest-confidence AI outputs directly into "self-driving" automated laboratories. By linking software to robotic synthesis, we close the loop, translating virtual projections into tangible, high-TRL outcomes.</p>
                 </div>
             </div>
         </section>
 
         <!-- FLAGSHIP SECTION -->
         <section id="flagship" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-flagship-grad" data-physics="2">
-            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Flagship Project</div>
-            <h2 class="text-4xl text-isai-heading font-medium mb-8">AI-Driven Solar Panel Recycling</h2>
-            
-            <!-- Protected Bento Box for Flagship Copy -->
-            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 sm:p-10 shadow-2xl backdrop-blur-md space-y-6">
-                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">The Sovereign Bottleneck</strong> By 2030, Australia will generate 91,000 tonnes of end-of-life solar panel waste annually, representing over $1 billion in locked material value. While standard recycling recovers 95% of mass, high-purity silicon wafers and silver remain securely bonded to resistant substrates. Removing this silicon without destroying purity is a bottleneck for the circular economy.</p>
-                
-                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Accelerating Traditional R&D</strong> Finding solvent combinations capable of breaking bonds between silicon and substrate typically takes years of trial-and-error. ISA accelerates this by deploying fully autonomous AI architecture. Moving beyond human intuition, our predictive AI screens thousands of quantum chemical formulations to identify optimal molecular targets.</p>
-                
-                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Closing the Autonomous Loop</strong> Our agentic workflows hand off high-confidence solvent candidates directly to a $2.7M ARC-funded automated robotic laboratory. The platform executes the synthesis and feeds validation data back to the AI engine, actively steering the discovery of scalable, non-toxic recycling pathways.</p>
-                
-                <p class="max-w-[75ch] text-lg leading-[1.8]"><strong class="text-isai-heading font-semibold block mb-1">Translation to Industry</strong> Engineered for localized deployment within Renewable Energy Zones (REZs), the Institute is converting a national waste crisis into a sovereign, high-value asset alongside major renewable developers.</p>
-            </div>
+            <div class="text-lg text-isai-accent mb-8 font-medium tracking-wide uppercase">Flagship Project</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-4 border-b border-isai-border pb-4">AI-Driven Solar Panel Recycling</h2>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed"><strong class="text-isai-heading font-semibold">The Sovereign Bottleneck:</strong> By 2030, Australia will generate 91,000 tonnes of end-of-life solar panel waste annually, representing over $1 billion in locked material value. While standard recycling recovers 95% of mass, high-purity silicon wafers and silver remain securely bonded to resistant substrates. Removing this silicon without destroying purity is a bottleneck for the circular economy.</p>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed"><strong class="text-isai-heading font-semibold">Accelerating Traditional R&D:</strong> Finding solvent combinations capable of breaking bonds between silicon and substrate typically takes years of trial-and-error. ISA accelerates this by deploying fully autonomous AI architecture. Moving beyond human intuition, our predictive AI screens thousands of quantum chemical formulations to identify optimal molecular targets.</p>
+            <p class="mb-6 max-w-[75ch] text-lg leading-relaxed"><strong class="text-isai-heading font-semibold">Closing the Autonomous Loop:</strong> Our agentic workflows hand off high-confidence solvent candidates directly to a $2.7M ARC-funded automated robotic laboratory. The platform executes the synthesis and feeds validation data back to the AI engine, actively steering the discovery of scalable, non-toxic recycling pathways.</p>
+            <p class="max-w-[75ch] text-lg leading-relaxed"><strong class="text-isai-heading font-semibold">Translation to Industry:</strong> Engineered for localized deployment within Renewable Energy Zones (REZs), the Institute is converting a national waste crisis into a sovereign, high-value asset alongside major renewable developers.</p>
         </section>
 
         <!-- TEAM SECTION -->
         <section id="team" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-team-grad" data-physics="3">
-            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Leadership Structure</div>
-            <h2 class="text-4xl text-isai-heading font-medium mb-8">Our Team</h2>
+            <div class="text-lg text-isai-accent mb-8 font-medium tracking-wide uppercase">Leadership Structure</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-4 border-b border-isai-border pb-4">Our Team</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                
-                <!-- Amir Card protected in Bento -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
+                <div class="pr-4">
                     <h3 class="text-2xl text-isai-heading font-medium mb-1">Professor Amir Karton</h3>
-                    <span class="block text-[0.95rem] text-isai-accent mb-6">Director, Institute for Strategic AI<br>Professor of Physical and Materials Chemistry</span>
-                    <div class="space-y-4">
-                        <p class="text-[0.95rem] leading-[1.7]">Professor Amir Karton is the Founding Director of the ISA and Associate Dean of Research at UNE, alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia.</p>
-                        <p class="text-[0.95rem] leading-[1.7]">Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery. His foundational contributions are recognized by prestigious ARC Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal, and ACS/RACI Lectureship Awards.</p>
-                    </div>
+                    <span class="block text-[0.95rem] text-isai-accent mb-4">Director, Institute for Strategic AI<br>Professor of Physical and Materials Chemistry</span>
+                    <p class="mb-4 text-[0.95rem] leading-relaxed">Professor Amir Karton is the Founding Director of the ISA and Associate Dean of Research at UNE, alongside appointments as a Visiting Researcher at Microsoft Research (AI4Science) and an Adjunct Professor at The University of Western Australia.</p>
+                    <p class="text-[0.95rem] leading-relaxed">Operating at the intersection of AI and quantum mechanics, he develops agentic workflows and scientific foundation models to accelerate autonomous materials discovery. His foundational contributions are recognized by prestigious ARC Fellowships (DECRA and Future Fellowship), the Le Fèvre Medal, and ACS/RACI Lectureship Awards.</p>
                 </div>
 
-                <!-- Aaron Card protected in Bento -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
-                    <h3 class="text-2xl text-isai-heading font-medium mb-1">Associate Prof. Aaron Driver</h3>
-                    <span class="block text-[0.95rem] text-isai-accent mb-6">Chief AI Officer, University of New England<br>Director, LabNext70</span>
-                    <div class="space-y-4">
-                        <p class="text-[0.95rem] leading-[1.7]">Associate Professor Aaron Driver is the Founding Deputy Director of the ISA. Aaron leads LabNext70, driving AI integration across teaching, research, and operations. His background spans technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative.</p>
-                        <p class="text-[0.95rem] leading-[1.7]">At UNE, Aaron has been instrumental in building the university's sovereign AI platform. He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications.</p>
-                    </div>
+                <div class="pr-4">
+                    <h3 class="text-2xl text-isai-heading font-medium mb-1">Associate Professor Aaron Driver</h3>
+                    <span class="block text-[0.95rem] text-isai-accent mb-4">Chief AI Officer, University of New England<br>Director, LabNext70</span>
+                    <p class="mb-4 text-[0.95rem] leading-relaxed">Associate Professor Aaron Driver is the Founding Deputy Director of the ISA. Aaron leads LabNext70, driving AI integration across teaching, research, and operations. His background spans technology, marketing, and behavioural science, giving him a rare ability to bridge technical capability with strategic narrative.</p>
+                    <p class="text-[0.95rem] leading-relaxed">At UNE, Aaron has been instrumental in building the university's sovereign AI platform. He brings deep expertise in industry partnership development and the translation of research into practical, high-impact applications.</p>
                 </div>
             </div>
         </section>
 
         <!-- CONTACT SECTION -->
         <section id="contact" class="section-animate opacity-0 translate-y-8 min-h-[80vh] flex flex-col justify-center max-w-[1000px] mx-auto px-8 py-24" data-bg="bg-hero-grad" data-physics="0">
-            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Connect</div>
-            <h2 class="text-4xl text-isai-heading font-medium mb-8">Deployment & Partnerships</h2>
+            <div class="text-lg text-isai-accent mb-8 font-medium tracking-wide uppercase">Connect</div>
+            <h2 class="text-4xl text-isai-heading font-medium mb-4 border-b border-isai-border pb-4">Deployment & Partnerships</h2>
+            <p class="text-center mx-auto max-w-2xl text-lg mt-4 mb-4">We partner with government agencies, industry leaders, and research organisations to solve complex problems with AI. If you have a challenge that needs a breakthrough, get in touch.</p>
             
-            <div class="grid md:grid-cols-2 gap-8 items-start">
-                <!-- Intro protected -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md">
-                    <p class="text-lg leading-[1.8]">We partner with government agencies, industry leaders, and research organisations to solve complex problems with AI. If you have a challenge that needs a breakthrough, get in touch.</p>
-                </div>
-                
-                <!-- Contact info protected -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-2xl backdrop-blur-md text-center md:text-left shadow-[0_0_40px_rgba(129,140,248,0.05)]">
-                    <h3 class="text-2xl text-isai-heading font-medium mb-2">Institute for Strategic AI</h3>
-                    <p class="mb-4 text-isai-body">University of New England<br>Armidale NSW 2351, Australia</p>
-                    <div class="mt-8 space-y-4">
-                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Professor Amir Karton, Director</strong><a href="mailto:amir.karton@une.edu.au" class="text-isai-accent hover:text-white transition-colors">amir.karton@une.edu.au</a></p>
-                        <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Associate Professor Aaron Driver</strong><a href="mailto:aaron.driver@une.edu.au" class="text-isai-accent hover:text-white transition-colors">aaron.driver@une.edu.au</a></p>
-                    </div>
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-12 text-center mt-8 shadow-2xl">
+                <h3 class="text-2xl text-isai-heading font-medium mb-2">Institute for Strategic AI</h3>
+                <p class="mb-4 text-isai-body">University of New England<br>Armidale NSW 2351, Australia</p>
+                <div class="mt-8 space-y-4">
+                    <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Professor Amir Karton, Director</strong><a href="mailto:amir.karton@une.edu.au" class="text-isai-accent hover:underline">amir.karton@une.edu.au</a></p>
+                    <p class="text-isai-body"><strong class="text-isai-heading block mb-1">Associate Professor Aaron Driver</strong><a href="mailto:aaron.driver@une.edu.au" class="text-isai-accent hover:underline">aaron.driver@une.edu.au</a></p>
                 </div>
             </div>
         </section>
@@ -269,7 +241,7 @@
             resize();
 
             // SCROLL-LINKED PHYSICS STATES
-            let physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+            let physicsConfig = { linkDistance: 150, baseSpeed: 0.4, repulsionStrength: 5 };
 
             // Tie Physics to the scrolling observer
             const observerLogicForPhysics = new IntersectionObserver((entries) => {
@@ -277,17 +249,17 @@
                     if(entry.isIntersecting) {
                         const state = entry.target.getAttribute('data-physics');
                         if (state === "0") {
-                            physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+                            physicsConfig = { linkDistance: 150, baseSpeed: 0.4, repulsionStrength: 5 };
                         } else if (state === "1") {
-                            physicsConfig = { linkDistance: 200, baseSpeed: 0.8, repulsionStrength: 2 };
+                            physicsConfig = { linkDistance: 190, baseSpeed: 0.7, repulsionStrength: 3 };
                         } else if (state === "2") {
-                            physicsConfig = { linkDistance: 100, baseSpeed: 1.6, repulsionStrength: 4 };
+                            physicsConfig = { linkDistance: 120, baseSpeed: 1.2, repulsionStrength: 8 };
                         } else if (state === "3") {
-                            physicsConfig = { linkDistance: 300, baseSpeed: 0.8, repulsionStrength: 1 };
+                            physicsConfig = { linkDistance: 240, baseSpeed: 0.2, repulsionStrength: 2 };
                         }
                     }
                 });
-            }, { threshold: 0.2 });
+            }, { threshold: 0.4 });
             
             document.querySelectorAll('[data-physics]').forEach(el => observerLogicForPhysics.observe(el));
 
