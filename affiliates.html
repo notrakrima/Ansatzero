@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute for Strategic AI | UNE</title>
+    
+    <!-- Meta Tags -->
+    <meta property="og:title" content="Institute for Strategic AI">
+    <meta property="og:description" content="AI-Driven Autonomous Research at the University of New England.">
+    <meta property="og:image" content="https://cdn.simulationtheory.ai/gasset/?asset=img&prompt=subtle+abstract+geometric+pattern+dark+stealth+blue+glow&w=1200&h=800&style=professional">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Papa Parse -->
+    <script src="/chat/cdn/papaparse.min.js"></script>
+
+    <!-- Tailwind Config for Custom Gradients & Colors -->
+    <script>
+            tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isai: {
+                            base: '#080808',
+                            heading: '#e2e8f0',
+                            body: '#cbd5e1', /* INCREASED CONTRAST HERE */
+                            border: '#1f1f1f',
+                            accent: '#818cf8',
+                            bento: 'rgba(20, 20, 22, 0.75)'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-grad': 'radial-gradient(circle at 50% 0%, #15151a 0%, #080808 70%)',
+                        'pillars-grad': 'radial-gradient(circle at 100% 50%, #0d121c 0%, #080808 80%)',
+                        'flagship-grad': 'radial-gradient(circle at 0% 100%, #170d1c 0%, #080808 80%)',
+                        'team-grad': 'radial-gradient(circle at 50% 50%, #0a1114 0%, #080808 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Hardware accelerated transitions for sections */
+        .section-animate {
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        
+        /* Subtle Computational Gridlines Overlay */
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-isai-base text-isai-body font-sans antialiased overflow-x-hidden selection:bg-isai-accent selection:text-white font-medium tracking-[0.015em]">
+    <!-- Fixed Background Layers -->
+    <div id="fixed-bg" class="fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-1000 ease-in-out bg-hero-grad"></div>
+    
+    <!-- Interactive Physics Canvas (Sits directly above the gradient background, but below the grid and text) -->
+    <canvas id="physics-canvas" class="fixed top-0 left-0 w-screen h-screen pointer-events-none" style="z-index: -15;"></canvas>
+    
+    <div class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-none grid-overlay"></div>
+
+    <!-- Vercel-style Top Nav -->
+    <nav class="fixed top-0 w-full h-[60px] flex items-center justify-between px-8 bg-[#080808]/75 backdrop-blur-md border-b border-isai-border z-50">
+        <!-- Logo linking back to Homepage -->
+        <a href="index.html" class="font-semibold tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="images/Logo_lower_case3-modified.png" alt="Institute for Strategic AI" class="h-8 w-auto">
+            <span class="hidden sm:block text-isai-accent">Institute for Strategic AI</span>                
+        </a>                
+        
+        <!-- Cross-page compatible Navigation Links -->
+        <div class="hidden md:flex gap-8">
+            <a href="index.html#about" class="text-sm text-isai-body hover:text-isai-heading transition-colors">About</a>
+            <a href="index.html#pillars" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Architecture</a>
+            <a href="index.html#flagship" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Flagship</a>
+            <a href="index.html#team" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Founders</a>
+            <a href="affiliates.html" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Affiliates</a>
+        </div>
+        
+        <!-- Contact Button linking back to Homepage Contact Section -->
+        <div>
+            <a href="index.html#contact" class="bg-isai-heading text-isai-base px-4 py-1.5 rounded-md text-sm font-semibold hover:opacity-90 hover:-translate-y-px transition-all">
+                Contact Us
+            </a>
+        </div>
+    </nav>
+
+    <main class="pt-[60px]">
+        <!-- AFFILIATES SECTION -->
+        <section id="affiliates-page" class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col pt-24 pb-24 max-w-[1000px] mx-auto px-8" data-bg="bg-hero-grad" data-physics="1">
+            
+            <div class="text-lg text-isai-accent mb-6 font-medium tracking-wide uppercase">Collaborators</div>
+            <h1 class="text-5xl text-isai-heading font-medium tracking-tight mb-12">Affiliated Academics</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                
+                <!-- Affiliate 1 Card -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
+                    <div class="flex items-center gap-6 mb-6">
+                        <!-- Image targeting the new images folder -->
+                        <img src="images/peter-anderson.jpg" alt="Prof. Peter Anderson" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">Prof. Peter Anderson</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Pro Vice-Chancellor (Indigenous)</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-[0.95rem] leading-[1.7]">Professor Peter Anderson is a leading national scholar championing the integration of Indigenous perspectives, governance, and methodologies across university research programs.</p>
+                    </div>
+                </div>
+
+                <!-- Affiliate 2 Card -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
+                    <div class="flex items-center gap-6 mb-6">
+                        <!-- Image targeting the new images folder -->
+                        <img src="images/kasimir-gregory.jpg" alt="Dr. Kasimir Gregory" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
+                        
+                        <div>
+                            <h3 class="text-2xl text-isai-heading font-medium mb-1">Dr. Kasimir Gregory</h3>
+                            <span class="block text-[0.95rem] text-isai-accent">Computational Chemistry </span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-[0.95rem] leading-[1.7]">Dr. Kasimir Gregory drives the computational chemistry modeling that underpins our predictive AI architectures.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll(".section-animate");
+            const fixedBg = document.getElementById("fixed-bg");
+
+            // Setup Intersection Observer for Background Colors and Fade In
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.35 // Triggers when 35% of section is visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 1. Text slide-up animation using Tailwind utility classes dynamically applied
+                        entry.target.classList.remove("opacity-0", "translate-y-8");
+                        entry.target.classList.add("opacity-100", "translate-y-0");
+                        
+                        // 2. Change background color
+                        const bgClass = entry.target.getAttribute("data-bg");
+                        // Reset all possible gradient backgrounds, then apply new one
+                        fixedBg.className = `fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-[1500ms] ease-in-out ${bgClass}`;
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // --- DYNAMIC NETWORK BACKGROUND PHYSICS ---
+            const canvas = document.getElementById('physics-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width, height;
+            let particles = [];
+            const numParticles = 70; // Adjust for density
+            
+            // Setup mouse tracking (needs pointer-events handled natively)
+            let mouse = { x: null, y: null, radius: 250 };
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            // SCROLL-LINKED PHYSICS STATES
+            let physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+
+            // Tie Physics to the scrolling observer
+            const observerLogicForPhysics = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        const state = entry.target.getAttribute('data-physics');
+                        if (state === "0") {
+                            physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+                        } else if (state === "1") {
+                            physicsConfig = { linkDistance: 200, baseSpeed: 0.8, repulsionStrength: 2 };
+                        } else if (state === "2") {
+                            physicsConfig = { linkDistance: 100, baseSpeed: 1.6, repulsionStrength: 4 };
+                        } else if (state === "3") {
+                            physicsConfig = { linkDistance: 300, baseSpeed: 0.8, repulsionStrength: 1 };
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            document.querySelectorAll('[data-physics]').forEach(el => observerLogicForPhysics.observe(el));
+
+            // Particle Class
+            // Particle Class (Refined Neural Network Style)
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 4 + 3; // Slightly refined core size
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = (Math.random() - 0.5) * 2;
+                    
+                    // Constrain colors to the ISAI brand: Blues, Indigos, and Violets only (no rainbow/distractions)
+                    this.hue = 210 + Math.floor(Math.random() * 50); 
+                }
+
+                draw() {
+                    ctx.setLineDash([]); // Ensure no dashed lines (removes the flower look)
+
+                    // 1. The glowing neural aura (smooth gradient)
+                    ctx.beginPath();
+                    let gradient = ctx.createRadialGradient(this.x, this.y, this.size, this.x, this.y, this.size * 4);
+                    gradient.addColorStop(0, `hsla(${this.hue}, 80%, 65%, 0.3)`); // Inner glow
+                    gradient.addColorStop(1, `hsla(${this.hue}, 80%, 65%, 0)`);   // Fade out
+                    ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    // 2. A crisp, faint orbital ring (tech aesthetic)
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2.2, 0, Math.PI * 2);
+                    ctx.strokeStyle = `hsla(${this.hue}, 80%, 65%, 0.4)`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+
+                    // 3. The solid white core (Soma) with a subtle CSS-like drop shadow
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff'; 
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, 0.8)`;
+                    ctx.fill();
+
+                    // Reset shadow so it doesn't affect the connecting lines
+                    ctx.shadowBlur = 0;
+                }
+
+                update() {
+                    this.x += this.vx * physicsConfig.baseSpeed;
+                    this.y += this.vy * physicsConfig.baseSpeed;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    // Mouse Repulsion
+                    if (mouse.x !== null && mouse.y !== null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouse.radius) {
+                            const forceDirectionX = dx / distance;
+                            const forceDirectionY = dy / distance;
+                            const force = (mouse.radius - distance) / mouse.radius;
+                            
+                            this.x -= forceDirectionX * force * physicsConfig.repulsionStrength;
+                            this.y -= forceDirectionY * force * physicsConfig.repulsionStrength;
+                        }
+                    }
+                    this.draw();
+                }
+            }
+            function init() {
+                particles = [];
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+                        function connect() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < physicsConfig.linkDistance) {
+                            // Calculate opacity based on distance (closer = more solid)
+                            let opacity = 1 - (distance / physicsConfig.linkDistance);
+                            
+                            ctx.beginPath();
+                            // Made the lines a lighter silver/slate and doubled the base opacity
+                            ctx.strokeStyle = `rgba(180, 190, 210, ${opacity * 0.75})`; 
+                            ctx.lineWidth = 1.0; // Thicker lines so they don't vanish
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) { particles[i].update(); }
+                connect();
+            }
+
+            init();
+            animate();
+        });
+    </script>
+</body>
+</html>
