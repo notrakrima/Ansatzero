@@ -79,20 +79,20 @@
     <!-- Fixed Background Layers -->
     <div id="fixed-bg" class="fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-1000 ease-in-out bg-hero-grad"></div>
     
-    <!-- Interactive Physics Canvas (Sits directly above the gradient background, but below the grid and text) -->
+    <!-- Canvas -->
     <canvas id="physics-canvas" class="fixed top-0 left-0 w-screen h-screen pointer-events-none" style="z-index: -15;"></canvas>
     
     <div class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-none grid-overlay"></div>
 
-    <!-- Vercel-style Top Nav -->
+    <!-- Top Nav -->
     <nav class="fixed top-0 w-full h-[60px] flex items-center justify-between px-8 bg-[#080808]/75 backdrop-blur-md border-b border-isai-border z-50">
-        <!-- Logo linking back to Homepage -->
+        <!-- Logo -->
         <a href="index.html" class="font-semibold tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img src="images/Logo_lower_case3-modified.png" alt="Institute for Strategic AI" class="h-8 w-auto">
             <span class="hidden sm:block text-isai-accent">Institute for Strategic AI</span>                
         </a>                
         
-        <!-- Cross-page compatible Navigation Links -->
+        <!-- Navigation Links -->
         <div class="hidden md:flex gap-8">
             <a href="index.html#about" class="text-sm text-isai-body hover:text-isai-heading transition-colors">About</a>
             <a href="index.html#pillars" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Architecture</a>
@@ -101,7 +101,7 @@
             <a href="affiliates.html" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Affiliates</a>
         </div>
         
-        <!-- Contact Button linking back to Homepage Contact Section -->
+        <!-- Contact Button -->
         <div>
             <a href="index.html#contact" class="bg-isai-heading text-isai-base px-4 py-1.5 rounded-md text-sm font-semibold hover:opacity-90 hover:-translate-y-px transition-all">
                 Contact Us
@@ -121,7 +121,7 @@
                 <!-- Affiliate Card -->
                 <a href="https://www.une.edu.au/info-for/indigenous-matters/oorala/whats-on/frank-archibald-memorial-lecture-series/2022-prof.-peter-anderson" target="_blank" rel="noopener noreferrer" class="block bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
                     <div class="flex items-center gap-6 mb-6">
-                        <!-- Image targeting the new images folder -->
+                        <!-- Image -->
                         <img src="images/peter-anderson.jpg" alt="Prof. Peter Anderson" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
                         
                         <div>
@@ -137,7 +137,7 @@
                 <!-- Affiliate Card -->
                 <a href="https://scholar.google.com/citations?user=NWeGxvIAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="block bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
                     <div class="flex items-center gap-6 mb-6">
-                        <!-- Image targeting the new images folder -->
+                        <!-- Image -->
                         <img src="images/raymond-chiong.jpg" alt="Prof. Raymond Chiong" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
 
                         <div>
@@ -153,7 +153,7 @@
                 <!-- Affiliate Card -->
                 <a href="https://www.une.edu.au/staff-profiles/hass/kyle-mulrooney" target="_blank" rel="noopener noreferrer" class="block bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
                     <div class="flex items-center gap-6 mb-6">
-                        <!-- Image targeting the new images folder -->
+                        <!-- Image -->
                         <img src="images/kyle-mulrooney.jpg" alt="A/Prof. Kyle Mulrooney" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
 
                         <div>
@@ -169,7 +169,7 @@
                 <!-- Affiliate Card -->
                 <a href="https://www.une.edu.au/staff-profiles/law/Professor-Mark-Perry" target="_blank" rel="noopener noreferrer" class="block bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
                     <div class="flex items-center gap-6 mb-6">
-                        <!-- Image targeting the new images folder -->
+                        <!-- Image -->
                         <img src="images/mark-perry.png" alt="Prof. Mark Perry" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
 
                         <div>
@@ -185,7 +185,7 @@
                 <!-- Affiliate Card -->
                 <a href="https://www.une.edu.au/staff-profiles/science-and-technology/kasimir-gregory" target="_blank" rel="noopener noreferrer" class="block bg-isai-bento border border-isai-border rounded-xl p-8 shadow-xl backdrop-blur-md hover:border-isai-accent hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300">
                     <div class="flex items-center gap-6 mb-6">
-                        <!-- Image targeting the new images folder -->
+                        <!-- Image -->
                         <img src="images/kasimir-gregory.jpg" alt="Dr. Kasimir Gregory" class="w-20 h-20 rounded-full border border-isai-border shadow-[0_0_15px_rgba(129,140,248,0.15)] object-cover">
                         
                         <div>
@@ -207,7 +207,7 @@
             const sections = document.querySelectorAll(".section-animate");
             const fixedBg = document.getElementById("fixed-bg");
 
-            // Setup Intersection Observer for Background Colors and Fade In
+            // Setup ntersection Observer for Background Colors and Fade In
             const observerOptions = {
                 root: null,
                 rootMargin: "0px",
