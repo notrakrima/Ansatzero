@@ -5,33 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Institute for Strategic AI | UNE</title>
+    <!-- SEO and Primary Meta Tags -->
     <meta name="description" content="The Institute for Strategic AI (ISA) bridges advanced artificial intelligence with real-world application. We build predictive, generative, and agentic AI for autonomous research and scientific discovery.">
     <meta name="keywords" content="Institute for Strategic AI, Agentic AI, Autonomous Research, Scientific Discovery, Predictive Analytics, AI in Chemistry">
     <meta name="author" content="Amir Karton & Aaron Driver">
     <meta name="theme-color" content="#050505">
 
+    <!-- Open Graph / LinkedIn / Facebook Preview -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://theisa.ai/">
     <meta property="og:title" content="Institute for Strategic AI">
     <meta property="og:description" content="Operating at the frontier of applied agentic AI. Bridging advanced artificial intelligence with real-world application.">
     <meta property="og:image" content="https://theisa.ai/images/og-image.png"> 
 
+    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://theisa.ai/">
     <meta name="twitter:title" content="Institute for Strategic AI">
     <meta name="twitter:description" content="Operating at the frontier of applied agentic AI. Bridging advanced artificial intelligence with real-world application.">
     <meta name="twitter:image" content="https://theisa.ai/images/og-image.png"> 
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Papa Parse -->
     <script src="/chat/cdn/papaparse.min.js"></script>
 
+    <!-- UI Styles -->
     <style>
+        /* Smooth scrolling */
         html { scroll-behavior: smooth; }
         
+        /* Hardware accelerated transitions for sections */
         .section-animate {
             transition: opacity 1s ease-out, transform 1s ease-out;
         }
         
+        /* Subtle Computational Gridlines Overlay */
         .grid-overlay {
             background-size: 40px 40px;
             background-image: 
@@ -39,6 +49,7 @@
                 linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
         }
 
+        /* Sleek, clinical dark mode styling matching ISA aesthetics */
         :root {
             --bg-color: #050505;
             --accent-indigo: #818cf8;
@@ -94,7 +105,7 @@
             font-size: 1rem;
             margin-top: 15px;
             resize: vertical;
-            min-height: 120px;
+            min-height: 100px;
         }
         .pitch-input:focus { outline: none; box-shadow: 0 0 10px rgba(129, 140, 248, 0.3); }
 
@@ -116,6 +127,7 @@
         .hidden { display: none !important; }
     </style>
 
+    <!-- SCRIPT 1: TAILWIND CSS CONFIGURATION -->
     <script>
         tailwind.config = {
             theme: {
@@ -144,8 +156,10 @@
 <body>
     <div class="incubator-wrapper">
         <div class="bento-grid">
+            <!-- LEFT COLUMN: The Interface -->
             <div class="main-column" style="display: flex; flex-direction: column; gap: 24px;">
                 
+                <!-- Context Box -->
                 <div class="bento-box">
                     <span class="status-text" id="ui-stage-title">Loading Parameters...</span>
                     <p id="ui-context" style="color: var(--text-muted); margin-bottom: 20px;">Establishing connection to Incubator...</p>
@@ -155,19 +169,21 @@
                     </div>
                 </div>
 
+                <!-- Entrepreneur Mentor Response Box -->
                 <div class="bento-box ai-mentor-box hidden" id="ui-response-box">
                     <span class="status-text" style="color: white;">❯ ENTREPRENEUR MENTOR</span>
                     <p id="ui-mentor-reply" style="font-style: italic; line-height: 1.6;"></p>
                     <button id="next-stage-btn" class="submit-btn hidden" style="background: var(--success-green); width: 100%; margin-top: 20px;">Proceed to Next Stage ❯</button>
                 </div>
 
+                <!-- Pitch Box -->
                 <div class="bento-box" id="ui-pitch-container">
                     <span class="status-text">❯ YOUR STRATEGY</span>
-                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..." maxlength="800"></textarea>
-                    <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 800</div>
+                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..."></textarea>
                     <button id="ui-submit-btn" class="submit-btn">Submit Pitch to Entrepreneur Mentor</button>
                 </div>
                 
+                <!-- Victory Box -->
                 <div class="bento-box hidden" id="ui-victory-box" style="text-align: center; border-color: var(--success-green);">
                     <h2 style="color: var(--success-green); font-size: 2rem;">INCUBATION COMPLETE</h2>
                     <p>You have proven the mindset of a true Entrepreneur.</p>
@@ -175,6 +191,7 @@
 
             </div>
 
+            <!-- RIGHT COLUMN: HUD & Stats -->
             <div class="side-column">
                 <div class="bento-box" style="position: sticky; top: 20px;">
                     <span class="status-text">Impact Capital Raised</span>
@@ -190,16 +207,21 @@
         </div>
     </div>
 
+<!-- SCRIPT 2: GAME LOGIC V2 (DYNAMIC NARRATIVE) -->
 <script>
+    // --- SYSTEM SECURITY LOCK ---
     let gamePasscode = prompt("SYSTEM LOCK: Please enter the authorized Game Passcode:");
     if (!gamePasscode) {
         alert("Warning: Passcode required to interact with the Entrepreneur Mentor.");
     }
+    // ----------------------------            
     
+    // Frontend Game State
     let currentStage = 0;
     let totalCapital = 0;
-    let chatHistory = [];
+    let chatHistory = []; // V2: Stores AI memory
 
+    // V2: Only the first stage is hardcoded. The rest are generated by the LLM!
     let currentContextText = "The local park is covered in litter and the playground equipment is broken. Most people are just complaining about it.";
     let currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
 
@@ -210,23 +232,19 @@
         "Stage 10: The Smart Region Incubator"
     ];
 
+    // DOM Elements
     const eTitle = document.getElementById('ui-stage-title');
     const eContext = document.getElementById('ui-context');
     const eChallenge = document.getElementById('ui-challenge');
     const eCapital = document.getElementById('ui-capital');
     const eTracker = document.getElementById('ui-stage-tracker');
     const ePitchInput = document.getElementById('ui-pitch-input');
-    const eCharCounter = document.getElementById('char-counter');
     const eSubmitBtn = document.getElementById('ui-submit-btn');
     const eResponseBox = document.getElementById('ui-response-box');
     const eMentorReply = document.getElementById('ui-mentor-reply');
     const eNextBtn = document.getElementById('next-stage-btn');
     const ePitchContainer = document.getElementById('ui-pitch-container');
     const eVictoryBox = document.getElementById('ui-victory-box');
-
-    ePitchInput.addEventListener('input', () => {
-        eCharCounter.innerText = `${ePitchInput.value.length} / 800`;
-    });
 
     function loadStage() {
         if (currentStage >= 10) {
@@ -242,19 +260,19 @@
         eNextBtn.classList.add('hidden');
         ePitchContainer.classList.remove('hidden');
         eMentorReply.style.color = "var(--text-main)";
-        ePitchInput.value = "";
-        eCharCounter.innerText = "0 / 800";
     }
 
     eSubmitBtn.addEventListener('click', async () => {
         const pitchText = ePitchInput.value.trim();
         if (!pitchText) return;
 
+        // UI Loading State
         eSubmitBtn.disabled = true;
         eSubmitBtn.innerText = "Evaluating via LLM...";
         eResponseBox.classList.add('hidden');
 
         try {
+            // Call the Netlify Function with History Payload
             const res = await fetch('/.netlify/functions/incubator', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -271,26 +289,28 @@
             if (!res.ok) throw new Error("Connection failed or unauthorized.");
             const data = await res.json();
 
+            // Display Mentor Response
             eResponseBox.classList.remove('hidden');
             eMentorReply.innerText = data.mentor_reply;
+            ePitchInput.value = ""; // V2: Flushes the input box!
 
+            // Save conversation to memory so AI maintains context
             chatHistory.push({ role: "user", content: pitchText });
             chatHistory.push({ role: "assistant", content: data.mentor_reply });
 
             if (data.is_funded) {
-                ePitchInput.value = ""; 
-                eCharCounter.innerText = "0 / 800";
-
                 eMentorReply.style.color = "var(--success-green)";
                 eMentorReply.innerHTML = `<strong>[ SEED FUNDING APPROVED ]</strong><br><br>` + eMentorReply.innerHTML;
                 totalCapital += data.funding_amount;
                 eCapital.innerText = "$" + totalCapital.toLocaleString();
                 
+                // Inject the AI-generated scenario for the next stage
                 if (currentStage < 9) {
                     currentContextText = data.next_context;
                     currentChallengeText = data.next_challenge;
                 }
                 
+                // Transition UI
                 ePitchContainer.classList.add('hidden');
                 eNextBtn.classList.remove('hidden');
             } else {
@@ -313,6 +333,7 @@
         loadStage();
     });
 
+    // Init
     loadStage();
 </script>
 </body>

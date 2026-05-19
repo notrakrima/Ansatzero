@@ -1,5 +1,4 @@
 exports.handler = async function(event, context) {
-    // 1. Setup CORS
     const headers = {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Content-Type",
@@ -12,7 +11,6 @@ exports.handler = async function(event, context) {
     try {
         const body = JSON.parse(event.body);
         
-        // SECURE PASSCODE CHECK
         if (body.passcode !== process.env.GAME_PASSCODE) {
             return { statusCode: 401, headers, body: JSON.stringify({ error: "Unauthorized: Incorrect Game Passcode" }) };
         }
@@ -24,7 +22,6 @@ exports.handler = async function(event, context) {
 
         const { stage_index, pitch, current_context, current_challenge, history } = body;
 
-        // V2.1 Dynamic Themes - Broad, strategic directives rather than specific examples.
         const THEMES = [
             "Identifying Community Needs", // Stage 1 (0) 
             "User-Centric Design. The founder discovers the demographic actually using their product is completely different from who they originally targeted. Present a logical but surprising new user base.", // Stage 2 (1)
@@ -66,14 +63,12 @@ exports.handler = async function(event, context) {
 
         ${nextStagePrompt}`;
 
-        // Build messages array using the saved memory history
         let messages = [
             { role: "system", content: systemPrompt },
             ...(history || []),
             { role: "user", content: pitch }
         ];
 
-        // Fetch using JSON Object format
         const response = await fetch(`${baseUrl}/chat/completions`, {
             method: "POST",
             headers: {
@@ -94,11 +89,9 @@ exports.handler = async function(event, context) {
             return { statusCode: 500, headers, body: JSON.stringify({ error: "API Proxy rejected the request. Check terminal logs." }) };
         }
 
-        // Parse the intelligent JSON response
         const aiResponse = JSON.parse(data.choices[0].message.content);
         const isFunded = aiResponse.status === "FUNDED";
         
-        // Define scaling capital rewards for each stage
         const levelFunding = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
         const funding_amount = levelFunding[stage_index] || 1000;
 
