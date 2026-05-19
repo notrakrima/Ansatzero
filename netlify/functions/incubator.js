@@ -1,4 +1,4 @@
-Identifying Community Needsexports.handler = async function(event, context) {
+exports.handler = async function(event, context) {
     // 1. Setup CORS
     const headers = {
         "Access-Control-Allow-Origin": "*",
@@ -27,13 +27,13 @@ Identifying Community Needsexports.handler = async function(event, context) {
         // V2.1 Dynamic Themes - Broad, strategic directives rather than specific examples.
         const THEMES = [
             "Identifying Community Needs", // Stage 1 (0) 
-            "User-Centric Design. The founder discovers the demographic actually using their product is different from the one they originally targeted. They must identify and adapt to this unexpected but logical user base", // Stage 2 (1)
-            "Human Authenticity. The founder must pitch their product to a high-level stakeholder, but their prepared materials sound overly robotic and impersonal. They must communicate genuine conviction, clarity, and authentic passion for the problem they are solving.", // Stage 3 (2)
-            "Defeating Digital Distractions. The founder is experiencing severe operational overload and losing focus to algorithms, notifications, and constant busywork while trying to scale. They must establish practical boundaries to regain clarity and momentum.", // Stage 4 (3)
-            "Managing Data Ethics. A shadowy third-party offers a massive shortcut or major funding opportunity, but it requires compromising the privacy, safety, or trust of the startup’s users. The founder must make a difficult ethical decision.", // Stage 5 (4)
-            "The Pivot. Users are ignoring the product’s main intended feature and instead obsessing over a secondary, unexpected use-case. The founder must decide whether to stay the course or pivot toward the new opportunity", // Stage 6 (5)
-            "Unique Value Proposition. A massive, well-funded corporation launches a highly polished clone of the product. The startup must identify a distinctive local, niche, or mission-driven advantage that cannot be easily replicated.", // Stage 7 (6)
-            "Product Quality over Hype. Funds are running critically low. The founder must choose between fixing a major flaw in the product or investing in aggressive marketing and hype to attract attention and investors.", // Stage 8 (7)
+            "User-Centric Design. The founder discovers the demographic actually using their product is completely different from who they originally targeted. Present a logical but surprising new user base.", // Stage 2 (1)
+            "Human Authenticity. The founder must pitch their product to a high-level stakeholder, but their prepared materials sound overly robotic and disconnected. They must show authentic passion.", // Stage 3 (2)
+            "Defeating Digital Distractions. The founder is experiencing severe operational overload and is losing focus to algorithms and busywork while trying to scale. They need a practical boundary.", // Stage 4 (3)
+            "Managing Data Ethics. A shadowy third-party offers a massive shortcut or funding, but it requires compromising the privacy or safety of the startup's specific users. Present a tough ethical choice.", // Stage 5 (4)
+            "The Pivot. Users are ignoring the main intended feature of the product and instead obsessing over a secondary, unexpected use-case. What should the founder do?", // Stage 6 (5)
+            "Unique Value Proposition. A massive, well-funded mega-corporation just launched a highly polished clone of the product. The startup must identify an uncopyable local or niche advantage.", // Stage 7 (6)
+            "Product Quality over Hype. Funds are running critically low. A choice must be made between fixing a core product flaw or paying for aggressive marketing/hype.", // Stage 8 (7)
             "Founder Wellbeing. A critical failure occurs right before a major milestone. The founder is exhausted and frustrated. How do they manage their mindset and the crisis?", // Stage 9 (8)
             "The Smart Region Incubator. The startup is a massive success. The founder must now decide how to reinvest their success to permanently uplift their local community or industry." // Stage 10 (9)
         ];
