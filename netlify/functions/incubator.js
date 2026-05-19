@@ -23,16 +23,16 @@ exports.handler = async function(event, context) {
         const { stage_index, pitch, current_context, current_challenge, history } = body;
 
         const THEMES = [
-            "Identifying Community Needs", // Stage 1 (0) 
-            "User-Centric Design. The founder discovers the demographic actually using their product is completely different from who they originally targeted. Present a logical but surprising new user base.", // Stage 2 (1)
-            "Human Authenticity. The founder must pitch their product to a high-level stakeholder, but their prepared materials sound overly robotic and disconnected. They must show authentic passion.", // Stage 3 (2)
-            "Defeating Digital Distractions. The founder is experiencing severe operational overload and is losing focus to algorithms and busywork while trying to scale. They need a practical boundary.", // Stage 4 (3)
-            "Managing Data Ethics. A shadowy third-party offers a massive shortcut or funding, but it requires compromising the privacy or safety of the startup's specific users. Present a tough ethical choice.", // Stage 5 (4)
-            "The Pivot. Users are ignoring the main intended feature of the product and instead obsessing over a secondary, unexpected use-case. What should the founder do?", // Stage 6 (5)
-            "Unique Value Proposition. A massive, well-funded mega-corporation just launched a highly polished clone of the product. The startup must identify an uncopyable local or niche advantage.", // Stage 7 (6)
-            "Product Quality over Hype. Funds are running critically low. A choice must be made between fixing a core product flaw or paying for aggressive marketing/hype.", // Stage 8 (7)
-            "Founder Wellbeing. A critical failure occurs right before a major milestone. The founder is exhausted and frustrated. How do they manage their mindset and the crisis?", // Stage 9 (8)
-            "The Smart Region Incubator. The startup is a massive success. The founder must now decide how to reinvest their success to permanently uplift their local community or industry." // Stage 10 (9)
+            "Identifying Community Needs",
+            "User-Centric Design. The founder discovers the demographic actually using their product is completely different from who they originally targeted. Present a logical but surprising new user base.",
+            "Human Authenticity. The founder must pitch their product to a high-level stakeholder, but their prepared materials sound overly robotic and disconnected. They must show authentic passion.",
+            "Defeating Digital Distractions. The founder is experiencing severe operational overload and is losing focus to algorithms and busywork while trying to scale. They need a practical boundary.",
+            "Managing Data Ethics. A shadowy third-party offers a massive shortcut or funding, but it requires compromising the privacy or safety of the startup's specific users. Present a tough ethical choice.",
+            "The Pivot. Users are ignoring the main intended feature of the product and instead obsessing over a secondary, unexpected use-case. What should the founder do?",
+            "Unique Value Proposition. A massive, well-funded mega-corporation just launched a highly polished clone of the product. The startup must identify an uncopyable local or niche advantage.",
+            "Product Quality over Hype. Funds are running critically low. A choice must be made between fixing a core product flaw or paying for aggressive marketing/hype.",
+            "Founder Wellbeing. A critical failure occurs right before a major milestone. The founder is exhausted and frustrated. How do they manage their mindset and the crisis?",
+            "The Smart Region Incubator. The startup is a massive success. The founder must now decide how to reinvest their success to permanently uplift their local community or industry."
         ];
 
         let nextStagePrompt = "";

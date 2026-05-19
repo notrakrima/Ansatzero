@@ -225,7 +225,18 @@
     const eVictoryBox = document.getElementById('ui-victory-box');
 
     ePitchInput.addEventListener('input', () => {
-        eCharCounter.innerText = `${ePitchInput.value.length} / 800`;
+        if (ePitchInput.value.length > 800) {
+            ePitchInput.value = ePitchInput.value.substring(0, 800);
+        }
+        
+        let currentLength = ePitchInput.value.length;
+        eCharCounter.innerText = `${currentLength} / 800`;
+        
+        if (currentLength >= 800) {
+            eCharCounter.style.color = "#ef4444";
+        } else {
+            eCharCounter.style.color = "var(--text-muted)";
+        }
     });
 
     function loadStage() {
@@ -244,11 +255,19 @@
         eMentorReply.style.color = "var(--text-main)";
         ePitchInput.value = "";
         eCharCounter.innerText = "0 / 800";
+        eCharCounter.style.color = "var(--text-muted)";
     }
 
     eSubmitBtn.addEventListener('click', async () => {
         const pitchText = ePitchInput.value.trim();
         if (!pitchText) return;
+
+        if (pitchText.length > 800) {
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.style.color = "#ef4444";
+            eMentorReply.innerText = "SYSTEM ERROR: Pitch exceeds the 800 character limit. Please condense your strategy.";
+            return;
+        }
 
         eSubmitBtn.disabled = true;
         eSubmitBtn.innerText = "Evaluating via LLM...";
@@ -280,6 +299,7 @@
             if (data.is_funded) {
                 ePitchInput.value = ""; 
                 eCharCounter.innerText = "0 / 800";
+                eCharCounter.style.color = "var(--text-muted)";
 
                 eMentorReply.style.color = "var(--success-green)";
                 eMentorReply.innerHTML = `<strong>[ SEED FUNDING APPROVED ]</strong><br><br>` + eMentorReply.innerHTML;
