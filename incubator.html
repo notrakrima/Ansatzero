@@ -169,9 +169,9 @@
                     </div>
                 </div>
 
-                <!-- AI Mentor Response Box -->
+                <!-- Entrepreneur Mentor Response Box -->
                 <div class="bento-box ai-mentor-box hidden" id="ui-response-box">
-                    <span class="status-text" style="color: white;">❯ AI MENTOR TERMINAL</span>
+                    <span class="status-text" style="color: white;">❯ ENTREPRENEUR MENTOR</span>
                     <p id="ui-mentor-reply" style="font-style: italic; line-height: 1.6;"></p>
                     <button id="next-stage-btn" class="submit-btn hidden" style="background: var(--success-green); width: 100%; margin-top: 20px;">Proceed to Next Stage ❯</button>
                 </div>
@@ -180,13 +180,13 @@
                 <div class="bento-box" id="ui-pitch-container">
                     <span class="status-text">❯ YOUR STRATEGY</span>
                     <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..."></textarea>
-                    <button id="ui-submit-btn" class="submit-btn">Submit Pitch to AI Mentor</button>
+                    <button id="ui-submit-btn" class="submit-btn">Submit Pitch to Entrepreneur Mentor</button>
                 </div>
                 
                 <!-- Victory Box -->
                 <div class="bento-box hidden" id="ui-victory-box" style="text-align: center; border-color: var(--success-green);">
                     <h2 style="color: var(--success-green); font-size: 2rem;">INCUBATION COMPLETE</h2>
-                    <p>You have proven the mindset of a true Enturperur.</p>
+                    <p>You have proven the mindset of a true Entrepreneur.</p>
                 </div>
 
             </div>
@@ -200,7 +200,7 @@
                     <span class="status-text">Project Status</span>
                     <p style="font-size: 0.9rem; color: var(--text-muted);">
                         Seed Stage: <span id="ui-stage-tracker" style="color: white; font-weight: bold;">1/10</span><br>
-                        Evaluation: <span style="color: var(--accent-indigo);">LiteLLM Neural Link</span>
+                        Evaluation: <span style="color: var(--accent-indigo);">UNE-SRI Mentor</span>
                     </p>
                 </div>
             </div>
@@ -212,7 +212,7 @@
     // --- SYSTEM SECURITY LOCK ---
     let gamePasscode = prompt("SYSTEM LOCK: Please enter the authorized Game Passcode:");
     if (!gamePasscode) {
-        alert("Warning: Passcode required to interact with the AI Mentor.");
+        alert("Warning: Passcode required to interact with the Entrepreneur Mentor.");
     }
     // ----------------------------            
     
@@ -222,7 +222,7 @@
 
     // Hardcode UI text so the page loads instantly without needing a backend fetch first
     const uiLevels = [
-        { title: "Stage 1: Identifying Community Needs", context: "The local park is covered in litter and the playground equipment is broken. Most people are just complaining about it.", challenge: "As an Enturperur, what action can you take to turn this problem into an opportunity?" },
+        { title: "Stage 1: Identifying Community Needs", context: "The local park is covered in litter and the playground equipment is broken. Most people are just complaining about it.", challenge: "As an Entrepreneur, what action can you take to turn this problem into an opportunity?" },
         { title: "Stage 2: User-Centric Design", context: "You designed a super-fast, motorized skateboard. It's awesome! But your target customers are elderly people at a local retirement home.", challenge: "How must you pivot or redesign your product to fit your actual users' needs?" },
         { title: "Stage 3: Human Authenticity", context: "You used an AI to write your elevator pitch to the mayor. It sounds robotic, boring, and uses big words that don't sound like you.", challenge: "AI is just a tool. What should you do to this script before you read it to the mayor?" },
         { title: "Stage 4: Defeating Digital Distractions", context: "You sat down to research your startup, but got stuck watching auto-playing videos for two hours. Your brain feels foggy.", challenge: "The app is designed to trap your attention. What practical boundary can you set right now to break the loop?" },
@@ -230,8 +230,8 @@
         { title: "Stage 6: The Pivot", context: "You built an app for swapping sports equipment. You notice users are actually just using the chat feature to organize weekend study groups.", challenge: "Your original idea isn't working as intended, but people love the chat. What is the smart entrepreneurial move?" },
         { title: "Stage 7: Unique Value Proposition", context: "Oh no! A massive tech company just launched a copycat of your idea. You can't out-spend them on advertising.", challenge: "What is one unique thing a small, local startup can do for its users that a giant mega-corporation cannot?" },
         { title: "Stage 8: Product Quality over Hype", context: "Your app has bugs and crashes sometimes. You have $5,000 left. You can either pay a celebrity influencer to hype it up, or pay a developer to fix the code.", challenge: "Which do you choose and why?" },
-        { title: "Stage 9: Founder Wellbeing", context: "You have stared at your computer for 14 hours trying to fix a stressful problem. You are angry and nothing is working.", challenge: "To be a successful Enturperur long-term, what is the best thing you can do for your brain right now?" },
-        { title: "Stage 10: The Smart Region Incubator", context: "You made it. Your startup is highly successful and you have ample resources. But true Enturperurs build up their communities.", challenge: "How will you use your success to make your local region 'smarter' or better for the next generation?" }
+        { title: "Stage 9: Founder Wellbeing", context: "You have stared at your computer for 14 hours trying to fix a stressful problem. You are angry and nothing is working.", challenge: "To be a successful Entrepreneur long-term, what is the best thing you can do for your brain right now?" },
+        { title: "Stage 10: The Smart Region Incubator", context: "You made it. Your startup is highly successful and you have ample resources. But true Entrepreneurs build up their communities.", challenge: "How will you use your success to make your local region 'smarter' or better for the next generation?" }
     ];
 
     // DOM Elements
@@ -311,12 +311,12 @@
         } catch (err) {
             console.error(err);
             eResponseBox.classList.remove('hidden');
-            eMentorReply.innerText = "SYSTEM ERROR: Unauthorized or Failed to connect to AI Mentor.";
+            eMentorReply.innerText = "SYSTEM ERROR: Unauthorized or Failed to connect to Entrepreneur Mentor.";
             eMentorReply.style.color = "#ef4444"; // Red error
         }
 
         eSubmitBtn.disabled = false;
-        eSubmitBtn.innerText = "Submit Pitch to AI Mentor";
+        eSubmitBtn.innerText = "Submit Pitch to Entrepreneur Mentor";
     });
 
     eNextBtn.addEventListener('click', () => {
