@@ -11,7 +11,7 @@ exports.handler = async function(event, context) {
     try {
         const body = JSON.parse(event.body);
         
-                return { statusCode: 200, headers, body: JSON.stringify({ mentor_reply: "[ SYSTEM NOTICE ]: The AI Mentor is currently offline for maintenance. No pitches are being accepted at this time." }) };
+//                return { statusCode: 200, headers, body: JSON.stringify({ mentor_reply: "[ SYSTEM NOTICE ]: The AI Mentor is currently offline for maintenance. No pitches are being accepted at this time." }) };
 
         if (body.passcode !== process.env.GAME_PASSCODE) {
             return { statusCode: 401, headers, body: JSON.stringify({ error: "Unauthorized: Incorrect Game Passcode" }) };
