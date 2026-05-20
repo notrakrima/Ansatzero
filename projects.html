@@ -1,0 +1,298 @@
+<head>
+    <meta name="google-site-verification" content="ak4lF8yGJC_b3QU0Gm7VK7W2x1DvZq3Kp-WSqfQEinA" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Institute for Strategic AI (ISA)</title>
+    <meta name="description" content="Explore the active projects and deployment pipelines at the Institute for Strategic AI (ISA). From AI-driven solar recycling to computational chemistry.">
+    <meta name="keywords" content="Institute for Strategic AI, Agentic AI, Projects, Solar Recycling, Computational Chemistry, Predictive Genetics">
+    <meta name="author" content="Amir Karton & Aaron Driver">
+    <meta name="theme-color" content="#050505">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://theisa.ai/projects.html">
+    <meta property="og:title" content="Projects | Institute for Strategic AI">
+    <meta property="og:description" content="Explore the active projects and deployment pipelines at the Institute for Strategic AI (ISA).">
+    <meta property="og:image" content="https://theisa.ai/images/og-image.png"> 
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://theisa.ai/projects.html">
+    <meta name="twitter:title" content="Projects | Institute for Strategic AI">
+    <meta name="twitter:description" content="Explore the active projects and deployment pipelines at the Institute for Strategic AI (ISA).">
+    <meta name="twitter:image" content="https://theisa.ai/images/og-image.png"> 
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="/chat/cdn/papaparse.min.js"></script>
+
+    <script>
+            tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isai: {
+                            base: '#080808',
+                            heading: '#e2e8f0',
+                            body: '#cbd5e1',
+                            border: '#1f1f1f',
+                            accent: '#818cf8',
+                            bento: 'rgba(20, 20, 22, 0.75)'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-grad': 'radial-gradient(circle at 50% 0%, #15151a 0%, #080808 70%)',
+                        'pillars-grad': 'radial-gradient(circle at 100% 50%, #0d121c 0%, #080808 80%)',
+                        'flagship-grad': 'radial-gradient(circle at 0% 100%, #170d1c 0%, #080808 80%)',
+                        'team-grad': 'radial-gradient(circle at 50% 50%, #0a1114 0%, #080808 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        .section-animate { transition: opacity 1s ease-out, transform 1s ease-out; }
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-isai-base text-isai-body font-sans antialiased overflow-x-hidden selection:bg-isai-accent selection:text-white font-medium tracking-[0.015em]">
+    
+    <div id="fixed-bg" class="fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-1000 ease-in-out bg-hero-grad"></div>
+    <canvas id="physics-canvas" class="fixed top-0 left-0 w-screen h-screen pointer-events-none" style="z-index: -15;"></canvas>
+    <div class="fixed top-0 left-0 w-screen h-screen -z-10 pointer-events-none grid-overlay"></div>
+
+    <nav class="fixed top-0 w-full h-[60px] flex items-center justify-between px-8 bg-[#080808]/75 backdrop-blur-md border-b border-isai-border z-50">
+        <a href="index.html" class="font-semibold tracking-wide flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img src="images/Logo_lower_case3-modified.png" alt="Institute for Strategic AI" class="h-8 w-auto">
+            <span class="hidden sm:block text-isai-accent">Institute for Strategic AI</span>                
+        </a>                
+        <div class="hidden md:flex gap-8">
+            <a href="index.html#about" class="text-sm text-isai-body hover:text-isai-heading transition-colors">About</a>
+            <a href="index.html#pillars" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Architecture</a>
+            <a href="projects.html" class="text-sm text-isai-heading transition-colors">Projects</a>
+            <a href="index.html#team" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Founders</a>
+            <a href="affiliates.html" class="text-sm text-isai-body hover:text-isai-heading transition-colors">Affiliates</a>
+        </div>
+        <div>
+            <a href="index.html#contact" class="bg-isai-heading text-isai-base px-4 py-1.5 rounded-md text-sm font-semibold hover:opacity-90 hover:-translate-y-px transition-all">
+                Contact
+            </a>
+        </div>
+    </nav>
+
+    <main class="pt-[60px]">
+
+        <section class="section-animate opacity-0 translate-y-8 min-h-[40vh] flex flex-col justify-center max-w-[1000px] mx-auto px-8 pt-24 pb-12" data-bg="bg-hero-grad" data-physics="0">
+            <h1 class="text-5xl md:text-[3.5rem] leading-tight font-medium text-isai-heading tracking-tight mb-6">Research & Deployment</h1>
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 sm:p-10 shadow-2xl backdrop-blur-md">
+                <p class="max-w-[75ch] text-lg leading-[1.8]">Our mandate requires rapid prototyping, rigorous testing, and scalable physical rollout. We integrate foundational AI models with legacy scientific infrastructure to create entirely new, autonomous capabilities across materials, genetics, and governance.</p>
+            </div>
+        </section>
+
+        <section class="section-animate opacity-0 translate-y-8 min-h-screen flex flex-col justify-start max-w-[1000px] mx-auto px-8 pb-24" data-bg="bg-pillars-grad" data-physics="1">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Project 1: Solar / e-Waste -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">Solar Panel Valorization</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Materials & Energy</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">Tackling the $1 billion sovereign bottleneck in e-waste. By integrating a multi-agent AI framework with a $2.7M automated robotic lab, we rapidly screen and synthesize novel, non-toxic solvent combinations capable of stripping high-purity silicon and silver from end-of-life photovoltaic panels.</p>
+                    <a href="index.html#flagship" class="inline-block mt-6 text-sm text-isai-accent hover:text-white transition-colors">See Flagship Architecture &rarr;</a>
+                </div>
+
+                <!-- Project 2: Predictive Genetics -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">Predictive Phenotyping</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Biological Systems (AGBU)</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">In strategic alignment with the Animal Genetics and Breeding Unit (AGBU), we are deploying heavy-compute machine learning architectures to map complex genetic markers. Our predictive models analyze vast genomic datasets to optimize the health, resilience, and productivity of diverse agricultural species.</p>
+                </div>
+
+                <!-- Project 3: Labinitio -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">First-Principles Automation</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Quantum Chemistry</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">Developing state-of-the-art computational workflows for applied chemistry. Utilizing the <em>Labinitio</em> theoretical framework, we run predictive calculations of physical properties—from thermodynamic parameters to reaction kinetics—acting as the digital vanguard for molecular discovery.</p>
+                    <a href="https://www.labinitio.org" target="_blank" class="inline-block mt-6 text-sm text-isai-accent hover:text-white transition-colors">Visit Labinitio Protocol &rarr;</a>
+                </div>
+
+                <!-- Project 4: IDS -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">Sovereign Data Architecture</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Governance & Security</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">Advanced AI models rely entirely on the datasets that feed them. We are pioneering robust governance frameworks that embed Indigenous Data Sovereignty (IDS) directly into the computational pipeline, ensuring highly ethical, secure, and rights-based deployment of localized AI capabilities.</p>
+                </div>
+
+                <!-- Project 5: UNE ASPIRE & NASA AVIRIS -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 hover:border-zinc-700 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-xl">
+                    <h3 class="text-xl text-isai-heading font-medium mb-2">Earth Observation AI</h3>
+                    <span class="text-isai-accent text-sm uppercase tracking-wide">Climate & Environmental Resilience</span>
+                    <p class="mt-4 text-[0.95rem] leading-[1.7]">In conjunction with the 2026 NASA JPL AVIRIS mission, ISA acts as the central AI "Translation Layer." We fuse live data from terrestrial flux towers and riverine aquatic sensors with high-resolution aerial spectroscopy to resolve atmospheric blurring. This converts raw spaceborne/airborne bytes into a verified sovereign asset: the Australian Spectral Library.</p>
+                    <a href="UNE-ASPIRE.html" class="inline-block mt-6 text-sm text-isai-accent hover:text-white transition-colors">Explore the ASPIRE Mission &rarr;</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll(".section-animate");
+            const fixedBg = document.getElementById("fixed-bg");
+
+            const observerOptions = { root: null, rootMargin: "0px", threshold: 0.35 };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove("opacity-0", "translate-y-8");
+                        entry.target.classList.add("opacity-100", "translate-y-0");
+                        const bgClass = entry.target.getAttribute("data-bg");
+                        fixedBg.className = `fixed top-0 left-0 w-screen h-screen -z-20 transition-all duration-[1500ms] ease-in-out ${bgClass}`;
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => { observer.observe(section); });
+
+            // --- DYNAMIC NETWORK BACKGROUND PHYSICS ---
+            const canvas = document.getElementById('physics-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            let width, height;
+            let particles = [];
+            const numParticles = 70;
+            
+            let mouse = { x: null, y: null, radius: 250 };
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            let physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+
+            const observerLogicForPhysics = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        const state = entry.target.getAttribute('data-physics');
+                        if (state === "0") {
+                            physicsConfig = { linkDistance: 300, baseSpeed: 0.4, repulsionStrength: 1 };
+                        } else if (state === "1") {
+                            physicsConfig = { linkDistance: 200, baseSpeed: 0.8, repulsionStrength: 2 };
+                        }
+                    }
+                });
+            }, { threshold: 0.2 });
+            
+            document.querySelectorAll('[data-physics]').forEach(el => observerLogicForPhysics.observe(el));
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.size = Math.random() * 4 + 3;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = (Math.random() - 0.5) * 2;
+                    this.hue = 210 + Math.floor(Math.random() * 50); 
+                }
+
+                draw() {
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    let gradient = ctx.createRadialGradient(this.x, this.y, this.size, this.x, this.y, this.size * 4);
+                    gradient.addColorStop(0, `hsla(${this.hue}, 80%, 65%, 0.3)`);
+                    gradient.addColorStop(1, `hsla(${this.hue}, 80%, 65%, 0)`);
+                    ctx.arc(this.x, this.y, this.size * 4, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2.2, 0, Math.PI * 2);
+                    ctx.strokeStyle = `hsla(${this.hue}, 80%, 65%, 0.4)`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff'; 
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = `hsla(${this.hue}, 80%, 65%, 0.8)`;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                update() {
+                    this.x += this.vx * physicsConfig.baseSpeed;
+                    this.y += this.vy * physicsConfig.baseSpeed;
+
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                    if (mouse.x !== null && mouse.y !== null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouse.radius) {
+                            const forceDirectionX = dx / distance;
+                            const forceDirectionY = dy / distance;
+                            const force = (mouse.radius - distance) / mouse.radius;
+                            
+                            this.x -= forceDirectionX * force * physicsConfig.repulsionStrength;
+                            this.y -= forceDirectionY * force * physicsConfig.repulsionStrength;
+                        }
+                    }
+                    this.draw();
+                }
+            }
+            
+            function init() {
+                particles = [];
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function connect() {
+                for (let a = 0; a < particles.length; a++) {
+                    for (let b = a; b < particles.length; b++) {
+                        let dx = particles[a].x - particles[b].x;
+                        let dy = particles[a].y - particles[b].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < physicsConfig.linkDistance) {
+                            let opacity = 1 - (distance / physicsConfig.linkDistance);
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(180, 190, 210, ${opacity * 0.75})`; 
+                            ctx.lineWidth = 1.0;
+                            ctx.moveTo(particles[a].x, particles[a].y);
+                            ctx.lineTo(particles[b].x, particles[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < particles.length; i++) { particles[i].update(); }
+                connect();
+            }
+
+            init();
+            animate();
+        });
+    </script>
+</body>
+</html>
