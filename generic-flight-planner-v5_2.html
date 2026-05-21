@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AVIRIS-3 Flight Planner: Dynamic KML Profiling</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- JSZip for extracting KMZ files locally without servers -->
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+    
+    <!-- toGeoJSON for converting KML geometries reliably -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.min.js"></script>
+    
+    <!-- Turf.js for Advanced Spatial Math & Poly Clipping -->
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6.5.0/turf.min.js"></script>
+
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 h-screen w-screen overflow-hidden">
+
+    <div class="relative w-full h-full">
+        <!-- Map Container -->
+        <div id="map" class="absolute inset-0 z-0 h-full w-full"></div>
+
+        <!-- Floating UI Panel -->
+        <div class="absolute top-4 right-4 z-[400] w-[400px] bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-gray-200 flex flex-col max-h-[95vh] overflow-y-auto overflow-x-hidden">
+        
+            <div class="p-4 bg-slate-800 text-white rounded-t-xl flex items-center gap-3">
+                <i class="fa-solid fa-plane-departure text-blue-400"></i>
+                <h1 class="text-lg font-bold">UNE's AVIRIS-3 Oz Flight Planner</h1>
+            </div>
+
+            <div class="p-5 space-y-6">
+                <!-- Location Info with Target Uploader -->
+                <div>
+                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Target Boundary</h2>
+                    <div class="space-y-3">
+                        <div class="w-full relative border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:bg-slate-50 transition-colors cursor-pointer group bg-white">
+                            <input type="file" id="kmz-upload" accept=".kmz,.kml" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                            <i class="fa-solid fa-file-import text-gray-400 text-3xl mb-2 group-hover:text-blue-500 transition-colors"></i>
+                            <p class="text-[11px] text-gray-500 font-semibold group-hover:text-blue-600 transition-colors">Drop Flight Area KMZ/KML here<br><span class="font-normal text-gray-400">Flight tracks will strictly conform to polygon bounds</span></p>
+                        </div>
+                        <div id="dynamic-targets" class="space-y-2">
+                            <!-- Populated after KMZ upload -->
+                            <div class="text-xs text-gray-400 italic text-center py-1" id="empty-state">No target KML uploaded yet.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flight Line Configuration -->
+                <div>
+                    <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Sensor Configuration</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="relative">
+                                <select id="gsd-selector" onchange="triggerFullRender()" class="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 font-bold text-slate-700 text-sm appearance-none cursor-pointer">
+                                    <option value="0.5">0.5m (2,500 ft AGL) | 606m</option>
+                                    <option value="1" selected>1.0m (5,000 ft AGL) | 1,212m</option>
+                                    <option value="1.5">1.5m (7,500 ft AGL) | 1,818m</option>
+                                    <option value="2">2.0m (10,000 ft AGL) | 2,424m</option>
+                                    <option value="2.5">2.5m (12,500 ft AGL) | 3,031m</option>
+                                    <option value="2.9">2.9m (15,000 ft AGL) | 3,637m</option>
+                                    <option value="3.4">3.4m (17,500 ft AGL) | 4,243m</option>
+                                    <option value="3.9">3.9m (20,000 ft AGL) | 4,849m</option>
+                                    <option value="4.4">4.4m (22,500 ft AGL) | 5,455m</option>
+                                    <option value="4.9">4.9m (25,000 ft AGL) | 6,061m</option>
+                                    <option value="5.4">5.4m (27,500 ft AGL) | 6,667m</option>
+                                    <option value="5.9">5.9m (30,000 ft AGL) | 7,273m</option>
+                                    <option value="6.4">6.4m (32,500 ft AGL) | 7,880m</option>
+                                    <option value="6.9">6.9m (35,000 ft AGL) | 8,486m</option>
+                                    <option value="7.4">7.4m (37,500 ft AGL) | 9,092m</option>
+                                    <option value="7.9">7.9m (40,000 ft AGL) | 9,698m</option>
+                                    <option value="9.8">9.8m (50,000 ft AGL) | 12,122m</option>
+                                    <option value="11.8">11.8m (60,000 ft AGL) | 14,547m</option>
+                                </select>
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-ruler-combined text-slate-400"></i>
+                                </div>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-slate-400 text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="relative">
+                                <select id="overlap-selector" onchange="triggerFullRender()" class="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 font-bold text-slate-700 text-sm appearance-none cursor-pointer">
+                                    <option value="0.10" selected>10% Overlap</option>
+                                    <option value="0.20">20% Overlap</option>
+                                    <option value="0.30">30% Overlap</option>
+                                    <option value="0.40">40% Overlap</option>
+                                    <option value="0.50">50% Overlap</option>
+                                </select>
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-layer-group text-slate-400"></i>
+                                </div>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-slate-400 text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solar & Timing Constraints -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Flight Constraints</h2>
+                        <span id="terrain-badge" class="hidden text-[9px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide border border-green-200"><i class="fa-solid fa-mountain mr-1"></i>3D Terrain Following</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="relative">
+                                <select id="solar-direction" onchange="triggerFullRender()" class="block w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 font-bold text-slate-700 text-sm appearance-none cursor-pointer">
+                                    <option value="Into_Sun" selected>Unidirectional: Into the Sun</option>
+                                    <option value="Sun_Back">Unidirectional: Sun on Back</option>
+                                </select>
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-sun text-slate-400"></i>
+                                </div>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-slate-400 text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-bold text-gray-600 block mb-1">Time of Flight (Zulu Time vs Solar Noon)</label>
+                            <div class="bg-white p-3 rounded-lg border border-gray-200 shadow-inner">
+                                <div class="relative w-full h-8 flex items-center select-none" id="zulu-slider">
+                                    <div class="absolute w-full h-2 bg-gray-200 rounded-full" id="track"></div>
+                                    <div class="absolute h-2 bg-blue-400 rounded-full cursor-pointer" id="track-fill"></div>
+                                    <div class="absolute w-5 h-5 bg-green-500 rounded-full shadow cursor-grab border-2 border-white flex items-center justify-center transform -translate-y-1/2 top-1/2 z-10 transition-transform hover:scale-110 active:scale-90" id="handle-start"></div>
+                                    <div class="absolute w-5 h-5 bg-red-500 rounded-full shadow cursor-grab border-2 border-white flex items-center justify-center transform -translate-y-1/2 top-1/2 z-20 transition-transform hover:scale-110 active:scale-90" id="handle-end"></div>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-gray-500 mt-2 font-mono tracking-tighter">
+                                    <div class="text-left font-bold text-green-600 w-1/3 truncate"><span id="lbl-start-zulu">--:-- Z</span></div>
+                                    <div class="text-center text-amber-500 w-1/3" title="Solar Noon"><i class="fa-solid fa-sun mb-0.5 text-xs drop-shadow-sm"></i><br><span id="lbl-noon-zulu" class="font-bold">--:-- Z</span></div>
+                                    <div class="text-right font-bold text-red-600 w-1/3 truncate"><span id="lbl-end-zulu">--:-- Z</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B200 LARC Stats Card -->
+                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm relative">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-sm font-bold text-slate-800">B200 LARC Mission Estimates</h2>
+                        <span class="text-[9px] bg-[#eef2ff] text-[#3b82f6] px-2 py-1.5 rounded-full font-bold tracking-widest uppercase">Per Target</span>
+                    </div>
+    
+                    <div class="grid grid-cols-2 gap-4 mb-4 pb-2 border-b border-gray-100">
+                        <div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Lines (N/S)</div>
+                            <div id="stat-lines" class="font-bold text-2xl text-slate-800">-</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 flex items-center gap-1">Altitude (3D MSL) <i class="fa-solid fa-circle-info text-gray-300" title="Terrain following absolute sea-level bounds"></i></div>
+                            <div id="stat-alt" class="font-bold text-[15px] leading-6 text-slate-800 break-words">- ft</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 py-3 border-b border-gray-100">
+                        <div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-600 flex items-center gap-2"><i class="fa-solid fa-camera text-[#3b82f6] w-4 text-center"></i>Science Hours</span>
+                                <span id="stat-science" class="font-semibold text-slate-800">- hrs</span>
+                            </div>
+                            <div class="text-[9px] text-gray-400 ml-6 mt-0.5 leading-tight italic">Includes terrain-following climb/descent penalty</div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-slate-600 flex items-center gap-2"><i class="fa-solid fa-rotate-left text-[#eab308] w-4 text-center"></i>Turn & Repos.</span>
+                            <span id="stat-turns" class="font-semibold text-slate-800">- hrs</span>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-600 flex items-center gap-2"><i class="fa-solid fa-route text-slate-500 w-4 text-center"></i>Est. Transit</span>
+                                <span id="stat-transit" class="font-semibold text-slate-800">- hrs</span>
+                            </div>
+                            <div id="airport-blurb" class="text-[9px] text-gray-400 ml-6 mt-0.5 leading-tight hidden">
+                                To Jet A1: <span id="stat-airport" class="font-semibold text-slate-500">Unknown</span> (<span id="stat-airport-dist">0</span> km)<br>
+                                <span class="italic text-[#06b6d4]">Accounts for vertical climb/descent from MSL=0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-base py-4 font-bold border-b border-gray-100">
+                        <span class="text-slate-800 tracking-wide">Total Flight Time</span>
+                        <span id="stat-total" class="text-[#2563eb] text-lg">- hrs</span>
+                    </div>
+
+                    <div class="space-y-4 pt-4">
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-cloud-sun text-[#06b6d4] mt-0.5 w-4 text-center text-base"></i>
+                                <div>
+                                    <div class="text-slate-600">Req. Cloud-Free Days</div>
+                                    <div class="stat-window-blurb text-[9px] text-gray-400 uppercase tracking-wider">3.0 hr solar window/day</div>
+                                </div>
+                            </div>
+                            <span id="stat-days" class="font-semibold text-slate-800">- days</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="flex items-start gap-2">
+                                <i class="fa-solid fa-hard-drive text-slate-500 mt-0.5 w-4 text-center text-base"></i>
+                                <div>
+                                    <div class="text-slate-600">Est. Data Volume</div>
+                                    <div class="text-[9px] text-gray-400 uppercase tracking-wider">20 GB/hr avg rate</div>
+                                </div>
+                            </div>
+                            <span id="stat-data" class="font-semibold text-slate-800">- GB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export KML Action -->
+                <div>
+                   <button onclick="downloadKML()" id="btn-download" disabled class="w-full flex items-center justify-center gap-2 bg-[#2563eb] hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3.5 rounded-lg font-bold transition-all shadow-md mt-2">
+                       <i class="fa-solid fa-earth-oceania text-xl"></i> 
+                       <span>Download 3D Terrain Flight Plan</span>
+                   </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ----------------------------------------------------
+        // 1. Initial State & Data Tables
+        // ----------------------------------------------------
+        let globalTargetFeature = null; 
+        let globalTargetCenter = null;
+        let generatedFlightPaths = []; 
+        let latestFlightData = null; 
+
+        let sliderStartVal = -1.5;
+        let sliderEndVal = 1.5;
+        const minSliderVal = -4;
+        const maxSliderVal = 4;
+        let targetSolarNoon = 12.0;
+
+        const avirisParameters = {
+            '0.5': { altFt: '2,500', swathMeters: 606 },
+            '1':   { altFt: '5,000', swathMeters: 1212 },
+            '1.5': { altFt: '7,500', swathMeters: 1818 },
+            '2':   { altFt: '10,000', swathMeters: 2424 },
+            '2.5': { altFt: '12,500', swathMeters: 3031 },
+            '2.9': { altFt: '15,000', swathMeters: 3637 },
+            '3.4': { altFt: '17,500', swathMeters: 4243 },
+            '3.9': { altFt: '20,000', swathMeters: 4849 },
+            '4.4': { altFt: '22,500', swathMeters: 5455 },
+            '4.9': { altFt: '25,000', swathMeters: 6061 },
+            '5.4': { altFt: '27,500', swathMeters: 6667 },
+            '5.9': { altFt: '30,000', swathMeters: 7273 },
+            '6.4': { altFt: '32,500', swathMeters: 7880 },
+            '6.9': { altFt: '35,000', swathMeters: 8486 },
+            '7.4': { altFt: '37,500', swathMeters: 9092 },
+            '7.9': { altFt: '40,000', swathMeters: 9698 },
+            '9.8': { altFt: '50,000', swathMeters: 12122 },
+            '11.8':{ altFt: '60,000', swathMeters: 14547 }
+        };
+
+        const jetA1Airports = [
+            { name: "Adelaide",          lat: -34.945, lng: 138.530 },
+            { name: "Alice Springs",     lat: -23.795, lng: 133.896 },
+            { name: "Avalon (Lara)",     lat: -38.039, lng: 144.469 },
+            { name: "Bankstown",         lat: -33.924, lng: 150.988 },
+            { name: "Broome",            lat: -17.949, lng: 122.227 },
+            { name: "Brisbane",          lat: -27.384, lng: 153.117 },
+            { name: "Cairns",            lat: -16.885, lng: 145.755 },
+            { name: "Canberra",          lat: -35.306, lng: 149.195 },
+            { name: "Darwin",            lat: -12.408, lng: 130.878 },
+            { name: "Dubbo",             lat: -32.217, lng: 148.577 },
+            { name: "Emerald",           lat: -23.568, lng: 148.175 },
+            { name: "Essendon",          lat: -37.728, lng: 144.901 },
+            { name: "Gladstone",         lat: -23.869, lng: 151.222 },
+            { name: "Hamilton Island",   lat: -20.352, lng: 148.951 },
+            { name: "Karratha (Dampier)",lat: -20.712, lng: 116.773 },
+            { name: "Mackay",            lat: -21.171, lng: 149.179 },
+            { name: "Maroochydore",      lat: -26.603, lng: 153.091 },
+            { name: "Melbourne",         lat: -37.669, lng: 144.841 },
+            { name: "Mount Isa",         lat: -20.663, lng: 139.488 },
+            { name: "Perth",             lat: -31.940, lng: 115.966 },
+            { name: "Rockhampton",       lat: -23.381, lng: 150.475 },
+            { name: "Sydney",            lat: -33.946, lng: 151.177 },
+            { name: "Tamworth",          lat: -31.083, lng: 150.849 },
+            { name: "Townsville",        lat: -19.252, lng: 146.765 },
+            { name: "Yulara (Ayers)",    lat: -25.186, lng: 130.975 },
+            { name: "Tennant Creek",     lat: -19.638, lng: 134.183 },
+            { name: "Prominent Hill",    lat: -29.716, lng: 135.522 },
+            { name: "Coober Pedy",       lat: -29.040, lng: 134.721 }
+        ];
+
+        // ----------------------------------------------------
+        // 2. Map Configuration
+        // ----------------------------------------------------
+        const map = L.map('map', { zoomControl: false }).setView([-28.0, 134.0], 5); 
+        L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri',
+            maxZoom: 17
+        }).addTo(map);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+            subdomains: 'abcd', maxZoom: 20
+        }).addTo(map);
+
+        let flightPlanLayerGroup = L.layerGroup().addTo(map);
+
+        // ----------------------------------------------------
+        // 3. UI Handlers (Slider & Uplink)
+        // ----------------------------------------------------
+        function formatZuluTime(decimalHour) {
+            let h = decimalHour;
+            if (h < 0) h += 24;
+            if (h >= 24) h -= 24;
+            let hh = Math.floor(h);
+            let mm = Math.round((h - hh) * 60);
+            if (mm === 60) { mm = 0; hh = (hh + 1) % 24; }
+            return `${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')} Z`;
+        }
+
+        function updateSliderUI() {
+            const startObj = document.getElementById('handle-start');
+            const endObj = document.getElementById('handle-end');
+            const fillObj = document.getElementById('track-fill');
+
+            let startPct = ((sliderStartVal - minSliderVal) / (maxSliderVal - minSliderVal)) * 100;
+            let endPct =   ((sliderEndVal - minSliderVal) / (maxSliderVal - minSliderVal)) * 100;
+
+            startObj.style.left = `calc(${startPct}% - 10px)`;
+            endObj.style.left = `calc(${endPct}% - 10px)`;
+            fillObj.style.left = `${startPct}%`;
+            fillObj.style.width = `${endPct - startPct}%`;
+
+            if(globalTargetFeature) {
+                document.getElementById('lbl-noon-zulu').innerText = formatZuluTime(targetSolarNoon);
+                document.getElementById('lbl-start-zulu').innerText = formatZuluTime(targetSolarNoon + sliderStartVal);
+                document.getElementById('lbl-end-zulu').innerText = formatZuluTime(targetSolarNoon + sliderEndVal);
+            } else {
+                document.getElementById('lbl-noon-zulu').innerText = "--:-- Z";
+                document.getElementById('lbl-start-zulu').innerText = (sliderStartVal > 0 ? "+":"") + sliderStartVal.toFixed(1) + "h";
+                document.getElementById('lbl-end-zulu').innerText = (sliderEndVal > 0 ? "+":"") + sliderEndVal.toFixed(1) + "h";
+            }
+
+            const totalWin = sliderEndVal - sliderStartVal;
+            document.querySelectorAll('.stat-window-blurb').forEach(el => {
+                el.innerText = `${totalWin.toFixed(1)} hr solar window/day`;
+            });
+        }
+
+        function attachSliderEvents() {
+            const startObj = document.getElementById('handle-start');
+            const endObj = document.getElementById('handle-end');
+            const track = document.getElementById('zulu-slider');
+
+            function handleDrag(e, isStart) {
+                let clientX = e.clientX;
+                if(e.touches && e.touches.length > 0) clientX = e.touches[0].clientX;
+                if(clientX === undefined) return;
+
+                const rect = track.getBoundingClientRect();
+                let pct = (clientX - rect.left) / rect.width;
+                pct = Math.max(0, Math.min(1, pct));
+
+                let mappedVal = minSliderVal + pct * (maxSliderVal - minSliderVal);
+                mappedVal = Math.round(mappedVal * 4) / 4; 
+                if (isStart) {
+                    sliderStartVal = Math.min(mappedVal, sliderEndVal - 0.5);
+                } else {
+                    sliderEndVal = Math.max(mappedVal, sliderStartVal + 0.5);
+                }
+                updateSliderUI();
+            }
+
+            function hookHandle(obj, isStart) {
+                obj.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    function onMove(ev) { handleDrag(ev, isStart); }
+                    function onUp() {
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                        updateMetricsOnly();
+                    }
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
+                });
+                obj.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    function onMove(ev) { handleDrag(ev, isStart); }
+                    function onUp() {
+                        document.removeEventListener('touchmove', onMove);
+                        document.removeEventListener('touchend', onUp);
+                        updateMetricsOnly();
+                    }
+                    document.addEventListener('touchmove', onMove, {passive:false});
+                    document.addEventListener('touchend', onUp);
+                }, {passive:false});
+            }
+
+            hookHandle(startObj, true);
+            hookHandle(endObj, false);
+            updateSliderUI();
+        }
+        attachSliderEvents();
+
+        const kmzInput = document.getElementById('kmz-upload');
+        if (kmzInput) {
+            kmzInput.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.name.toLowerCase().endsWith('.kmz')) {
+                    try {
+                        const zip = await JSZip.loadAsync(file);
+                        const kmlFilename = Object.keys(zip.files).find(name => name.toLowerCase().endsWith('.kml') && !name.includes('MACOSX'));
+                        if (kmlFilename) {
+                            const kmlText = await zip.files[kmlFilename].async('string');
+                            extractPolygonFromKML(kmlText, file.name);
+                        } else {
+                            alert('No valid KML file found inside the KMZ archive.');
+                        }
+                    } catch (err) {
+                        alert('Error unpacking KMZ file.');
+                    }
+                } else if (file.name.toLowerCase().endsWith('.kml')) {
+                    try {
+                        const kmlText = await file.text();
+                        extractPolygonFromKML(kmlText, file.name);
+                    } catch (err) {
+                        alert('Could not read KML file.');
+                    }
+                }
+            });
+        }
+
+        // ----------------------------------------------------
+        // 4. Processing Functions
+        // ----------------------------------------------------
+        function extractPolygonFromKML(kmlText, filename) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(kmlText, "text/xml");
+
+            const geojson = toGeoJSON.kml(xmlDoc);
+            let targetPolygon = null;
+
+            for (let i=0; i<geojson.features.length; i++) {
+                let feat = geojson.features[i];
+                if(feat.geometry && (feat.geometry.type === 'Polygon' || feat.geometry.type === 'MultiPolygon')) {
+                    targetPolygon = feat;
+                    break;
+                }
+            }
+
+            if(!targetPolygon) {
+                 alert("Could not detect any geometric Polygons. Please ensure your KML contains standard Polygon boundaries.");
+                 return;
+            }
+
+            globalTargetFeature = targetPolygon;
+            const bbox = turf.bbox(targetPolygon);
+            const centerLng = (bbox[0] + bbox[2]) / 2;
+
+            targetSolarNoon = 12.0 - (centerLng / 15.0);
+            if (targetSolarNoon < 0) targetSolarNoon += 24;
+            updateSliderUI();
+
+            document.getElementById('empty-state').style.display = 'none';
+            const container = document.getElementById('dynamic-targets');
+            container.innerHTML = `
+                <div class="px-3 py-2 rounded-lg border border-blue-200 bg-blue-50 text-blue-800 text-sm font-semibold flex items-center justify-between">
+                    <span><i class="fa-solid fa-map-location-dot mr-2"></i> ${filename}</span>
+                    <i class="fa-solid fa-check-circle text-green-500"></i>
+                </div>`;
+
+            triggerFullRender();
+        }
+
+        function findNearestAirport(targetBBox) {
+            const centerLat = (targetBBox[1] + targetBBox[3]) / 2;
+            const centerLng = (targetBBox[0] + targetBBox[2]) / 2;
+
+            let minDistance = Infinity;
+            let closestAirport = null;
+            const targetPoint = turf.point([centerLng, centerLat]);
+
+            jetA1Airports.forEach(airport => {
+                const pt = turf.point([airport.lng, airport.lat]);
+                const distKm = turf.distance(targetPoint, pt, {units: 'kilometers'});
+                if(distKm < minDistance) {
+                    minDistance = distKm;
+                    closestAirport = airport;
+                }
+            });
+            return { airport: closestAirport, distanceKm: minDistance };
+        }
+
+        async function getElevations(coords) {
+            // Lower batch size to prevent URL length limits, as we added much higher resolution terrain sampling
+            const batchSize = 40; 
+            const elevations = [];
+            for (let i = 0; i < coords.length; i += batchSize) {
+                const batch = coords.slice(i, i + batchSize);
+                const lats = batch.map(c => c[0].toFixed(5)).join(',');
+                const lngs = batch.map(c => c[1].toFixed(5)).join(',');
+                try {
+                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lats}&longitude=${lngs}`);
+                    const data = await res.json();
+                    if (data.elevation) elevations.push(...data.elevation);
+                    else elevations.push(...Array(batch.length).fill(0));
+                } catch (e) {
+                    elevations.push(...Array(batch.length).fill(0));
+                }
+            }
+            return elevations;
+        }
+
+        async function processTargetClipping(feature, swathWidthKm, overlapPercentage, solarDirection, gsdValue) {
+            flightPlanLayerGroup.clearLayers();
+            generatedFlightPaths = [];
+
+            // Boundary
+            L.geoJSON(feature, {
+                style: { color: '#ef4444', weight: 2.5, fillColor: '#ef4444', fillOpacity: 0.1, dashArray: '6, 6' }
+            }).addTo(flightPlanLayerGroup);
+
+            const bbox = turf.bbox(feature); 
+            const minLng = bbox[0], minLat = bbox[1], maxLng = bbox[2], maxLat = bbox[3];
+            const centerLat = (minLat + maxLat) / 2;
+
+            const deltaLngPerKm = 1 / (111.0 * Math.cos(centerLat * Math.PI / 180));
+            const effectiveSwathKm = swathWidthKm * (1 - overlapPercentage);
+            const deltaLngStep = effectiveSwathKm * deltaLngPerKm;
+
+            const baseFlightPaths = [];
+            let totalDistanceKm = 0;
+            let deadheadKm = 0;
+
+            for (let currentLng = minLng + (deltaLngStep / 2); currentLng <= maxLng + (deltaLngStep/2); currentLng += deltaLngStep) {
+                const verticalLine = turf.lineString([[currentLng, minLat - 0.5], [currentLng, maxLat + 0.5]]);
+                try {
+                    const intersects = turf.lineIntersect(verticalLine, feature);
+                    if(intersects.features.length >= 2) {
+                        const latitudes = intersects.features.map(f => f.geometry.coordinates[1]).sort((a,b) => b - a);
+                        for(let i=0; i < latitudes.length; i+=2) {
+                            if(latitudes[i+1] !== undefined) {
+                                baseFlightPaths.push([
+                                    [latitudes[i], currentLng],   
+                                    [latitudes[i+1], currentLng]  
+                                ]);
+                            }
+                        }
+                    }
+                } catch(e) { }
+            }
+
+            baseFlightPaths.forEach((segment) => {
+                if (solarDirection === 'Into_Sun') {
+                    segment.sort((a,b) => a[0] - b[0]); 
+                } else if (solarDirection === 'Sun_Back') {
+                    segment.sort((a,b) => b[0] - a[0]); 
+                }
+            });
+
+            // Reduced segment spacing from 1.0 km to 0.2 km (~200m) for actual terrain adherence!
+            const segmentedPaths = [];
+            const allCoordsForAPI = [];
+            for (const path of baseFlightPaths) {
+                const turfLine = turf.lineString([[path[0][1], path[0][0]], [path[1][1], path[1][0]]]);
+                const lengthKm = turf.length(turfLine, {units: 'kilometers'});
+                totalDistanceKm += lengthKm;
+
+                const numSegments = Math.max(1, Math.ceil(lengthKm / 0.2)); 
+                const currentSegmentedPath = [];
+                for(let i=0; i<=numSegments; i++) {
+                    const along = turf.along(turfLine, (i/numSegments) * lengthKm, {units: 'kilometers'});
+                    const c = along.geometry.coordinates;
+                    const coord = [c[1], c[0]]; // [lat, lng]
+                    currentSegmentedPath.push(coord);
+                    allCoordsForAPI.push(coord);
+                }
+                segmentedPaths.push(currentSegmentedPath);
+            }
+
+            let elevations = [];
+            if(allCoordsForAPI.length > 0) {
+                 elevations = await getElevations(allCoordsForAPI);
+                 document.getElementById('terrain-badge').classList.remove('hidden');
+            }
+
+            const params = avirisParameters[gsdValue];
+            const aglMeters = parseFloat(params.altFt.replace(/,/g, '')) * 0.3048;
+
+            let elIdx = 0;
+            let maxMSL = -Infinity;
+            let minMSL = Infinity;
+            let trackAscentMeters = 0;
+            let trackDescentMeters = 0;
+
+            const flightPaths3D = [];
+
+            segmentedPaths.forEach((pathSegment) => {
+                const path3D = [];
+                const latlngs2D = [];
+                let prevMsl = null;
+
+                pathSegment.forEach(pt => {
+                    const groundEl = elevations[elIdx++] || 0;
+                    const msl = Number(groundEl) + Number(aglMeters);
+                    
+                    if(msl > maxMSL) maxMSL = msl;
+                    if(msl < minMSL) minMSL = msl;
+                    
+                    if(prevMsl !== null) {
+                        const diffMeters = msl - prevMsl;
+                        if(diffMeters > 0) trackAscentMeters += diffMeters;
+                        else trackDescentMeters += Math.abs(diffMeters);
+                    }
+                    prevMsl = msl;
+
+                    path3D.push([pt[0], pt[1], msl]);
+                    latlngs2D.push([pt[0], pt[1]]);
+                });
+                flightPaths3D.push(path3D);
+
+                L.polyline(latlngs2D, { color: '#fbbf24', weight: 4, opacity: 1.0 }).addTo(flightPlanLayerGroup);
+            });
+
+            generatedFlightPaths = flightPaths3D; 
+
+            if(baseFlightPaths.length > 1) {
+                const turnarounds = [];
+                for(let i = 0; i < baseFlightPaths.length - 1; i++) {
+                    const line1End = baseFlightPaths[i][baseFlightPaths[i].length - 1]; 
+                    const line2Start = baseFlightPaths[i+1][0];
+                    turnarounds.push([line1End, line2Start]);
+                    const pt1 = turf.point([line1End[1], line1End[0]]);
+                    const pt2 = turf.point([line2Start[1], line2Start[0]]);
+                    deadheadKm += turf.distance(pt1, pt2, {units: 'kilometers'});
+                }
+                L.polyline(turnarounds, { color: '#ffffff', weight: 2, opacity: 0.9, dashArray: '4, 6' }).addTo(flightPlanLayerGroup);
+            }
+
+            map.flyToBounds([ [minLat, minLng], [maxLat, maxLng] ], { duration: 1.0, padding: [40, 40] });
+
+            return { 
+                passes: baseFlightPaths.length, 
+                distanceKm: totalDistanceKm, 
+                deadheadKm: deadheadKm, 
+                bbox: bbox,
+                minMSLFt: minMSL === Infinity ? 0 : minMSL * 3.28084,
+                maxMSLFt: maxMSL === -Infinity ? 0 : maxMSL * 3.28084,
+                trackAscentFt: trackAscentMeters * 3.28084,
+                trackDescentFt: trackDescentMeters * 3.28084
+            };
+        }
+
+        async function triggerFullRender() {
+            if(!globalTargetFeature) return;
+
+            document.getElementById('btn-download').disabled = true;
+            document.getElementById('stat-lines').innerHTML = '<i class="fa-solid fa-spinner fa-spin text-slate-500"></i>';
+            document.getElementById('stat-alt').innerHTML = '<i class="fa-solid fa-spinner fa-spin text-slate-500"></i>';
+
+            const gsdValue = document.getElementById('gsd-selector').value;
+            const overlapPercentage = parseFloat(document.getElementById('overlap-selector').value);
+            const params = avirisParameters[gsdValue];
+            const swathKm = params.swathMeters / 1000;
+            const solarDirection = document.getElementById('solar-direction').value;
+
+            latestFlightData = await processTargetClipping(globalTargetFeature, swathKm, overlapPercentage, solarDirection, gsdValue);
+            document.getElementById('btn-download').disabled = false;
+
+            updateMetricsOnly();
+        }
+
+        function updateMetricsOnly() {
+            if(!latestFlightData) return;
+            const fData = latestFlightData;
+            const airportInfo = findNearestAirport(fData.bbox);
+
+            const solarWindowHrs = sliderEndVal - sliderStartVal;
+            const B200_SPEED_KMH = 370; 
+            const TURN_TIME_MINUTES = 3.5; 
+            const B200_CLIMB_RATE_FT_MIN = 2500;
+            const B200_DESCENT_RATE_FT_MIN = 2500;
+
+            const totalTurns = Math.max(0, fData.passes - 1);
+            let turningHours = (totalTurns * TURN_TIME_MINUTES) / 60.0;
+            const deadheadHours = fData.deadheadKm / B200_SPEED_KMH;
+            const totalNonScienceHours = turningHours + deadheadHours; 
+
+            // -- Vertical Flight Path Calculations --
+            const avgAltFt = (fData.minMSLFt + fData.maxMSLFt) / 2;
+            
+            // Climb from/to the airport (assume 0 MSL)
+            const airportClimbHrs = (avgAltFt / B200_CLIMB_RATE_FT_MIN) / 60;
+            const airportDescentHrs = (avgAltFt / B200_DESCENT_RATE_FT_MIN) / 60;
+
+            // Extra padding time for maneuvering steeply undulating terrain blocks along the science path
+            const terrainManeuverHrs = (fData.trackAscentFt / B200_CLIMB_RATE_FT_MIN) / 60 * 0.50; // Applying 50% penalty to pure vertical math for slowing speed
+
+            // Combine
+            const scienceHours = (fData.distanceKm / B200_SPEED_KMH) + terrainManeuverHrs;
+            const transitDistRound = airportInfo.distanceKm * 2;
+            const transitHoursRaw = (transitDistRound / B200_SPEED_KMH) + airportClimbHrs + airportDescentHrs; 
+
+            const totalMissionHours = fData.passes > 0 ? (scienceHours + totalNonScienceHours + transitHoursRaw) : 0;
+            const cloudFreeDays = totalMissionHours > 0 ? totalMissionHours / solarWindowHrs : 0; 
+            const estimatedDataGB = totalMissionHours * 20; 
+
+            document.getElementById('stat-lines').innerText = fData.passes || '-';
+            if(fData.minMSLFt > 0) {
+                document.getElementById('stat-alt').innerText = `${Math.round(fData.minMSLFt).toLocaleString()} - ${Math.round(fData.maxMSLFt).toLocaleString()} ft`;
+            } else {
+                document.getElementById('stat-alt').innerText = `- ft`;
+            }
+
+            document.getElementById('stat-science').innerText = scienceHours.toFixed(2) + ' hrs';
+            document.getElementById('stat-turns').innerText = totalNonScienceHours.toFixed(2) + ' hrs';
+            document.getElementById('stat-transit').innerText = transitHoursRaw.toFixed(2) + ' hrs';
+
+            document.getElementById('airport-blurb').style.display = 'block';
+            document.getElementById('stat-airport').innerText = airportInfo.airport.name;
+            document.getElementById('stat-airport-dist').innerText = Math.round(airportInfo.distanceKm);
+
+            document.getElementById('stat-total').innerText = totalMissionHours.toFixed(2) + ' hrs';
+            document.getElementById('stat-days').innerText = cloudFreeDays.toFixed(1) + ' days';
+            document.getElementById('stat-data').innerText = Math.round(estimatedDataGB) + ' GB';
+        }
+
+        // ----------------------------------------------------
+        // 5. KML Export
+        // ----------------------------------------------------
+        function downloadKML() {
+            if(generatedFlightPaths.length === 0) return;
+
+            let kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>AVIRIS-3 3D Terrain-Following Paths</name>
+    <description>Dynamically generated 3D clipped flight paths for constant GSD mapping.</description>
+    <Style id="flightLineObj">
+      <LineStyle>
+        <color>ff00bbff</color>
+        <width>3</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>3300bbff</color>
+      </PolyStyle>
+    </Style>
+    <Folder>
+      <name>Survey Lines</name>`;
+
+            // NOTE: coordinates explicitly exported as "lon,lat,alt" strictly per standard with no interstitial whitespace
+            generatedFlightPaths.forEach((line3D, index) => {
+                kmlContent += `
+      <Placemark>
+        <name>Flight Line ${index + 1}</name>
+        <styleUrl>#flightLineObj</styleUrl>
+        <LineString>
+          <extrude>1</extrude>
+          <tessellate>1</tessellate>
+          <altitudeMode>absolute</altitudeMode>
+          <coordinates>\n            ${line3D.map(pt => `${pt[1].toFixed(6)},${pt[0].toFixed(6)},${pt[2].toFixed(1)}`).join('\n            ')}
+          </coordinates>
+        </LineString>
+      </Placemark>`;
+            });
+
+            kmlContent += `\n    </Folder>\n  </Document>\n</kml>`;
+
+            const blob = new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `AVIRIS3_3D_Mission_${new Date().toISOString().split('T')[0]}.kml`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
