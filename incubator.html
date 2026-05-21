@@ -155,22 +155,23 @@
             <p style="color: var(--text-muted); margin-bottom: 40px;">Select your starting scenario to enter the Incubator.</p>
 
             <div class="scenario-card" onclick="startGame('park')">
-                <span class="status-text" style="color: #34d399;">Scenario A: The Community Problem</span>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">The Neglected Park</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">The local suburban park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.</p>
+                <span class="status-text" style="color: #34d399;">Scenario A: The Community Park</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.</p>
             </div>
 
-            <div class="scenario-card" onclick="startGame('lab')">
-                <span class="status-text" style="color: var(--accent-indigo);">Scenario B: Deep Tech & Discovery</span>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">The Inefficient Lab</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Scientific researchers are spending months manually parsing chemical data and relying on incredibly slow, outdated computational models to run their simulations.</p>
+            <div class="scenario-card" onclick="startGame('school')">
+                <span class="status-text" style="color: var(--accent-indigo);">Scenario B: The Cafeteria Lines</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.</p>
             </div>
 
-            <div class="scenario-card" onclick="startGame('waste')">
-                <span class="status-text" style="color: #fbbf24;">Scenario C: Hardware & Logistics</span>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">The E-Waste Crisis</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Tons of electronic waste are being dumped into local landfills every month because extracting the valuable metals by hand is too dangerous and expensive.</p>
+            <div class="scenario-card" onclick="startGame('tech')">
+                <span class="status-text" style="color: #fbbf24;">Scenario C: The Tech Problem</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump.</p>
             </div>
+
         </div>
 
         <div id="game-screen" class="bento-grid hidden">
@@ -236,7 +237,7 @@
     ];
     
     function getPhase(stageIndex) {
-        if (stageIndex < 3) return "SURVIVE (Ideation)";
+        if (stageIndex < 3) return "SURVIVE (Idea Development)";
         if (stageIndex < 6) return "SUSTAIN (Early Traction)";
         if (stageIndex < 9) return "SCALE (Building the Core)";
         if (stageIndex < 12) return "SUCCEED (Market Domination)";
@@ -244,10 +245,9 @@
     }
 
     const scenarios = {
-        park: "The local suburban park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.",
-        lab: "Scientific researchers are spending months manually parsing chemical data and relying on incredibly slow, outdated computational models to run their simulations.",
-        waste: "Tons of electronic waste are being dumped into local landfills every month because extracting the valuable metals by hand is too dangerous and expensive."
-    };
+        park: "The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.",
+        school: "The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.",
+        tech: "Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump ."    };
 
     const eLobby = document.getElementById('lobby-screen');
     const eGame = document.getElementById('game-screen');
