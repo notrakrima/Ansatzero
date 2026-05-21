@@ -151,7 +151,7 @@
 <body>
     <div class="incubator-wrapper">
         <div id="lobby-screen" class="lobby-container">
-            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">The Enturperur V3</h1>
+            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Enturperur Game</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px;">Select your starting scenario to enter the Incubator.</p>
 
             <div class="scenario-card" onclick="startGame('park')">
@@ -237,11 +237,11 @@
     ];
     
     function getPhase(stageIndex) {
-        if (stageIndex < 3) return "SURVIVE (Idea Development)";
-        if (stageIndex < 6) return "SUSTAIN (Early Traction)";
-        if (stageIndex < 9) return "SCALE (Building the Core)";
-        if (stageIndex < 12) return "SUCCEED (Market Domination)";
-        return "STEWARD (Long-Term Vision)";
+        if (stageIndex < 3) return "Idea Development";
+        if (stageIndex < 6) return "Early Traction";
+        if (stageIndex < 9) return "Building the Core";
+        if (stageIndex < 12) return "Market Expansion";
+        return "Long-Term Vision";
     }
 
     const scenarios = {
@@ -267,9 +267,9 @@
     const eVictoryBox = document.getElementById('ui-victory-box');
 
     function startGame(scenarioKey) {
-        gamePasscode = prompt("SYSTEM LOCK: Please enter the authorized Game Passcode:");
+        gamePasscode = prompt("Please enter the game password:");
         if (!gamePasscode) {
-            alert("Passcode is required to interface with the AI.");
+            alert("Password required.");
             return;
         }
         currentContextText = scenarios[scenarioKey];
