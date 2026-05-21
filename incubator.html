@@ -152,7 +152,7 @@
     <div class="incubator-wrapper">
         <div id="lobby-screen" class="lobby-container">
             <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
-            <p style="color: var(--text-muted); margin-bottom: 40px;">Select your starting scenario to enter the Incubator.</p>
+            <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
 
             <div class="scenario-card" onclick="startGame('park')">
                 <span class="status-text" style="color: #34d399;">The Community Park</span>
@@ -368,7 +368,7 @@
         } catch (err) {
             console.error(err);
             eResponseBox.classList.remove('hidden');
-            eMentorReply.innerText = "SYSTEM ERROR: Unauthorized or Failed to connect to Entrepreneur Mentor.";
+            eMentorReply.innerText = "SYSTEM ERROR: Failed to connect.";
             eMentorReply.style.color = "#ef4444";
         }
 
