@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="ak4lF8yGJC_b3QU0Gm7VK7W2x1DvZq3Kp-WSqfQEinA" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute for Strategic AI | UNE</title>
+    <meta name="description" content="The Institute for Strategic AI (ISA) bridges advanced artificial intelligence with real-world application. We build predictive, generative, and agentic AI for autonomous research and scientific discovery.">
+    <meta name="keywords" content="Institute for Strategic AI, Agentic AI, Autonomous Research, Scientific Discovery, Predictive Analytics, AI in Chemistry">
+    <meta name="author" content="Amir Karton & Aaron Driver">
+    <meta name="theme-color" content="#050505">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://theisa.ai/">
+    <meta property="og:title" content="Institute for Strategic AI">
+    <meta property="og:description" content="Operating at the frontier of applied agentic AI. Bridging advanced artificial intelligence with real-world application.">
+    <meta property="og:image" content="https://theisa.ai/images/og-image.png"> 
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://theisa.ai/">
+    <meta name="twitter:title" content="Institute for Strategic AI">
+    <meta name="twitter:description" content="Operating at the frontier of applied agentic AI. Bridging advanced artificial intelligence with real-world application.">
+    <meta name="twitter:image" content="https://theisa.ai/images/og-image.png"> 
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/chat/cdn/papaparse.min.js"></script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        .section-animate { transition: opacity 1s ease-out, transform 1s ease-out; }
+        
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        :root {
+            --bg-color: #050505;
+            --accent-indigo: #818cf8;
+            --bento-bg: rgba(255, 255, 255, 0.03);
+            --bento-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success-green: #34d399;
+        }
+        
+        .incubator-wrapper {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: inherit;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .lobby-container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            margin-top: 5vh;
+        }
+        
+        .scenario-card {
+            background: var(--bento-bg);
+            border: 1px solid var(--bento-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .scenario-card:hover {
+            border-color: var(--accent-indigo);
+            background: rgba(129, 140, 248, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .bento-box {
+            background: var(--bento-bg);
+            border: 1px solid var(--bento-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 800px) { .bento-grid { grid-template-columns: 1fr; } }
+
+        .status-text { text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; color: var(--accent-indigo); margin-bottom: 10px; display: block; font-weight: bold;}
+        .impact-capital { font-size: 2.5rem; font-family: monospace; color: var(--success-green); font-weight: bold; }
+        
+        .pitch-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--accent-indigo);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 15px;
+            resize: vertical;
+            min-height: 120px;
+        }
+        .pitch-input:focus { outline: none; box-shadow: 0 0 10px rgba(129, 140, 248, 0.3); }
+
+        .submit-btn {
+            background: var(--accent-indigo);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+        .submit-btn:hover { background: #6366f1; transform: translateY(-2px); }
+        .submit-btn:disabled { background: #374151; cursor: not-allowed; transform: none; }
+
+        .ai-mentor-box { border-color: var(--accent-indigo); background: rgba(129, 140, 248, 0.05); }
+        .hidden { display: none !important; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isai: { base: '#080808', heading: '#e2e8f0', body: '#cbd5e1', border: '#1f1f1f', accent: '#818cf8', bento: 'rgba(20, 20, 22, 0.75)' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="incubator-wrapper">
+        <div id="lobby-screen" class="lobby-container">
+            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
+            <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
+
+            <div class="scenario-card" onclick="startGame('park')">
+                <span class="status-text" style="color: #34d399;">The Community Park</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.</p>
+            </div>
+
+            <div class="scenario-card" onclick="startGame('school')">
+                <span class="status-text" style="color: var(--accent-indigo);">The Cafeteria Lines</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.</p>
+            </div>
+
+            <div class="scenario-card" onclick="startGame('tech')">
+                <span class="status-text" style="color: #fbbf24;">The Tech Problem</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump.</p>
+            </div>
+
+        </div>
+
+        <div id="game-screen" class="bento-grid hidden">
+            <div class="main-column" style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <div class="bento-box">
+                    <span class="status-text" id="ui-stage-title">Loading Parameters...</span>
+                    <p id="ui-context" style="color: var(--text-muted); margin-bottom: 20px;">Establishing connection to Incubator...</p>
+                    <div style="border-left: 3px solid var(--accent-indigo); padding-left: 15px;">
+                        <strong style="color: white;">CHALLENGE:</strong>
+                        <p id="ui-challenge" style="font-weight: 500;"></p>
+                    </div>
+                </div>
+
+                <div class="bento-box ai-mentor-box hidden" id="ui-response-box">
+                    <span class="status-text" style="color: white;">❯ ENTREPRENEUR MENTOR</span>
+                    <p id="ui-mentor-reply" style="font-style: italic; line-height: 1.6;"></p>
+                    <button id="next-stage-btn" class="submit-btn hidden" style="background: var(--success-green); width: 100%; margin-top: 20px;">Proceed to Next Stage ❯</button>
+                </div>
+
+                <div class="bento-box" id="ui-pitch-container">
+                    <span class="status-text">❯ YOUR STRATEGY</span>
+                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..." maxlength="800"></textarea>
+                    <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 800</div>
+                    <button id="ui-submit-btn" class="submit-btn">Submit Pitch to Entrepreneur Mentor</button>
+                </div>
+                
+                <div class="bento-box hidden" id="ui-victory-box" style="text-align: center; border-color: var(--success-green);">
+                    <h2 style="color: var(--success-green); font-size: 2rem; margin-bottom: 10px;">INCUBATION COMPLETE</h2>
+                    <p>You have navigated all 15 stages of development and proven the mindset of a true Founder.</p>
+                </div>
+            </div>
+
+            <div class="side-column">
+                <div class="bento-box" style="position: sticky; top: 20px;">
+                    <span class="status-text">Impact Capital Raised</span>
+                    <div class="impact-capital" id="ui-capital">$0</div>
+                    <hr style="border-color: var(--bento-border); margin: 20px 0;">
+                    <span class="status-text">Project Phase</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        Stage: <span id="ui-stage-tracker" style="color: white; font-weight: bold;">1/15</span><br>
+                        Phase: <span id="ui-phase-tracker" style="color: var(--accent-indigo);">SURVIVE</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+//    let gamePasscode = "";
+    let currentStage = 0;
+    let totalCapital = 0;
+    let chatHistory = [];
+    let currentContextText = "";
+    let currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+
+    const levelTitles = [
+        "Stage 1: Identifying the Real Problem", "Stage 2: The Minimum Kernel", "Stage 3: Doing Things That Don't Scale", 
+        "Stage 4: Ramen Profitability", "Stage 5: The Pivot", "Stage 6: The Competitor Ghost", 
+        "Stage 7: Hitting the Ceiling", "Stage 8: The Key Hire", "Stage 9: The Toxic Genius", 
+        "Stage 10: The Fundraising Gauntlet", "Stage 11: Scaling Customer Love", "Stage 12: Data & Ethics",
+        "Stage 13: 10x Scale Complexity", "Stage 14: Founder Wellbeing", "Stage 15: The Audacious Goal"
+    ];
+    
+    function getPhase(stageIndex) {
+        if (stageIndex < 3) return "Idea Development";
+        if (stageIndex < 6) return "Early Traction";
+        if (stageIndex < 9) return "Building the Core";
+        if (stageIndex < 12) return "Market Expansion";
+        return "Long-Term Vision";
+    }
+
+    const scenarios = {
+        park: "The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.",
+        school: "The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.",
+        tech: "Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump ."    };
+
+    const eLobby = document.getElementById('lobby-screen');
+    const eGame = document.getElementById('game-screen');
+    const eTitle = document.getElementById('ui-stage-title');
+    const eContext = document.getElementById('ui-context');
+    const eChallenge = document.getElementById('ui-challenge');
+    const eCapital = document.getElementById('ui-capital');
+    const eTracker = document.getElementById('ui-stage-tracker');
+    const ePhase = document.getElementById('ui-phase-tracker');
+    const ePitchInput = document.getElementById('ui-pitch-input');
+    const eCharCounter = document.getElementById('char-counter');
+    const eSubmitBtn = document.getElementById('ui-submit-btn');
+    const eResponseBox = document.getElementById('ui-response-box');
+    const eMentorReply = document.getElementById('ui-mentor-reply');
+    const eNextBtn = document.getElementById('next-stage-btn');
+    const ePitchContainer = document.getElementById('ui-pitch-container');
+    const eVictoryBox = document.getElementById('ui-victory-box');
+
+    function startGame(scenarioKey) {
+//        gamePasscode = prompt("Please enter the game password:");
+//        if (!gamePasscode) {
+//            alert("Password required.");
+//            return;
+//        }
+        currentContextText = scenarios[scenarioKey];
+        eLobby.classList.add('hidden');
+        eGame.classList.remove('hidden');
+        loadStage();
+    }
+
+    ePitchInput.addEventListener('input', () => {
+        if (ePitchInput.value.length > 800) ePitchInput.value = ePitchInput.value.substring(0, 800);
+        let currentLength = ePitchInput.value.length;
+        eCharCounter.innerText = `${currentLength} / 800`;
+        eCharCounter.style.color = currentLength >= 800 ? "#ef4444" : "var(--text-muted)";
+    });
+
+    function loadStage() {
+        if (currentStage >= 15) {
+            ePitchContainer.classList.add('hidden');
+            eVictoryBox.classList.remove('hidden');
+            return;
+        }
+        eTitle.innerText = levelTitles[currentStage];
+        eContext.innerText = currentContextText;
+        eChallenge.innerText = currentChallengeText;
+        eTracker.innerText = `${currentStage + 1}/15`;
+        ePhase.innerText = getPhase(currentStage);
+        
+        eResponseBox.classList.add('hidden');
+        eNextBtn.classList.add('hidden');
+        ePitchContainer.classList.remove('hidden');
+        eMentorReply.style.color = "var(--text-main)";
+        ePitchInput.value = "";
+        eCharCounter.innerText = "0 / 800";
+        eCharCounter.style.color = "var(--text-muted)";
+    }
+
+    eSubmitBtn.addEventListener('click', async () => {
+        const pitchText = ePitchInput.value.trim();
+        if (!pitchText) return;
+
+        if (pitchText.length > 800) {
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.style.color = "#ef4444";
+            eMentorReply.innerText = "SYSTEM ERROR: Pitch exceeds the 800 character limit. Please condense your strategy.";
+            return;
+        }
+
+        eSubmitBtn.disabled = true;
+        eSubmitBtn.innerText = "Evaluating via LLM...";
+        eResponseBox.classList.add('hidden');
+
+        try {
+            const res = await fetch('/.netlify/functions/incubator', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    stage_index: currentStage, 
+                    pitch: pitchText,
+                    current_context: currentContextText,
+                    current_challenge: currentChallengeText,
+                    history: chatHistory,
+//                    passcode: gamePasscode 
+                })
+            });
+
+            if (!res.ok) throw new Error("Connection failed or unauthorized.");
+            const data = await res.json();
+
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.innerText = data.mentor_reply;
+
+            chatHistory.push({ role: "user", content: pitchText });
+            chatHistory.push({ role: "assistant", content: data.mentor_reply });
+
+            if (data.is_funded) {
+                ePitchInput.value = ""; 
+                eCharCounter.innerText = "0 / 800";
+                eCharCounter.style.color = "var(--text-muted)";
+
+                eMentorReply.style.color = "var(--success-green)";
+                eMentorReply.innerHTML = `<strong>[ FUNDING APPROVED ]</strong><br><br>` + eMentorReply.innerHTML;
+                totalCapital += data.funding_amount;
+                eCapital.innerText = "$" + totalCapital.toLocaleString();
+                
+                if (currentStage < 14) {
+                    currentContextText = data.next_context;
+                    currentChallengeText = data.next_challenge;
+                }
+                
+                ePitchContainer.classList.add('hidden');
+                eNextBtn.classList.remove('hidden');
+            } else {
+                eMentorReply.style.color = "var(--accent-indigo)";
+            }
+
+        } catch (err) {
+            console.error(err);
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.innerText = "SYSTEM ERROR: Failed to connect.";
+            eMentorReply.style.color = "#ef4444";
+        }
+
+        eSubmitBtn.disabled = false;
+        eSubmitBtn.innerText = "Submit Pitch to Entrepreneur Mentor";
+    });
+
+    eNextBtn.addEventListener('click', () => {
+        currentStage++;
+        loadStage();
+    });
+</script>
+</body>
+</html>
