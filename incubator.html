@@ -221,7 +221,7 @@
     </div>
 
 <script>
-    let gamePasscode = "";
+//    let gamePasscode = "";
     let currentStage = 0;
     let totalCapital = 0;
     let chatHistory = [];
@@ -267,11 +267,11 @@
     const eVictoryBox = document.getElementById('ui-victory-box');
 
     function startGame(scenarioKey) {
-        gamePasscode = prompt("Please enter the game password:");
-        if (!gamePasscode) {
-            alert("Password required.");
-            return;
-        }
+//        gamePasscode = prompt("Please enter the game password:");
+//        if (!gamePasscode) {
+//            alert("Password required.");
+//            return;
+//        }
         currentContextText = scenarios[scenarioKey];
         eLobby.classList.add('hidden');
         eGame.classList.remove('hidden');
@@ -331,7 +331,7 @@
                     current_context: currentContextText,
                     current_challenge: currentChallengeText,
                     history: chatHistory,
-                    passcode: gamePasscode 
+//                    passcode: gamePasscode 
                 })
             });
 

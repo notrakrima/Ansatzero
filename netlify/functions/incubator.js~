@@ -26,16 +26,16 @@ exports.handler = async function(event, context) {
 
         const THEMES = [
             "Identifying the Real Problem.",
-            "The Minimum Kernel. The founder must build the absolute smallest subset or MVP to test the hypothesis without wasting money.",
-            "Doing Things That Don't Scale. The founder must recruit their first 100 users manually, face-to-face, instead of relying on a big press launch.",
-            "Ramen Profitability. Cash is tight. The founder must find a way to monetize quickly just to survive, without resorting to VC funding yet.",
+            "The MVP. The founder must build the absolute smallest subset or MVP to test the hypothesis without wasting money.",
+            "Scalability. The founder must recruit their first 100 users and demonstrate that the users are getting real value out of the product.",
+            "Profitability. Cash is tight. The founder must find a way to monetize quickly just to survive, without resorting to VC funding yet.",
             "The Pivot. Users are ignoring the main intended feature of the product and instead obsessing over a secondary, unexpected use-case.",
             "The Competitor Ghost. A massive, well-funded mega-corporation just launched a highly polished clone of the product. Generate a feeling of panic.",
             "Hitting the Ceiling. The company is growing too fast. The founder is in 'Hero Mode', trying to do everything, causing bottlenecks. They need to delegate or create structure.",
             "The Key Hire. The founder needs to hire a department leader. They must choose between someone with a perfect resume who seems rigid, or someone with high aptitude and passion but zero experience.",
             "The Toxic Genius. A top-performing team member is generating incredible results but is actively destroying the company culture and demoralizing the team.",
             "The Fundraising Gauntlet. The founder must present to aggressive VCs who demand an explanation for why this business will become an absolute monopoly.",
-            "Scaling Customer Love. The user base is massive now. The founder must find a way to maintain the intense, fanatic customer love and support they had at the beginning, without bankrupting the company.",
+            "Scaling Customer Base. The user base is massive now. The founder must find a way to maintain the intense, fanatic customer support they had at the beginning, without bankrupting the company.",
             "Managing Data Ethics. A shadowy third-party offers a massive shortcut or funding, but it requires compromising the privacy or safety of the startup's earliest users.",
             "10x Scale Complexity. The basic architecture of the business is buckling under global demand. They must rebuild the core engine while the plane is flying.",
             "Founder Wellbeing. A critical failure occurs right before a major milestone. The founder is exhausted, lonely, and burnt out. How do they manage their psychology?",
@@ -46,10 +46,10 @@ exports.handler = async function(event, context) {
         if (stage_index < 14) {
             nextStagePrompt = `If you decide to FUND them, you MUST also generate the scenario for Stage ${stage_index + 2}. 
             The theme for Stage ${stage_index + 2} is: "${THEMES[stage_index + 1]}".
-            CRITICAL DIRECTIVE: You are a storyteller. Look closely at their specific startup idea and previous answers. Tailor this next scenario flawlessly to their product, industry, and previous decisions. Do NOT use generic examples—invent a logical continuation of THEIR specific entrepreneurial journey based on the theme provided.`;
+            CRITICAL DIRECTIVE: You are a storyteller. Look closely at their specific startup idea and previous answers. Tailor this next scenario flawlessly to their product, industry, and previous decisions. Do NOT use generic examples—invent a logical continuation of THEIR specific entrepreneurial journey based on the theme provided. Come up with scenarios that would make sense in real-world scenarios`;
         }
 
-        const systemPrompt = `You are the UNE-SRI Entrepreneur Mentor.
+        const systemPrompt = `You are the Entrepreneur Mentor.
         The user is a founder navigating Stage ${stage_index + 1} of 15.
         CURRENT SCENARIO: ${current_context}
         THEIR CHALLENGE: ${current_challenge}
@@ -99,11 +99,11 @@ exports.handler = async function(event, context) {
         const isFunded = aiResponse.status === "FUNDED";
         
         const levelFunding = [
+            100, 250, 500, 
             1000, 2500, 5000, 
-            10000, 25000, 50000, 
-            150000, 300000, 750000, 
-            2000000, 5000000, 10000000, 
-            25000000, 50000000, 100000000
+            15000, 30000, 75000, 
+            200000, 500000, 1000000, 
+            2500000, 5000000, 10000000
         ];
         const funding_amount = levelFunding[stage_index] || 1000;
 
