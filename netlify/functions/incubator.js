@@ -19,6 +19,7 @@ exports.handler = async function(event, context) {
 
         const apiKey = process.env.LITELLM_MASTER_KEY;
         const baseUrl = process.env.LITELLM_BASE_URL || "https://api.openai.com/v1"; 
+        const aiModel = process.env.GAME_LLM_MODEL || "gpt-4o";
 
         if (!apiKey) return { statusCode: 500, headers, body: JSON.stringify({ error: "Missing LiteLLM Master Key" }) };
 
@@ -80,10 +81,11 @@ exports.handler = async function(event, context) {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`
+                "Authorization": `Bearer ${apiKey}`,
+                "ngrok-skip-browser-warning": "true" // <--- ADD THIS LINE
             },
             body: JSON.stringify({
-                model: "gpt-4o",
+                model: aiModel, // <--- REPLACE "gpt-4o" WITH aiModel
                 messages: messages,
                 temperature: 0.7,
                 response_format: { type: "json_object" } 
