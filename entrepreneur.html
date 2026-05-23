@@ -200,8 +200,8 @@
 
                 <div class="bento-box" id="ui-pitch-container">
                     <span class="status-text">❯ YOUR STRATEGY</span>
-                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..." maxlength="800"></textarea>
-                    <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 800</div>
+                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Formulate your pitch to the Investor here..." maxlength="500"></textarea>
+                    <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 500</div>
                     <button id="ui-submit-btn" class="submit-btn">Submit Pitch to Entrepreneur Mentor</button>
                 </div>
                 
@@ -287,10 +287,10 @@
     }
 
     ePitchInput.addEventListener('input', () => {
-        if (ePitchInput.value.length > 800) ePitchInput.value = ePitchInput.value.substring(0, 800);
+        if (ePitchInput.value.length > 500) ePitchInput.value = ePitchInput.value.substring(0, 500);
         let currentLength = ePitchInput.value.length;
-        eCharCounter.innerText = `${currentLength} / 800`;
-        eCharCounter.style.color = currentLength >= 800 ? "#ef4444" : "var(--text-muted)";
+        eCharCounter.innerText = `${currentLength} / 500`;
+        eCharCounter.style.color = currentLength >= 500 ? "#ef4444" : "var(--text-muted)";
     });
 
     function loadStage() {
@@ -310,7 +310,7 @@
         ePitchContainer.classList.remove('hidden');
         eMentorReply.style.color = "var(--text-main)";
         ePitchInput.value = "";
-        eCharCounter.innerText = "0 / 800";
+        eCharCounter.innerText = "0 / 500";
         eCharCounter.style.color = "var(--text-muted)";
     }
 
@@ -318,10 +318,10 @@
         const pitchText = ePitchInput.value.trim();
         if (!pitchText) return;
 
-        if (pitchText.length > 800) {
+        if (pitchText.length > 500) {
             eResponseBox.classList.remove('hidden');
             eMentorReply.style.color = "#ef4444";
-            eMentorReply.innerText = "SYSTEM ERROR: Pitch exceeds the 800 character limit. Please condense your strategy.";
+            eMentorReply.innerText = "SYSTEM ERROR: Pitch exceeds the 500 character limit. Please condense your strategy.";
             return;
         }
 
@@ -354,7 +354,7 @@
 
             if (data.is_funded) {
                 ePitchInput.value = ""; 
-                eCharCounter.innerText = "0 / 800";
+                eCharCounter.innerText = "0 / 500";
                 eCharCounter.style.color = "var(--text-muted)";
 
                 eMentorReply.style.color = "var(--success-green)";
