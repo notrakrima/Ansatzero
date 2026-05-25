@@ -366,8 +366,7 @@
             eResponseBox.classList.add('hidden');
             
             try {
-                const initPrompt = "System Command: Generate a single, real-world problem or crisis for a startup founder to solve. Be creative (e.g., environmental, tech, social, logistical). Be age appropriate, the startup founders are kids aged 10–15. Describe the situation in 2 to 3 sentences max. Do NOT offer solutions. Just present the problem.";
-                
+                const initPrompt = "System Command: Output ONLY the scenario description. State an ongoing, systemic problem or friction point suitable for 10-15 year old entrepreneurs to solve (e.g., systemic school inefficiencies, continuous local environmental issues, or community resource gaps). The scenario MUST be a persistent market need, NOT a temporary one-off event, accident, or bad weather. Use exactly 2 to 3 sentences. Do NOT use conversational filler like 'Imagine'. Do NOT offer solutions. Just present the objective facts of the ongoing problem.";                
                 const res = await fetch('/.netlify/functions/incubator', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
