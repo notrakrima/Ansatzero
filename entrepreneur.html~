@@ -154,8 +154,6 @@
             <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
 
-            <div id="resume-container"></div>
-
             <div class="scenario-card" onclick="startGame('park')">
                 <span class="status-text" style="color: #34d399;">The Community Park</span>
                 <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
@@ -179,6 +177,7 @@
                 <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem;">Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.</p>
             </div>
+
         </div>
 
         <div id="game-screen" class="bento-grid hidden">
@@ -222,9 +221,6 @@
                         Stage: <span id="ui-stage-tracker" style="color: white; font-weight: bold;">1/15</span><br>
                         Phase: <span id="ui-phase-tracker" style="color: var(--accent-indigo);">SURVIVE</span>
                     </p>
-                    <button id="ui-export-btn" class="submit-btn" style="width: 100%; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); margin-top: 30px;">
-                        Download Pitch Record
-                    </button>
                 </div>
             </div>
         </div>
@@ -277,56 +273,6 @@
     const eNextBtn = document.getElementById('next-stage-btn');
     const ePitchContainer = document.getElementById('ui-pitch-container');
     const eVictoryBox = document.getElementById('ui-victory-box');
-    const eResumeContainer = document.getElementById('resume-container');
-    const eExportBtn = document.getElementById('ui-export-btn');
-
-    function saveGameState() {
-        const state = {
-            stage: currentStage,
-            capital: totalCapital,
-            history: chatHistory,
-            context: currentContextText,
-            challenge: currentChallengeText
-        };
-        localStorage.setItem('isa_enturperur_save', JSON.stringify(state));
-    }
-
-    function checkSavedGame() {
-        const saved = localStorage.getItem('isa_enturperur_save');
-        if (saved) {
-            try {
-                const data = JSON.parse(saved);
-                if (data.stage >= 0 && data.stage < 15) {
-                    eResumeContainer.innerHTML = `
-                        <div class="scenario-card" onclick="resumeGame()" style="border-color: var(--success-green); background: rgba(52, 211, 153, 0.05); margin-bottom: 40px;">
-                            <span class="status-text" style="color: var(--success-green);">● SAVED SESSION DETECTED</span>
-                            <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;">Resume ${levelTitles[data.stage]}</h3>
-                            <p style="color: var(--text-muted); font-size: 0.95rem;">Continue your previous pitch to the Entrepreneur Mentor. Impact Capital: $${(data.capital || 0).toLocaleString()}</p>
-                        </div>
-                    `;
-                }
-            } catch (e) {
-                localStorage.removeItem('isa_enturperur_save');
-            }
-        }
-    }
-
-    function resumeGame() {
-        const saved = localStorage.getItem('isa_enturperur_save');
-        if (saved) {
-            const data = JSON.parse(saved);
-            currentStage = data.stage;
-            totalCapital = data.capital || 0;
-            chatHistory = data.history || [];
-            currentContextText = data.context || "";
-            currentChallengeText = data.challenge || "";
-            
-            eCapital.innerText = "$" + totalCapital.toLocaleString();
-            eLobby.classList.add('hidden');
-            eGame.classList.remove('hidden');
-            loadStage();
-        }
-    }
 
     function startGame(scenarioKey) {
 //        gamePasscode = prompt("Please enter the game password:");
@@ -334,13 +280,7 @@
 //            alert("Password required.");
 //            return;
 //        }
-        localStorage.removeItem('isa_enturperur_save');
-        currentStage = 0;
-        totalCapital = 0;
-        chatHistory = [];
-        eCapital.innerText = "$0";
         currentContextText = scenarios[scenarioKey];
-        currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
         eLobby.classList.add('hidden');
         eGame.classList.remove('hidden');
         loadStage();
@@ -411,8 +351,6 @@
 
             chatHistory.push({ role: "user", content: pitchText });
             chatHistory.push({ role: "assistant", content: data.mentor_reply });
-            
-            saveGameState();
 
             if (data.is_funded) {
                 ePitchInput.value = ""; 
@@ -448,30 +386,8 @@
 
     eNextBtn.addEventListener('click', () => {
         currentStage++;
-        saveGameState();
         loadStage();
     });
-
-    eExportBtn.addEventListener('click', () => {
-        if (chatHistory.length === 0) return;
-        let exportText = "ISA PROJECT INCUBATOR - PITCH RECORD\\n\\n";
-        chatHistory.forEach(msg => {
-            if (msg.role === 'user') {
-                exportText += `>>> YOUR PITCH:\\n${msg.content}\\n\\n`;
-            } else if (msg.role === 'assistant') {
-                let cleanedText = msg.content.replace(/<[^>]+>/g, '');
-                exportText += `>>> MENTOR FEEDBACK:\\n${cleanedText}\\n\\n`;
-            }
-        });
-        const blob = new Blob([exportText], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `isa-pitch-record-stage-${currentStage + 1}.txt`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-    });
-
-    document.addEventListener("DOMContentLoaded", checkSavedGame);
 </script>
 </body>
 </html>
