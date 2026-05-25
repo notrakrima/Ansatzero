@@ -151,6 +151,12 @@
 <body>
     <div class="incubator-wrapper">
         <div id="lobby-screen" class="lobby-container">
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <a href="index.html" class="submit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); padding: 8px 16px; font-size: 0.9rem;">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    ISA Website
+                </a>
+            </div>
             <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
 
@@ -178,6 +184,12 @@
                 <span class="status-text" style="color: #34d399;">School Budget Cuts</span>
                 <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem;">Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.</p>
+            </div>
+
+            <div class="scenario-card" onclick="startGame('ai')">
+                <span class="status-text" style="color: #a855f7;">An AI Generated Scenario</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Pitch a completely original startup idea of your own choosing, or ask for an AI generated a crisis to solve.</p>
             </div>
         </div>
 
@@ -263,7 +275,8 @@
         park: "The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.",
         school: "The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.",
         tech: "Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump.",
-        budget: "Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust."
+        budget: "Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.",
+        ai: "You have opted for an AI-generated wildcard scenario. Pitch a completely original startup idea, or command the Mentor to construct a real-world crisis for you."
     }; 
 
     const eLobby = document.getElementById('lobby-screen');
@@ -333,22 +346,71 @@
         }
     }
 
-    function startGame(scenarioKey) {
-//        gamePasscode = prompt("Please enter the game password:");
-//        if (!gamePasscode) {
-//            alert("Password required.");
-//            return;
-//        }
+    async function startGame(scenarioKey) {
         localStorage.removeItem('isa_enturperur_save');
         currentStage = 0;
         totalCapital = 0;
         chatHistory = [];
         eCapital.innerText = "$0";
-        currentContextText = scenarios[scenarioKey];
-        currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+
         eLobby.classList.add('hidden');
         eGame.classList.remove('hidden');
-        loadStage();
+
+        if (scenarioKey === 'ai') {
+            eTitle.innerText = "INITIALIZING...";
+            eContext.innerText = "The Mentor is constructing a unique crisis for you to solve. Please wait a moment...";
+            eChallenge.innerText = "Connecting to Incubator LLM...";
+            eTracker.innerText = "-";
+            ePhase.innerText = "GENERATING";
+            ePitchContainer.classList.add('hidden');
+            eResponseBox.classList.add('hidden');
+            
+            try {
+                const res = await fetch('/.netlify/functions/incubator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        stage_index: 0, 
+                        pitch: "System Request: Generate a new wildcard business case study. Describe a systemic, persistent problem in a local school or community using exactly 2 sentences. You MUST wrap the objective facts inside tags like this: [SCENARIO] the problem description [/SCENARIO]. Do not ask questions.",
+                        current_context: "Wildcard Mode Initialization",
+                        current_challenge: "Provide the case study scenario wrapped inside [SCENARIO] tags.",
+                        history: []
+                    })
+                });
+
+                if (!res.ok) throw new Error("Connection failed");
+                const data = await res.json();
+                
+                let rawReply = data.mentor_reply;
+                let finalScenarioText = rawReply;
+                
+                const scenarioMatch = rawReply.match(/\[SCENARIO\]([\s\S]*?)\[\/SCENARIO\]/i);
+                if (scenarioMatch && scenarioMatch[1]) {
+                    finalScenarioText = scenarioMatch[1].trim();
+                } else {
+                    finalScenarioText = rawReply.replace(/^(Great!|Here is|You need to|Let's|Imagine|The scenario is).*?[:\.]\s*/i, '').trim();
+                }
+                
+                currentContextText = finalScenarioText;
+                currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+                
+                chatHistory = []; 
+                
+                loadStage(); 
+                saveGameState(); 
+            } catch (err) {
+                console.error(err);
+                currentContextText = "SYSTEM ERROR: Could not reach AI Mentor to generate scenario. Please refresh and try again.";
+                currentChallengeText = "Connection Timeout.";
+                loadStage();
+            }
+
+        } else {
+            currentContextText = scenarios[scenarioKey];
+            currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+            loadStage();
+            saveGameState();
+        }
     }
 
     ePitchInput.addEventListener('input', () => {
