@@ -151,6 +151,12 @@
 <body>
     <div class="incubator-wrapper">
         <div id="lobby-screen" class="lobby-container">
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <a href="index.html" class="submit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); padding: 8px 16px; font-size: 0.9rem;">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    ISA Website
+                </a>
+            </div>
             <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
 
@@ -178,6 +184,12 @@
                 <span class="status-text" style="color: #34d399;">School Budget Cuts</span>
                 <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem;">Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.</p>
+            </div>
+
+            <div class="scenario-card" onclick="startGame('ai')">
+                <span class="status-text" style="color: #a855f7;">An AI Generated Scenario</span>
+                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Pitch a completely original startup idea of your own choosing, or ask for an AI generated crisis to solve.</p>
             </div>
         </div>
 
@@ -225,7 +237,7 @@
 
 
                     <button id="ui-export-btn" class="submit-btn" style="width: 100%; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); margin-top: 30px;">
-                        Download Pitch Record
+                        Download Pitch Record*
                     </button>
                     <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; line-height: 1.4; text-align: center;">
                         *All simulation data is processed on your browser. Zero session data is retained on our servers.
@@ -263,7 +275,8 @@
         park: "The local park is covered in litter and the playground equipment is broken. Most people just complain on community Facebook groups, but nothing changes.",
         school: "The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.",
         tech: "Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump.",
-        budget: "Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust."
+        budget: "Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.",
+        ai: "You have opted for an AI-generated wildcard scenario. Pitch a completely original startup idea, or command the Mentor to construct a real-world crisis for you."
     }; 
 
     const eLobby = document.getElementById('lobby-screen');
@@ -333,22 +346,56 @@
         }
     }
 
-    function startGame(scenarioKey) {
-//        gamePasscode = prompt("Please enter the game password:");
-//        if (!gamePasscode) {
-//            alert("Password required.");
-//            return;
-//        }
+    async function startGame(scenarioKey) {
         localStorage.removeItem('isa_enturperur_save');
         currentStage = 0;
         totalCapital = 0;
         chatHistory = [];
         eCapital.innerText = "$0";
-        currentContextText = scenarios[scenarioKey];
-        currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+
         eLobby.classList.add('hidden');
         eGame.classList.remove('hidden');
-        loadStage();
+
+        if (scenarioKey === 'ai') {
+            eTitle.innerText = "INITIALIZING...";
+            eContext.innerText = "Connecting to Data Agent to generate unique crisis parameters...";
+            eChallenge.innerText = "Establishing LLM Link...";
+            eTracker.innerText = "-";
+            ePhase.innerText = "GENERATING";
+            ePitchContainer.classList.add('hidden');
+            eResponseBox.classList.add('hidden');
+            
+            try {
+                const res = await fetch('/.netlify/functions/incubator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mode: 'generate_scenario' })
+                });
+
+                if (!res.ok) throw new Error("Connection failed");
+                const data = await res.json();
+                
+                // The backend router now perfectly guarantees the raw 2-3 sentence string!
+                currentContextText = data.mentor_reply; 
+                currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+                
+                chatHistory = []; 
+                
+                loadStage(); 
+                saveGameState(); 
+            } catch (err) {
+                console.error(err);
+                currentContextText = "SYSTEM ERROR: Could not reach AI Data Agent. Please refresh and try again.";
+                currentChallengeText = "Connection Timeout.";
+                loadStage();
+            }
+
+        } else {
+            currentContextText = scenarios[scenarioKey];
+            currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+            loadStage();
+            saveGameState();
+        }
     }
 
     ePitchInput.addEventListener('input', () => {

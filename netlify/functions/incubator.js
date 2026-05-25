@@ -11,20 +11,63 @@ exports.handler = async function(event, context) {
     try {
         const body = JSON.parse(event.body);
         
-//                return { statusCode: 200, headers, body: JSON.stringify({ mentor_reply: "[ SYSTEM NOTICE ]: The AI Mentor is currently offline for maintenance. No pitches are being accepted at this time." }) };
-
-//        if (body.passcode !== process.env.GAME_PASSCODE) {
-//            return { statusCode: 401, headers, body: JSON.stringify({ error: "Unauthorized: Incorrect Game Passcode" }) };
-//        }
-
         const apiKey = process.env.LITELLM_MASTER_KEY;
         const baseUrl = process.env.LITELLM_BASE_URL || "https://api.openai.com/v1"; 
         const aiModel = process.env.GAME_LLM_MODEL || "gpt-4o";
 
         if (!apiKey) return { statusCode: 500, headers, body: JSON.stringify({ error: "Missing LiteLLM Master Key" }) };
 
-        const { stage_index, pitch, current_context, current_challenge, history } = body;
+        const { stage_index, pitch, current_context, current_challenge, history, mode } = body;
 
+        // =====================================================================
+        // AGENT 1: THE SCENARIO GENERATOR
+        // Intercepts requests explicitly flagged as "mode: generate_scenario"
+        // =====================================================================
+        if (mode === "generate_scenario") {
+            const generatorPrompt = `You are a strict data-generation API, NOT a mentor.
+            Your sole purpose is to output a persistent, systemic community or school problem (e.g., outdated facilities, wasted resources, systemic inefficiencies) deeply relevant and suitable for a 10-15 year old student startup founder to solve.
+            - Ensure the content is strictly age-appropriate (PG rating) and relatable to middle/high school students.
+            - Write EXACTLY 2 to 3 sentences.
+            - DO NOT use conversational filler (no "Here is", no "Imagine").
+            - DO NOT offer solutions. Just present the objective facts of the problem.
+
+            OUTPUT FORMAT:
+            You MUST return valid JSON in this exact structure:
+            {
+                "scenario": "The objective 2-3 sentence problem description."
+            }`;
+
+            const response = await fetch(`${baseUrl}/chat/completions`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`,
+                    "ngrok-skip-browser-warning": "true" 
+                },
+                body: JSON.stringify({
+                    model: aiModel,
+                    messages: [{ role: "system", content: generatorPrompt }],
+                    temperature: 0.8,
+                    response_format: { type: "json_object" } 
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) return { statusCode: 500, headers, body: JSON.stringify({ error: "API Proxy rejected the request." }) };
+            
+            const aiResponse = JSON.parse(data.choices[0].message.content);
+            
+            return {
+                statusCode: 200,
+                headers,
+                body: JSON.stringify({ mentor_reply: aiResponse.scenario }) 
+            };
+        }
+
+        // =====================================================================
+        // AGENT 2: THE ENTREPRENEUR MENTOR
+        // Handles standard gameplay, evaluating pitches
+        // =====================================================================
         const THEMES = [
             "Identifying the Real Problem.",
             "The MVP. The founder must build the absolute smallest subset or MVP to test the hypothesis without wasting money.",
@@ -47,16 +90,17 @@ exports.handler = async function(event, context) {
         if (stage_index < 14) {
             nextStagePrompt = `If you decide to FUND them, you MUST also generate the scenario for Stage ${stage_index + 2}. 
             The theme for Stage ${stage_index + 2} is: "${THEMES[stage_index + 1]}".
-            CRITICAL DIRECTIVE: You are a storyteller. Look closely at their specific startup idea and previous answers. Tailor this next scenario flawlessly to their product, industry, and previous decisions. Do NOT use generic examples—invent a logical continuation of THEIR specific entrepreneurial journey based on the theme provided. Come up with scenarios that would make sense in real-world scenarios`;
+            CRITICAL DIRECTIVE: You are a storyteller. Look closely at their specific startup idea and previous answers. Tailor this next scenario flawlessly to their product, industry, and previous decisions. Do NOT use generic examples—invent a logical continuation of THEIR specific entrepreneurial journey based on the theme provided. Come up with scenarios that would make sense in real-world scenarios. Ensure all generated scenarios are strictly age-appropriate for a 10-15 year old founder (avoid mature themes, adult financial crises, or overly dense legal jargon).`;
         }
 
         const systemPrompt = `You are the Entrepreneur Mentor.
-        The user is a founder navigating Stage ${stage_index + 1} of 15.
+        The user is a 10-15 year old student founder navigating Stage ${stage_index + 1} of 15.
         CURRENT SCENARIO: ${current_context}
         THEIR CHALLENGE: ${current_challenge}
         
         INSTRUCTIONS:
-        Evaluate their pitch. Does it solve the challenge ethically, logically, and demonstrate high-level entrepreneurial thinking?
+        Evaluate their pitch. Keep your tone encouraging, educational, and accessible (avoid overly complex financial or legal jargon), but treat their ideas seriously as a real investor would.
+        Does it solve the challenge ethically, logically, and demonstrate high-level entrepreneurial thinking appropriate for their age?
         - If YES: Fund them.
         - If NO/TOO SHORT: Do not fund them. Ask a Socratic question to guide them.
 
@@ -82,10 +126,10 @@ exports.handler = async function(event, context) {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${apiKey}`,
-                "ngrok-skip-browser-warning": "true" // <--- ADD THIS LINE
+                "ngrok-skip-browser-warning": "true" 
             },
             body: JSON.stringify({
-                model: aiModel, // <--- REPLACE "gpt-4o" WITH aiModel
+                model: aiModel,
                 messages: messages,
                 temperature: 0.7,
                 response_format: { type: "json_object" } 
