@@ -151,12 +151,6 @@
 <body>
     <div class="incubator-wrapper">
         <div id="lobby-screen" class="lobby-container">
-            <div style="text-align: left; margin-bottom: 2rem;">
-                <a href="index.html" class="submit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); padding: 8px 16px; font-size: 0.9rem;">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    ISA Website
-                </a>
-            </div>
             <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Entrepreneur Game</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px;font-size: 1.2rem;">Select your starting scenario to enter the Incubator.</p>
 
@@ -184,12 +178,6 @@
                 <span class="status-text" style="color: #34d399;">School Budget Cuts</span>
                 <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
                 <p style="color: var(--text-muted); font-size: 0.95rem;">Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust.</p>
-            </div>
-
-            <div class="scenario-card" onclick="startGame('ai')">
-                <span class="status-text" style="color: #a855f7;">An AI Generated Scenario</span>
-                <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 8px;"></h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Pitch a completely original startup idea of your own choosing, or ask for an AI generated a crisis to solve.</p>
             </div>
         </div>
 
@@ -276,7 +264,6 @@
         school: "The school cafeteria lines are so long that students spend their entire lunch break waiting. By the time they reach the front, the good food is sold out and everyone is frustrated.",
         tech: "Kids at school want to play the latest video games, but new computers are too expensive. Meanwhile, older usable tech and spare parts are being thrown out to the local dump.",
         budget: "Your School is facing budget cuts and they are closing the music classes. All the music instuments are collecting dust."
-        ai: "You have opted for an AI-generated wildcard scenario. Pitch a completely original startup idea, or command the Mentor to construct a real-world crisis for you."
     }; 
 
     const eLobby = document.getElementById('lobby-screen');
