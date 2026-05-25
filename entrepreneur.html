@@ -366,15 +366,14 @@
             eResponseBox.classList.add('hidden');
             
             try {
-                // We securely manipulate the context and challenge fields to temporarily override the Mentor persona
                 const res = await fetch('/.netlify/functions/incubator', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         stage_index: 0, 
-                        pitch: "Initialize the wildcard scenario.",
-                        current_context: "The user has started the game in 'Wildcard' mode and needs a starting problem to solve.",
-                        current_challenge: "URGENT OVERRIDE: DO NOT evaluate the pitch. You must GENERATE a starting scenario. Output EXACTLY 2-3 sentences describing a systemic, ongoing problem (e.g., school inefficiencies, community resource gaps) suitable for a 10-15 year old founder. The problem MUST be persistent, not a one-off accident. DO NOT write greetings, DO NOT write feedback. Output ONLY the objective facts of the problem description.",
+                        pitch: "System Request: Generate a new wildcard business case study. Describe a systemic, persistent problem in a local school or community using exactly 2 sentences. You MUST wrap the objective facts inside tags like this: [SCENARIO] the problem description [/SCENARIO]. Do not ask questions.",
+                        current_context: "Wildcard Mode Initialization",
+                        current_challenge: "Provide the case study scenario wrapped inside [SCENARIO] tags.",
                         history: []
                     })
                 });
@@ -382,20 +381,30 @@
                 if (!res.ok) throw new Error("Connection failed");
                 const data = await res.json();
                 
-                // Set the AI's generated response directly as the game's context
-                currentContextText = data.mentor_reply;
+                let rawReply = data.mentor_reply;
+                let finalScenarioText = rawReply;
+                
+                const scenarioMatch = rawReply.match(/\[SCENARIO\]([\s\S]*?)\[\/SCENARIO\]/i);
+                if (scenarioMatch && scenarioMatch[1]) {
+                    finalScenarioText = scenarioMatch[1].trim();
+                } else {
+                    finalScenarioText = rawReply.replace(/^(Great!|Here is|You need to|Let's|Imagine|The scenario is).*?[:\.]\s*/i, '').trim();
+                }
+                
+                currentContextText = finalScenarioText;
                 currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
                 
-                // Do NOT add this initialization to the player's chat history, keeps the UI clean
                 chatHistory = []; 
                 
                 loadStage(); 
                 saveGameState(); 
             } catch (err) {
+                console.error(err);
                 currentContextText = "SYSTEM ERROR: Could not reach AI Mentor to generate scenario. Please refresh and try again.";
                 currentChallengeText = "Connection Timeout.";
                 loadStage();
             }
+
         } else {
             currentContextText = scenarios[scenarioKey];
             currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
