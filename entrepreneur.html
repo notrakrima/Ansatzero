@@ -346,22 +346,67 @@
         }
     }
 
-    function startGame(scenarioKey) {
-//        gamePasscode = prompt("Please enter the game password:");
-//        if (!gamePasscode) {
-//            alert("Password required.");
-//            return;
-//        }
+    async function startGame(scenarioKey) {
         localStorage.removeItem('isa_enturperur_save');
         currentStage = 0;
         totalCapital = 0;
         chatHistory = [];
         eCapital.innerText = "$0";
-        currentContextText = scenarios[scenarioKey];
-        currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+
         eLobby.classList.add('hidden');
         eGame.classList.remove('hidden');
-        loadStage();
+
+        if (scenarioKey === 'ai') {
+            // Temporarily show a loading state while we fetch the AI scenario
+            eTitle.innerText = "INITIALIZING AI SCRIPT...";
+            eContext.innerText = "The Mentor is constructing a unique, procedurally generated crisis for you to solve. Please wait a moment...";
+            eChallenge.innerText = "Connecting to Incubator LLM...";
+            eTracker.innerText = "-";
+            ePhase.innerText = "GENERATING";
+            ePitchContainer.classList.add('hidden');
+            eResponseBox.classList.add('hidden');
+            
+            try {
+                // Command the LLM to generate a random problem
+                const initPrompt = "System Command: Generate a single, random, highly difficult real-world problem or crisis for a startup founder to solve. Be creative (e.g., environmental, tech, social, logistical). Describe the situation in 2 to 3 sentences max. Do NOT offer solutions. Just present the problem.";
+                
+                const res = await fetch('/.netlify/functions/incubator', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        stage_index: 0, 
+                        pitch: initPrompt,
+                        current_context: "User requested a completely random AI-generated scenario.",
+                        current_challenge: "Generate a scenario.",
+                        history: []
+                    })
+                });
+
+                if (!res.ok) throw new Error("Connection failed");
+                const data = await res.json();
+                
+                // Add this generation to history so the AI remembers the context
+                chatHistory.push({ role: "user", content: initPrompt });
+                chatHistory.push({ role: "assistant", content: data.mentor_reply });
+
+                // Set the AI's generated response directly as the game's context!
+                currentContextText = data.mentor_reply;
+                currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+                
+                loadStage(); // Reloads the UI with the fresh AI context
+                saveGameState(); 
+            } catch (err) {
+                currentContextText = "SYSTEM ERROR: Could not reach AI Mentor to generate scenario. Please refresh and try again.";
+                currentChallengeText = "Connection Timeout.";
+                loadStage();
+            }
+        } else {
+            // Standard scenario logic
+            currentContextText = scenarios[scenarioKey];
+            currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+            loadStage();
+            saveGameState();
+        }
     }
 
     ePitchInput.addEventListener('input', () => {
