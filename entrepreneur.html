@@ -222,9 +222,14 @@
                         Stage: <span id="ui-stage-tracker" style="color: white; font-weight: bold;">1/15</span><br>
                         Phase: <span id="ui-phase-tracker" style="color: var(--accent-indigo);">SURVIVE</span>
                     </p>
+
+
                     <button id="ui-export-btn" class="submit-btn" style="width: 100%; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); margin-top: 30px;">
-                        Download Pitch Record
+                        Download Pitch Record*
                     </button>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; line-height: 1.4; text-align: center;">
+                        *All simulation data is processed on your browser. Zero session data is retained on our servers.
+                    </p>
                 </div>
             </div>
         </div>
@@ -454,23 +459,32 @@
 
     eExportBtn.addEventListener('click', () => {
         if (chatHistory.length === 0) return;
-        let exportText = "ISA PROJECT INCUBATOR - PITCH RECORD\\n\\n";
+        
+        let exportText = "============================================================\n";
+        exportText += "   INSTITUTE FOR STRATEGIC AI | THE ENTURPERUR\n";
+        exportText += "   PITCH RECORD\n";
+        exportText += "============================================================\n\n";
+        exportText += `STAGE STRATEGY: ${currentStage + 1} / 15\n`;
+        exportText += `IMPACT CAPITAL: $${totalCapital.toLocaleString()}\n\n`;
+        exportText += "------------------------------------------------------------\n\n";
+
         chatHistory.forEach(msg => {
             if (msg.role === 'user') {
-                exportText += `>>> YOUR PITCH:\\n${msg.content}\\n\\n`;
+                exportText += `[ YOUR STRATEGY ]\n${msg.content}\n\n`;
             } else if (msg.role === 'assistant') {
-                let cleanedText = msg.content.replace(/<[^>]+>/g, '');
-                exportText += `>>> MENTOR FEEDBACK:\\n${cleanedText}\\n\\n`;
+                let cleanedText = msg.content.replace(/<br\s*[\/]?>/gi, '\n').replace(/<[^>]+>/g, '');
+                exportText += `[ MENTOR FEEDBACK ]\n${cleanedText}\n`;
+                exportText += "------------------------------------------------------------\n\n";
             }
         });
-        const blob = new Blob([exportText], { type: 'text/plain' });
+
+        const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `isa-pitch-record-stage-${currentStage + 1}.txt`;
+        a.download = `ISA_Incubator_Record_Stage_${currentStage + 1}.txt`;
         a.click();
         URL.revokeObjectURL(a.href);
     });
-
     document.addEventListener("DOMContentLoaded", checkSavedGame);
 </script>
 </body>
