@@ -366,15 +366,15 @@
             eResponseBox.classList.add('hidden');
             
             try {
-                const initPrompt = "System Command: Output ONLY the scenario description. State an ongoing, systemic problem or friction point suitable for 10-15 year old entrepreneurs to solve (e.g., systemic school inefficiencies, continuous local environmental issues, or community resource gaps). The scenario MUST be a persistent market need, NOT a temporary one-off event, accident, or bad weather. Use exactly 2 to 3 sentences. Do NOT use conversational filler like 'Imagine'. Do NOT offer solutions. Just present the objective facts of the ongoing problem.";                
+                // We securely manipulate the context and challenge fields to temporarily override the Mentor persona
                 const res = await fetch('/.netlify/functions/incubator', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         stage_index: 0, 
-                        pitch: initPrompt,
-                        current_context: "User requested an AI-generated scenario.",
-                        current_challenge: "Generate a scenario.",
+                        pitch: "Initialize the wildcard scenario.",
+                        current_context: "The user has started the game in 'Wildcard' mode and needs a starting problem to solve.",
+                        current_challenge: "URGENT OVERRIDE: DO NOT evaluate the pitch. You must GENERATE a starting scenario. Output EXACTLY 2-3 sentences describing a systemic, ongoing problem (e.g., school inefficiencies, community resource gaps) suitable for a 10-15 year old founder. The problem MUST be persistent, not a one-off accident. DO NOT write greetings, DO NOT write feedback. Output ONLY the objective facts of the problem description.",
                         history: []
                     })
                 });
@@ -382,11 +382,12 @@
                 if (!res.ok) throw new Error("Connection failed");
                 const data = await res.json();
                 
-                chatHistory.push({ role: "user", content: initPrompt });
-                chatHistory.push({ role: "assistant", content: data.mentor_reply });
-
+                // Set the AI's generated response directly as the game's context
                 currentContextText = data.mentor_reply;
                 currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+                
+                // Do NOT add this initialization to the player's chat history, keeps the UI clean
+                chatHistory = []; 
                 
                 loadStage(); 
                 saveGameState(); 
