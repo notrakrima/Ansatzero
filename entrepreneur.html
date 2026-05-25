@@ -235,7 +235,6 @@
                         Phase: <span id="ui-phase-tracker" style="color: var(--accent-indigo);">SURVIVE</span>
                     </p>
 
-
                     <button id="ui-export-btn" class="submit-btn" style="width: 100%; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); margin-top: 30px;">
                         Download Pitch Record*
                     </button>
@@ -248,7 +247,6 @@
     </div>
 
 <script>
-//    let gamePasscode = "";
     let currentStage = 0;
     let totalCapital = 0;
     let chatHistory = [];
@@ -350,7 +348,6 @@
         localStorage.removeItem('isa_enturperur_save');
         currentStage = 0;
         totalCapital = 0;
-        chatHistory = [];
         eCapital.innerText = "$0";
 
         eLobby.classList.add('hidden');
@@ -375,11 +372,11 @@
                 if (!res.ok) throw new Error("Connection failed");
                 const data = await res.json();
                 
-                // The backend router now perfectly guarantees the raw 2-3 sentence string!
                 currentContextText = data.mentor_reply; 
                 currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
                 
-                chatHistory = []; 
+                // INJECT STARTING SCENARIO INTO HISTORY
+                chatHistory = [{ role: 'scenario', content: currentContextText }]; 
                 
                 loadStage(); 
                 saveGameState(); 
@@ -387,12 +384,18 @@
                 console.error(err);
                 currentContextText = "SYSTEM ERROR: Could not reach AI Data Agent. Please refresh and try again.";
                 currentChallengeText = "Connection Timeout.";
+                
+                chatHistory = [{ role: 'scenario', content: currentContextText }]; 
                 loadStage();
             }
 
         } else {
             currentContextText = scenarios[scenarioKey];
             currentChallengeText = "As an Entrepreneur, what action can you take to turn this problem into an opportunity?";
+            
+            // INJECT STARTING SCENARIO INTO HISTORY
+            chatHistory = [{ role: 'scenario', content: currentContextText }];
+            
             loadStage();
             saveGameState();
         }
@@ -450,8 +453,8 @@
                     pitch: pitchText,
                     current_context: currentContextText,
                     current_challenge: currentChallengeText,
-                    history: chatHistory,
-//                    passcode: gamePasscode 
+                    // EXCLUDE SCENARIO FROM THE PAYLOAD TO AVOID BREAKING LLM
+                    history: chatHistory.filter(msg => msg.role !== 'scenario')
                 })
             });
 
@@ -479,6 +482,9 @@
                 if (currentStage < 14) {
                     currentContextText = data.next_context;
                     currentChallengeText = data.next_challenge;
+                    
+                    // ON SUCCESSFUL FUNDING, ADD THE NEXT STAGE'S SCENARIO TO HISTORY
+                    chatHistory.push({ role: 'scenario', content: currentContextText });
                 }
                 
                 ePitchContainer.classList.add('hidden');
@@ -505,7 +511,8 @@
     });
 
     eExportBtn.addEventListener('click', () => {
-        if (chatHistory.length === 0) return;
+        // Prevent empty download if no actual pitch has happened yet
+        if (chatHistory.filter(msg => msg.role !== 'scenario').length === 0) return;
         
         let exportText = "============================================================\n";
         exportText += "   INSTITUTE FOR STRATEGIC AI | THE ENTREPRENEUR\n";
@@ -516,7 +523,10 @@
         exportText += "------------------------------------------------------------\n\n";
 
         chatHistory.forEach(msg => {
-            if (msg.role === 'user') {
+            // RENDER THE NEW SCENARIO ROLE IN THE TEXT OUTPUT
+            if (msg.role === 'scenario') {
+                exportText += `[ CURRENT SCENARIO ]\n${msg.content}\n\n`;
+            } else if (msg.role === 'user') {
                 exportText += `[ YOUR STRATEGY ]\n${msg.content}\n\n`;
             } else if (msg.role === 'assistant') {
                 let cleanedText = msg.content.replace(/<br\s*[\/]?>/gi, '\n').replace(/<[^>]+>/g, '');
