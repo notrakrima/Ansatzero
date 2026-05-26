@@ -81,9 +81,9 @@ exports.handler = async function(event, context) {
         // =====================================================================
         const THEMES = [
             "Module 1: The 'You'. Defending personal conviction and why they are the right steward, beyond academic credentials.",
-            "Module 2: The 'Who' & Their 'Why'. Identifying specific community or industry stakeholders. Forcing the researcher into 'deep listening' and ethnography to understand actual stakeholder pain points, rather than pushing a pre-built academic solution.",
-            "Module 3: The 'What' (Non-IP Solution). Translating the discovery into a tangible, non-commercial format (e.g., a policy framework, open-source tool, community training, service) that stakeholders can easily utilize.",
-            "Module 4: The 'How' (Distribution). Designing an adoption and distribution strategy to get the solution out of the university and actively used in the real world to maximize public benefit."
+            "Module 2: The 'Who' & Their 'Why'. Identifying specific community or industry stakeholders. Forcing the researcher into 'Humble Inquiry' to build empathy and understand actual stakeholder pain points, rather than pushing a pre-built academic solution.",
+            "Module 3: The 'What' (Behaviour Change). Translating the discovery into a tangible, non-commercial format (e.g., policy, open-source, community service). Crucially, they must identify what specific human behaviour this solution is trying to change, acknowledging that humans resist deviating from the status quo.",
+            "Module 4: The 'How' (Distribution). Designing an adoption strategy. How will you collaborate with the community to ensure this disruptive change actually takes root, bypassing traditional PR to create genuine, localized impact?"
         ];
 
         let nextStagePrompt = "";
