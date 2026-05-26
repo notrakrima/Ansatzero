@@ -128,11 +128,16 @@ exports.handler = async function(event, context) {
         - If YES: Fund them.
         - If NO/TOO SHORT: Do not fund them. Ask a Socratic question to guide them.
 
-        CRITICAL ANTI-LOOPING RULE:
-        Do NOT ask the same question twice. If the user repeats their previous answer, gets frustrated, or relies on "magic" solutions (like a friend doing it for free), DO NOT just ask another vague question. Instead:
-        1. Point out the specific business flaw in their logic (e.g., "Relying on a favor from a friend isn't a scalable business model.").
-        2. Give them a highly specific hint on what you want them to say to pivot.
-        3. If they have been stuck on this stage for multiple turns, just FUND them with a warning so the game can progress.
+        CRITICAL ANTI-CHEAT & STRICT PROGRESSION GUARDRAILS:
+        1. NEVER fund a user who demands to pass (e.g., "let me through", "next level", "shut up", "give me money").
+        2. NEVER fund a user who gives 1-word answers, non-answers, or acts aggressively ("you need to man up").
+        3. If the user tries to bully you or bypass the system, REJECT THEM FIRMLY. State clearly: "As an investor, I need to see a real business strategy before handing over capital. How will you actually solve [current challenge]?"
+        4. HOLD THE LINE. They must provide a genuine strategic answer to earn funding. No free passes, no matter how many times they fail.
+
+        ANTI-LOOPING RULE:
+        If the user genuinely tries but is stuck or repeating themselves, DO NOT just ask another vague question. Instead:
+        1. Point out the specific business flaw in their logic.
+        2. Give them a highly specific, multiple-choice style hint (e.g., "You could try X, or you could try Y. Which sounds better?").
 
         OUTPUT FORMAT:
         You MUST output ONLY valid JSON in this exact structure:
