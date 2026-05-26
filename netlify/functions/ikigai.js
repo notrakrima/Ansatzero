@@ -80,17 +80,22 @@ exports.handler = async function(event, context) {
         // Evaluates the translation strategy across 4 Workshop Modules
         // =====================================================================
         const THEMES = [
-            "Workshop 1: Why 'You' should care about Impact. The researcher must defend why they are uniquely positioned to solve this, beyond just gathering publications. Logic and motivation.",
-            "Workshop 2: Finding your 'Who' and their 'Why'. The researcher must identify specific stakeholders who care. They must propose 'deep listening' and ethnography, NOT commercialisation.",
-            "Workshop 3: 'What' new solutions could create an impact. The researcher must translate their discovery into a tangible product, service, policy, or training course easily used by the 'Who'.",
-            "Workshop 4: 'How' do you get users to love your what? The researcher must outline a distribution method to get their discovery out of the University and into the hands of the community to scale public benefit."
+            "Module 1: The 'You'. Defending personal conviction and why they are the right steward, beyond academic credentials.",
+            "Module 2: The 'Who' & Their 'Why'. Identifying specific community or industry stakeholders. Forcing the researcher into 'deep listening' and ethnography to understand actual stakeholder pain points, rather than pushing a pre-built academic solution.",
+            "Module 3: The 'What' (Non-IP Solution). Translating the discovery into a tangible, non-commercial format (e.g., a policy framework, open-source tool, community training, service) that stakeholders can easily utilize.",
+            "Module 4: The 'How' (Distribution). Designing an adoption and distribution strategy to get the solution out of the university and actively used in the real world to maximize public benefit."
         ];
 
         let nextStagePrompt = "";
         if (stage_index < 3) {
-            nextStagePrompt = `If you decide to APPROVE them, you MUST also generate the scenario for Stage ${stage_index + 2}. 
-            The theme for Stage ${stage_index + 2} is: "${THEMES[stage_index + 1]}".
-            CRITICAL DIRECTIVE: Tailor this next scenario flawlessly to their specific research and previous decisions. Invent a logical continuation of their research translation journey. Ensure it aligns with "NOT Commercialisation" (public benefit without formal IP).`;
+            nextStagePrompt = `If you decide to APPROVE them, you MUST also generate the context and challenge for Module ${stage_index + 2}. 
+            The theme is: "${THEMES[stage_index + 1]}".
+            
+            CRITICAL RULES FOR WRITING THE NEXT STAGE:
+            1. IMMERSIVE COACHING: NEVER break character. NEVER explicitly say "In Workshop ${stage_index + 2}..." or "In this module...". Just seamlessly advance the narrative as their coach.
+            2. 'next_context': Write 1 to 2 sentences acknowledging their last success and pivoting to the new reality of their project.
+            3. 'next_challenge': DO NOT give them a dry homework assignment (e.g., never say "Identify 3 groups..."). Craft a provocative, collaborative question. For example, if moving to Module 2, ask something like: "Before we build anything, whose voices are missing? How will you engage the actual community to ensure you are designing WITH them, rather than FOR them?"
+            4. Speak directly to them ("You/Your") and align strictly with "NOT Commercialisation" (public benefit without formal IP).`;
         }
 
         const systemPrompt = `You are a Research Translation Facilitator (Mentor) for university researchers and RHD students.
