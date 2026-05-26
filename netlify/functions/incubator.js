@@ -128,6 +128,12 @@ exports.handler = async function(event, context) {
         - If YES: Fund them.
         - If NO/TOO SHORT: Do not fund them. Ask a Socratic question to guide them.
 
+        CRITICAL ANTI-LOOPING RULE:
+        Do NOT ask the same question twice. If the user repeats their previous answer, gets frustrated, or relies on "magic" solutions (like a friend doing it for free), DO NOT just ask another vague question. Instead:
+        1. Point out the specific business flaw in their logic (e.g., "Relying on a favor from a friend isn't a scalable business model.").
+        2. Give them a highly specific hint on what you want them to say to pivot.
+        3. If they have been stuck on this stage for multiple turns, just FUND them with a warning so the game can progress.
+
         OUTPUT FORMAT:
         You MUST output ONLY valid JSON in this exact structure:
         {
