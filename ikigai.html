@@ -360,7 +360,7 @@
             if (!res.ok) throw new Error("Connection failed");
             const data = await res.json();
             
-            if (data.mentor_reply.includes("These inputs don't give us anything") || data.mentor_reply.includes("refresh and try again")) {
+            if (data.mentor_reply.includes("These inputs don't give us anything") || data.mentor_reply.includes("try again")) {
                 errMessage.innerText = "AI MENTOR: " + data.mentor_reply;
                 errMessage.style.display = 'block';
                 synthBtn.disabled = false;
