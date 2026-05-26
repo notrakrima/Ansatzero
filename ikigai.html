@@ -167,33 +167,33 @@
                 </a>
             </div>
             
-            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Humble Discovery Engine</h1>
+            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Discovery with Purpose</h1>
             <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Bridge your research with real-world application. Complete your <em>Ikigai</em> profile below to generate a bespoke translation mission.
+                Transform meaningful discovery into real-world benefit. Complete your Ikigai profile below to uncover your translation mission.
             </p>
 
             <div class="ikigai-grid">
                 <div class="ikigai-box">
                     <span class="status-text" style="color: #34d399;">1. The Expertise</span>
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">What are you good at? (Not just skills—what do colleagues consistently come to you for?)</label>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What are you good at? (e.g., what do colleagues consistently come to you for?)</label>
                     <textarea id="iki-goodAt" class="ikigai-input" placeholder="e.g., I'm the person everyone comes to when they need to untangle complex data ecosystems..." required></textarea>
                 </div>
                 
                 <div class="ikigai-box">
                     <span class="status-text" style="color: #fbbf24;">2. The Passion</span>
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">What do you love doing? (Not what KPIs demand. What makes time disappear?)</label>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What do you love doing? (e.g., what makes time disappear?)</label>
                     <textarea id="iki-love" class="ikigai-input" placeholder="e.g., Identifying the overarching narrative hidden within hundreds of disparate experiments..." required></textarea>
                 </div>
 
                 <div class="ikigai-box">
                     <span class="status-text" style="color: var(--accent-indigo);">3. The Problem</span>
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">What does the world need? (Gaps you see that others overlook or ignore)</label>
-                    <textarea id="iki-needs" class="ikigai-input" placeholder="e.g., Regional communities are entirely cut off from high-level scientific modelling that could save their crops..." required></textarea>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What does the world need? (i.e., gaps you see that others overlook or ignore)</label>
+                    <textarea id="iki-needs" class="ikigai-input" placeholder="e.g., Regional communities are don't have access to high-performance computing facilities that could model water management in drought..." required></textarea>
                 </div>
 
                 <div class="ikigai-box">
                     <span class="status-text" style="color: #a855f7;">4. The Engine</span>
-                    <label style="font-size: 0.9rem; color: var(--text-muted);">What can you get paid for? (Grants, wages, what the market values)</label>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What can you get paid for? (e.g., grants, services, what the market values)</label>
                     <textarea id="iki-paid" class="ikigai-input" placeholder="e.g., ARC Linkage grants, specialized consulting for agricultural tech..." required></textarea>
                 </div>
             </div>
@@ -267,6 +267,7 @@
     let chatHistory = [];
     let currentContextText = "";
     let currentChallengeText = "How are you uniquely positioned to address this? Why should you be the steward of this impact?";
+    let ikigaiData = null; 
 
     const levelTitles = [
         "Module 1: Why 'You'", 
@@ -309,7 +310,8 @@
 
         errMessage.style.display = 'none';
         synthBtn.disabled = true;
-        synthBtn.innerText = "Synthesizing Mission...";
+        synthBtn.innerText = "Analyzing...";
+        ikigaiData = { goodAt: iGood, love: iLove, needs: iNeeds, paid: iPaid };
 
         // Ready game state
         currentStage = 0;
@@ -445,11 +447,20 @@
         
         let exportText = "============================================================\n";
         exportText += "   INSTITUTE FOR STRATEGIC AI | TRANSLATION PROTOCOL\n";
-        exportText += "   HUMBLE DISCOVERY RESEARCH PLAN\n";
+        exportText += "   DISCOVERY WITH PURPOSE PLAN\n";
         exportText += "============================================================\n\n";
         exportText += `COMPLETED MODULES: ${currentStage + 1} / 4\n`;
         exportText += `ESTIMATED IMPACT REACH: ${totalImpact.toLocaleString()} Stakeholders\n\n`;
         exportText += "------------------------------------------------------------\n\n";
+
+        if (ikigaiData) {
+            exportText += "[ YOUR IKIGAI PROFILE ]\n";
+            exportText += `1. THE EXPERTISE: ${ikigaiData.goodAt}\n`;
+            exportText += `2. THE PASSION: ${ikigaiData.love}\n`;
+            exportText += `3. THE PROBLEM: ${ikigaiData.needs}\n`;
+            exportText += `4. THE ENGINE: ${ikigaiData.paid}\n`;
+            exportText += "------------------------------------------------------------\n\n";
+        }
 
         chatHistory.forEach(msg => {
             if (msg.role === 'scenario') {
