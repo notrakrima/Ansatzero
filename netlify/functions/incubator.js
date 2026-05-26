@@ -24,9 +24,33 @@ exports.handler = async function(event, context) {
         // Intercepts requests explicitly flagged as "mode: generate_scenario"
         // =====================================================================
         if (mode === "generate_scenario") {
+            // 1. Create a diverse list of PG-rated topics for the AI to pick from
+            const seedTopics = [
+                "local environmental issues or pollution",
+                "food waste in the local community",
+                "lack of resources for youth sports and recreation",
+                "inefficiencies in local public transport",
+                "technological inequality and lack of device access among peers",
+                "pet overpopulation and animal shelter struggles",
+                "social isolation of elderly neighbors",
+                "funding issues for after-school creative arts programs",
+                "digital safety, screen time, or cyberbullying",
+                "local small businesses losing out to mega-corporations",
+                "youth mental health and study burnout",
+                "lack of healthy, affordable food options near teenagers"
+            ];
+            
+            // 2. Pick one at random
+            const randomTopic = seedTopics[Math.floor(Math.random() * seedTopics.length)];
+
+            // 3. Inject the random topic directly into the prompt
             const generatorPrompt = `You are a strict data-generation API, NOT a mentor.
-            Your sole purpose is to output a persistent, systemic community or school problem (e.g., outdated facilities, wasted resources, systemic inefficiencies) deeply relevant and suitable for a 10-15 year old student startup founder to solve.
-            - Ensure the content is strictly age-appropriate (PG rating) and relatable to middle/high school students.
+            Your sole purpose is to output a persistent, systemic community problem specifically focused on: **${randomTopic}**. 
+            The problem MUST be deeply relevant and suitable for a 10-15 year old student startup founder to solve.
+            
+            CRITICAL RULES:
+            - NEVER start your response with "Schools often..." or "Many schools...". 
+            - Ensure the content is strictly age-appropriate (PG rating) and relatable to teenagers.
             - Write EXACTLY 2 to 3 sentences.
             - DO NOT use conversational filler (no "Here is", no "Imagine").
             - DO NOT offer solutions. Just present the objective facts of the problem.
@@ -47,7 +71,7 @@ exports.handler = async function(event, context) {
                 body: JSON.stringify({
                     model: aiModel,
                     messages: [{ role: "system", content: generatorPrompt }],
-                    temperature: 0.8,
+                    temperature: 0.9, // Raised slightly for maximum creativity
                     response_format: { type: "json_object" } 
                 })
             });
