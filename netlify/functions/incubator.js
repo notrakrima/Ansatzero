@@ -49,7 +49,7 @@ exports.handler = async function(event, context) {
             The problem MUST be deeply relevant and suitable for a 10-15 year old student startup founder to solve.
             
             CRITICAL RULES:
-            - NEVER start your response with "Schools often..." or "Many schools...". 
+            - NEVER start your response with "Schools often..." or "Many schools..." "In many...". 
             - Ensure the content is strictly age-appropriate (PG rating) and relatable to teenagers.
             - Write EXACTLY 2 to 3 sentences.
             - DO NOT use conversational filler (no "Here is", no "Imagine").
