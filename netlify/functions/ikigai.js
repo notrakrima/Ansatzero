@@ -34,18 +34,20 @@ exports.handler = async function(event, context) {
             4. What sustains me financially: "${paidFor}"
             
             YOUR TASKS:
-            1. Diagnose my alignment: Speak DIRECTLY to me using "you" and "your". (NEVER use "The researcher" or third person). Diagnose which zone I am leaning toward (Passion: Love+Good, Mission: Love+Needs, Profession: Good+Paid, Vocation: Needs+Paid) and brutally call out what I am missing or avoiding.
-            2. Synthesize an Impact Mission: Present a highly logical, scientifically grounded 2-to-3 sentence scenario where I translate my expertise into public benefit. 
-            
+            1. Validate Input: Evaluate my answers. If my inputs are single letters, gibberish, repetitive filler, or lack real semantic meaning, you MUST reject the input entirely. Do not attempt a diagnosis or invent a scenario. Instead, firmly tell me: "These inputs don't give us anything to work with. To map a genuine translation journey, you need to provide real, thoughtful details about your research and stakeholders. Please refresh and try again."
+            2. Diagnose my alignment: (Only if input is valid) Speak DIRECTLY to me using "you" and "your". (NEVER use "The researcher" or third person). Diagnose which zone I am leaning toward (Passion: Love+Good, Mission: Love+Needs, Profession: Good+Paid, Vocation: Needs+Paid) and brutally call out what I am missing or avoiding.
+            3. Synthesize an Impact Mission: (Only if input is valid) Present a highly logical, scientifically grounded 2-to-3 sentence scenario where I translate my expertise into public benefit.
+
             CRITICAL RULES FOR SYNTHESIS:
+            - INPUT GUARDRAIL: Never hallucinate meaning for nonsensical, low-effort, or 1-character inputs. Refuse the prompt if the input is void of real-world details.
             - DO NOT lazily mash my keywords together. If my expertise (e.g., Quantum Mechanics) seems totally disconnected from the problem (e.g., Regional Needs), you MUST find a brilliant, non-obvious bridge, or explicitly point out how difficult this translation will be. It MUST make real-world, logical sense.
             - NEVER start the scenario with "Imagine", "Consider", or "Picture this". State the reality directly.
             - Do NOT mention "startup", "VCs", or "profit". Focus strictly on "translation" and "impact".
-            
+
             OUTPUT FORMAT:
             You MUST return valid JSON in this exact structure:
             {
-                "scenario": "Your 1-to-2 sentence diagnosis speaking directly to me, followed by the highly logical 2-to-3 sentence Impact Mission scenario."
+                "scenario": "Your 1-to-2 sentence diagnosis speaking directly to me, followed by the highly logical 2-to-3 sentence Impact Mission scenario. (OR your firm rejection message if inputs were invalid)."
             }`;
 
             const response = await fetch(`${baseUrl}/chat/completions`, {
@@ -108,6 +110,9 @@ exports.handler = async function(event, context) {
         Does their strategy solve the current challenge ethically, logically, and demonstrate deep listening and translation capacity?
         - If YES: Approve them.
         - If NO/TOO SHORT: Do not approve. Ask a Socratic question to guide them.
+
+        CRITICAL 'LOW-EFFORT' GUARDRAIL:
+        If the user's strategy is a single letter, gibberish (e.g., "A", "asdf"), or completely lacks semantic meaning, DO NOT approve them. Firmly reject it and tell them: "This doesn't give us anything to work with. Please provide a genuine, thoughtful strategy."
 
         CRITICAL 'ANTI-RESUME' GUARDRAIL:
         Watch out for 'Grant-Speak', 'Resume-Speak', or treating this like a KPI optimization problem. If the researcher answers with dry, academic metrics rather than genuine community connection, CHALLENGE THEM. Ask: "If your current funding disappeared tomorrow, why would you still be the one to do this?" Demand human-centric impact.

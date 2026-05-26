@@ -325,6 +325,13 @@
         const errMessage = document.getElementById('ikigai-error');
 
         if (!iGood || !iLove || !iNeeds || !iPaid) {
+            errMessage.innerText = "Please fill out all 4 Ikigai sections before continuing.";
+            errMessage.style.display = 'block';
+            return;
+        }
+
+        if (iGood.length < 5 || iLove.length < 5 || iNeeds.length < 5 || iPaid.length < 5) {
+            errMessage.innerText = "Please provide real, detailed answers (at least a few words) for all 4 sections.";
             errMessage.style.display = 'block';
             return;
         }
@@ -400,6 +407,10 @@
     eSubmitBtn.addEventListener('click', async () => {
         const pitchText = ePitchInput.value.trim();
         if (!pitchText) return;
+        if (pitchText.length < 5) {
+            alert("Your strategy is too short. Please provide a genuine, thoughtful approach.");
+            return;
+        }
 
         eSubmitBtn.disabled = true;
         eSubmitBtn.innerText = "Evaluating Translation Blueprint...";
