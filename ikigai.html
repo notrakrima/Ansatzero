@@ -360,7 +360,15 @@
             if (!res.ok) throw new Error("Connection failed");
             const data = await res.json();
             
-            currentContextText = data.mentor_reply; 
+            if (data.mentor_reply.includes("These inputs don't give us anything") || data.mentor_reply.includes("refresh and try again")) {
+                errMessage.innerText = "AI MENTOR: " + data.mentor_reply;
+                errMessage.style.display = 'block';
+                synthBtn.disabled = false;
+                synthBtn.innerText = "Create My Ikigai Mission";
+                return; // Stops the function from hiding the lobby
+            }
+
+            currentContextText = data.mentor_reply;             
             currentChallengeText = "The proposed mission above maps a new trajectory for your research. Let's further explore this idea: look closely at this scenario. Setting aside your formal academic credentials and publication record, what underlying belief, unique perspective, or deep-seated frustration compels you to take ownership of this challenge?";
             
             chatHistory = [{ role: 'scenario', content: currentContextText }]; 
