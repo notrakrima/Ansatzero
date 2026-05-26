@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="ak4lF8yGJC_b3QU0Gm7VK7W2x1DvZq3Kp-WSqfQEinA" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humble Discovery AI | Institute for Strategic AI</title>
+    <meta name="description" content="Research translation tool using the Humble Discovery framework to maximize public benefit from academic discoveries.">
+    <meta name="theme-color" content="#050505">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+        
+        .grid-overlay {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        :root {
+            --bg-color: #050505;
+            --accent-indigo: #818cf8;
+            --bento-bg: rgba(255, 255, 255, 0.03);
+            --bento-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success-green: #34d399;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: inherit;
+        }
+
+        .incubator-wrapper {
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .lobby-container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            margin-top: 5vh;
+        }
+        
+        .ikigai-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .ikigai-grid { grid-template-columns: 1fr; }
+        }
+
+        .ikigai-box {
+            background: var(--bento-bg);
+            border: 1px solid var(--bento-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .ikigai-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--bento-border);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-top: 10px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .ikigai-input:focus {
+            outline: none;
+            border-color: var(--accent-indigo);
+            box-shadow: 0 0 10px rgba(129, 140, 248, 0.2);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 24px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .bento-box {
+            background: var(--bento-bg);
+            border: 1px solid var(--bento-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 800px) { .bento-grid { grid-template-columns: 1fr; } }
+
+        .status-text { text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; color: var(--accent-indigo); margin-bottom: 10px; display: block; font-weight: bold;}
+        .impact-metric { font-size: 2.5rem; font-family: monospace; color: var(--success-green); font-weight: bold; }
+        
+        .pitch-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--accent-indigo);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-top: 15px;
+            resize: vertical;
+            min-height: 120px;
+        }
+        .pitch-input:focus { outline: none; box-shadow: 0 0 10px rgba(129, 140, 248, 0.3); }
+
+        .submit-btn {
+            background: var(--accent-indigo);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+        .submit-btn:hover { background: #6366f1; transform: translateY(-2px); }
+        .submit-btn:disabled { background: #374151; cursor: not-allowed; transform: none; }
+
+        .ai-mentor-box { border-color: var(--accent-indigo); background: rgba(129, 140, 248, 0.05); }
+        .hidden { display: none !important; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        isai: { base: '#080808', heading: '#e2e8f0', body: '#cbd5e1', border: '#1f1f1f', accent: '#818cf8' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="grid-overlay">
+    <div class="incubator-wrapper">
+        
+        <!-- IKIGAI INTAKE LOBBY -->
+        <div id="lobby-screen" class="lobby-container">
+            <div style="text-align: left; margin-bottom: 2rem;">
+                <a href="index.html" class="submit-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); padding: 8px 16px; font-size: 0.9rem;">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    ISA Website
+                </a>
+            </div>
+            
+            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">Humble Discovery Engine</h1>
+            <p style="color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Bridge your research with real-world application. Complete your <em>Ikigai</em> profile below to generate a bespoke translation mission.
+            </p>
+
+            <div class="ikigai-grid">
+                <div class="ikigai-box">
+                    <span class="status-text" style="color: #34d399;">1. The Expertise</span>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What are you good at? (Not just skills—what do colleagues consistently come to you for?)</label>
+                    <textarea id="iki-goodAt" class="ikigai-input" placeholder="e.g., I'm the person everyone comes to when they need to untangle complex data ecosystems..." required></textarea>
+                </div>
+                
+                <div class="ikigai-box">
+                    <span class="status-text" style="color: #fbbf24;">2. The Passion</span>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What do you love doing? (Not what KPIs demand. What makes time disappear?)</label>
+                    <textarea id="iki-love" class="ikigai-input" placeholder="e.g., Identifying the overarching narrative hidden within hundreds of disparate experiments..." required></textarea>
+                </div>
+
+                <div class="ikigai-box">
+                    <span class="status-text" style="color: var(--accent-indigo);">3. The Problem</span>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What does the world need? (Gaps you see that others overlook or ignore)</label>
+                    <textarea id="iki-needs" class="ikigai-input" placeholder="e.g., Regional communities are entirely cut off from high-level scientific modelling that could save their crops..." required></textarea>
+                </div>
+
+                <div class="ikigai-box">
+                    <span class="status-text" style="color: #a855f7;">4. The Engine</span>
+                    <label style="font-size: 0.9rem; color: var(--text-muted);">What can you get paid for? (Grants, wages, what the market values)</label>
+                    <textarea id="iki-paid" class="ikigai-input" placeholder="e.g., ARC Linkage grants, specialized consulting for agricultural tech..." required></textarea>
+                </div>
+            </div>
+
+            <button id="synthesize-btn" class="submit-btn" style="width: 100%; max-width: 400px; font-size: 1.1rem; padding: 16px;">
+                Synthesize Translation Mission
+            </button>
+            <p id="ikigai-error" style="color: #ef4444; margin-top: 15px; display: none;">Please fill out all 4 Ikigai sections before continuing.</p>
+        </div>
+
+
+        <!-- RESEARCH TRANSLATION ENGINE -->
+        <div id="game-screen" class="bento-grid hidden">
+            <div class="main-column" style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <div class="bento-box">
+                    <span class="status-text" id="ui-stage-title">Loading Mission Parameters...</span>
+                    <p id="ui-context" style="color: var(--text-muted); margin-bottom: 20px;">Fusing Ikigai data...</p>
+                    <div style="border-left: 3px solid var(--accent-indigo); padding-left: 15px;">
+                        <strong style="color: white;">CURRENT FOCUS:</strong>
+                        <p id="ui-challenge" style="font-weight: 500;"></p>
+                    </div>
+                </div>
+
+                <div class="bento-box ai-mentor-box hidden" id="ui-response-box">
+                    <span class="status-text" style="color: white;">❯ TRANSLATION FACILITATOR</span>
+                    <p id="ui-mentor-reply" style="font-style: italic; line-height: 1.6;"></p>
+                    <button id="next-stage-btn" class="submit-btn hidden" style="background: var(--success-green); width: 100%; margin-top: 20px;">Proceed to Next Module ❯</button>
+                </div>
+
+                <div class="bento-box" id="ui-pitch-container">
+                    <span class="status-text">❯ YOUR STRATEGY</span>
+                    <textarea id="ui-pitch-input" class="pitch-input" placeholder="Outline your translation approach here..." maxlength="800"></textarea>
+                    <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 800</div>
+                    <button id="ui-submit-btn" class="submit-btn">Submit Strategy to Facilitator</button>
+                </div>
+                
+                <div class="bento-box hidden" id="ui-victory-box" style="text-align: center; border-color: var(--success-green);">
+                    <h2 style="color: var(--success-green); font-size: 2rem; margin-bottom: 10px;">TRANSLATION PLAN COMPLETE</h2>
+                    <p>You have successfully navigated the Humble Discovery framework and have a tangible plan for public benefit footprint.</p>
+                </div>
+            </div>
+
+            <div class="side-column">
+                <div class="bento-box" style="position: sticky; top: 20px;">
+                    <span class="status-text">Impact Reach</span>
+                    <div class="impact-metric" id="ui-capital">0</div>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Lives / Stakeholders impact capacity</p>
+                    <hr style="border-color: var(--bento-border); margin: 20px 0;">
+                    
+                    <span class="status-text">Project Phase</span>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        Module: <span id="ui-stage-tracker" style="color: white; font-weight: bold;">1/4</span><br>
+                        Phase: <span id="ui-phase-tracker" style="color: var(--accent-indigo);">MODULE 1: The 'You'</span>
+                    </p>
+
+                    <button id="ui-export-btn" class="submit-btn" style="width: 100%; background: transparent; border: 1px solid var(--accent-indigo); color: var(--accent-indigo); margin-top: 30px;">
+                        Download Impact Plan
+                    </button>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; line-height: 1.4; text-align: center;">
+                        *All synthesis is processed locally. Zero data is retained.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let currentStage = 0;
+    let totalImpact = 0;
+    let chatHistory = [];
+    let currentContextText = "";
+    let currentChallengeText = "How are you uniquely positioned to address this? Why should you be the steward of this impact?";
+
+    const levelTitles = [
+        "Module 1: Why 'You'", 
+        "Module 2: The 'Who' & Their 'Why'", 
+        "Module 3: The 'What' (Non-IP Solution)", 
+        "Module 4: The 'How' (Distribution)"
+    ];
+    
+    // UI Elements
+    const eLobby = document.getElementById('lobby-screen');
+    const eGame = document.getElementById('game-screen');
+    const eTitle = document.getElementById('ui-stage-title');
+    const eContext = document.getElementById('ui-context');
+    const eChallenge = document.getElementById('ui-challenge');
+    const eCapital = document.getElementById('ui-capital');
+    const eTracker = document.getElementById('ui-stage-tracker');
+    const ePhase = document.getElementById('ui-phase-tracker');
+    const ePitchInput = document.getElementById('ui-pitch-input');
+    const eCharCounter = document.getElementById('char-counter');
+    const eSubmitBtn = document.getElementById('ui-submit-btn');
+    const eResponseBox = document.getElementById('ui-response-box');
+    const eMentorReply = document.getElementById('ui-mentor-reply');
+    const eNextBtn = document.getElementById('next-stage-btn');
+    const ePitchContainer = document.getElementById('ui-pitch-container');
+    const eVictoryBox = document.getElementById('ui-victory-box');
+    const eExportBtn = document.getElementById('ui-export-btn');
+    const synthBtn = document.getElementById('synthesize-btn');
+
+    synthBtn.addEventListener('click', async () => {
+        const iGood = document.getElementById('iki-goodAt').value.trim();
+        const iLove = document.getElementById('iki-love').value.trim();
+        const iNeeds = document.getElementById('iki-needs').value.trim();
+        const iPaid = document.getElementById('iki-paid').value.trim();
+        const errMessage = document.getElementById('ikigai-error');
+
+        if (!iGood || !iLove || !iNeeds || !iPaid) {
+            errMessage.style.display = 'block';
+            return;
+        }
+
+        errMessage.style.display = 'none';
+        synthBtn.disabled = true;
+        synthBtn.innerText = "Synthesizing Mission...";
+
+        // Ready game state
+        currentStage = 0;
+        totalImpact = 0;
+        chatHistory = [];
+        eCapital.innerText = "0";
+
+        try {
+            const res = await fetch('/.netlify/functions/ikigai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    mode: 'generate_scenario',
+                    ikigai: { goodAt: iGood, love: iLove, worldNeeds: iNeeds, paidFor: iPaid }
+                })
+            });
+
+            if (!res.ok) throw new Error("Connection failed");
+            const data = await res.json();
+            
+            currentContextText = data.mentor_reply; 
+            currentChallengeText = "Why 'You'? As a researcher, how are you uniquely positioned to address this problem logically and experientially?";
+            
+            chatHistory = [{ role: 'scenario', content: currentContextText }]; 
+            
+            eLobby.classList.add('hidden');
+            eGame.classList.remove('hidden');
+            loadStage(); 
+
+        } catch (err) {
+            console.error(err);
+            synthBtn.disabled = false;
+            synthBtn.innerText = "Error. Try again";
+        }
+    });
+
+    ePitchInput.addEventListener('input', () => {
+        if (ePitchInput.value.length > 800) ePitchInput.value = ePitchInput.value.substring(0, 800);
+        let currentLength = ePitchInput.value.length;
+        eCharCounter.innerText = `${currentLength} / 800`;
+        eCharCounter.style.color = currentLength >= 800 ? "#ef4444" : "var(--text-muted)";
+    });
+
+    function loadStage() {
+        if (currentStage >= 4) {
+            ePitchContainer.classList.add('hidden');
+            eVictoryBox.classList.remove('hidden');
+            return;
+        }
+        eTitle.innerText = levelTitles[currentStage];
+        eContext.innerText = currentContextText;
+        eChallenge.innerText = currentChallengeText;
+        eTracker.innerText = `${currentStage + 1}/4`;
+        ePhase.innerText = levelTitles[currentStage];
+        
+        eResponseBox.classList.add('hidden');
+        eNextBtn.classList.add('hidden');
+        ePitchContainer.classList.remove('hidden');
+        eMentorReply.style.color = "var(--text-main)";
+        ePitchInput.value = "";
+        eCharCounter.innerText = "0 / 800";
+        eCharCounter.style.color = "var(--text-muted)";
+    }
+
+    eSubmitBtn.addEventListener('click', async () => {
+        const pitchText = ePitchInput.value.trim();
+        if (!pitchText) return;
+
+        eSubmitBtn.disabled = true;
+        eSubmitBtn.innerText = "Evaluating Translation Blueprint...";
+        eResponseBox.classList.add('hidden');
+
+        try {
+            const res = await fetch('/.netlify/functions/ikigai', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    stage_index: currentStage, 
+                    pitch: pitchText,
+                    current_context: currentContextText,
+                    current_challenge: currentChallengeText,
+                    history: chatHistory.filter(msg => msg.role !== 'scenario')
+                })
+            });
+
+            if (!res.ok) throw new Error("Connection failed");
+            const data = await res.json();
+
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.innerText = data.mentor_reply;
+
+            chatHistory.push({ role: "user", content: pitchText });
+            chatHistory.push({ role: "assistant", content: data.mentor_reply });
+
+            if (data.is_funded) {
+                ePitchInput.value = ""; 
+                eCharCounter.innerText = "0 / 800";
+
+                eMentorReply.style.color = "var(--success-green)";
+                eMentorReply.innerHTML = `<strong>[ MODULE APPROVED ]</strong><br><br>` + eMentorReply.innerHTML;
+                totalImpact = data.impact_points;
+                eCapital.innerText = totalImpact.toLocaleString();
+                
+                if (currentStage < 3) {
+                    currentContextText = data.next_context;
+                    currentChallengeText = data.next_challenge;
+                    chatHistory.push({ role: 'scenario', content: currentContextText });
+                }
+                
+                ePitchContainer.classList.add('hidden');
+                eNextBtn.classList.remove('hidden');
+            } else {
+                eMentorReply.style.color = "var(--accent-indigo)";
+            }
+
+        } catch (err) {
+            eResponseBox.classList.remove('hidden');
+            eMentorReply.innerText = "SYSTEM ERROR: Failed to connect to Translation Facilitator.";
+            eMentorReply.style.color = "#ef4444";
+        }
+
+        eSubmitBtn.disabled = false;
+        eSubmitBtn.innerText = "Submit Strategy to Facilitator";
+    });
+
+    eNextBtn.addEventListener('click', () => {
+        currentStage++;
+        loadStage();
+    });
+
+    eExportBtn.addEventListener('click', () => {
+        if (chatHistory.filter(msg => msg.role !== 'scenario').length === 0) return;
+        
+        let exportText = "============================================================\n";
+        exportText += "   INSTITUTE FOR STRATEGIC AI | TRANSLATION PROTOCOL\n";
+        exportText += "   HUMBLE DISCOVERY RESEARCH PLAN\n";
+        exportText += "============================================================\n\n";
+        exportText += `COMPLETED MODULES: ${currentStage + 1} / 4\n`;
+        exportText += `ESTIMATED IMPACT REACH: ${totalImpact.toLocaleString()} Stakeholders\n\n`;
+        exportText += "------------------------------------------------------------\n\n";
+
+        chatHistory.forEach(msg => {
+            if (msg.role === 'scenario') {
+                exportText += `[ SCENARIO METRICS ]\n${msg.content}\n\n`;
+            } else if (msg.role === 'user') {
+                exportText += `[ RESEARCHER PROPOSAL ]\n${msg.content}\n\n`;
+            } else if (msg.role === 'assistant') {
+                let cleanedText = msg.content.replace(/<br\s*[\/]?>/gi, '\n').replace(/<[^>]+>/g, '');
+                exportText += `[ FACILITATOR FEEDBACK ]\n${cleanedText}\n`;
+                exportText += "------------------------------------------------------------\n\n";
+            }
+        });
+
+        // Add the Coaching Debrief at the end
+        exportText += "[ COACHING DEBRIEF - FOR YOUR NEXT STEPS ]\n";
+        exportText += "Reflect on these questions before starting the commercialisation/translation process:\n\n";
+        exportText += "1. Look at the Ikigai quadrant that was hardest to fill. What does this tell you about your current academic workload?\n";
+        exportText += "2. Where is the widest gap between your day-to-day role and this Impact Mission? Can you close it by changing what you do, or does it require changing who you partner with?\n";
+        exportText += "3. Which zone are you living in most of the time right now (Profession, Vocation, Passion, or Mission) and what needs to shift to reach your true Ikigai?\n";
+        exportText += "============================================================\n";
+
+        const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ISA_Translation_Plan.txt`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
+
+</script>
+</body>
+</html>
