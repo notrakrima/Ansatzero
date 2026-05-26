@@ -228,7 +228,7 @@
                     <span class="status-text">❯ YOUR STRATEGY</span>
                     <textarea id="ui-pitch-input" class="pitch-input" placeholder="Outline your translation approach here..." maxlength="800"></textarea>
                     <div id="char-counter" style="text-align: right; color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;">0 / 800</div>
-                    <button id="ui-submit-btn" class="submit-btn">Submit Strategy to Facilitator</button>
+                    <button id="ui-submit-btn" class="submit-btn">Submit Strategy</button>
                 </div>
                 
                 <div class="bento-box hidden" id="ui-victory-box" style="text-align: center; border-color: var(--success-green);">
@@ -429,12 +429,12 @@
 
         } catch (err) {
             eResponseBox.classList.remove('hidden');
-            eMentorReply.innerText = "SYSTEM ERROR: Failed to connect to Translation Facilitator.";
+            eMentorReply.innerText = "SYSTEM ERROR: Failed to connect to Server.";
             eMentorReply.style.color = "#ef4444";
         }
 
         eSubmitBtn.disabled = false;
-        eSubmitBtn.innerText = "Submit Strategy to Facilitator";
+        eSubmitBtn.innerText = "Submit Strategy";
     });
 
     eNextBtn.addEventListener('click', () => {
@@ -449,7 +449,7 @@
         exportText += "   INSTITUTE FOR STRATEGIC AI | TRANSLATION PROTOCOL\n";
         exportText += "   DISCOVERY WITH PURPOSE PLAN\n";
         exportText += "============================================================\n\n";
-        exportText += `COMPLETED MODULES: ${currentStage + 1} / 4\n`;
+        exportText += `COMPLETED MODULES: ${Math.min(currentStage + 1, 4)} / 4\n`;
         exportText += `ESTIMATED IMPACT REACH: ${totalImpact.toLocaleString()} Stakeholders\n\n`;
         exportText += "------------------------------------------------------------\n\n";
 
