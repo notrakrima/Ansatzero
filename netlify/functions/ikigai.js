@@ -26,24 +26,26 @@ exports.handler = async function(event, context) {
         if (mode === "generate_scenario") {
             const { goodAt, love, worldNeeds, paidFor } = ikigai;
             
-            const generatorPrompt = `You are a Research Translation Strategist and Executive Coach using the Humble Discovery methodology.
-            A university researcher has provided their 'Ikigai' profile:
-            1. What they are good at: "${goodAt}"
-            2. What they love: "${love}"
+            const generatorPrompt = `You are an elite Research Translation Strategist and Executive Coach using the Humble Discovery methodology.
+            I am a university researcher. Here is my 'Ikigai' profile:
+            1. What I am good at: "${goodAt}"
+            2. What I love doing: "${love}"
             3. What the world needs: "${worldNeeds}"
-            4. What sustains them financially (Grants/Wages etc): "${paidFor}"
+            4. What sustains me financially: "${paidFor}"
             
             YOUR TASKS:
-            1. Diagnose their alignment: Briefly observe the tension between their four answers. Identify which zone they are leaning toward (Passion: Love+Good, Mission: Love+Needs, Profession: Good+Paid, or Vocation: Needs+Paid).
-            2. Synthesize an Impact Mission: Formulate a real-world scenario where the researcher is standing at the precipice of translating their expertise into social, environmental, or community benefit.
+            1. Diagnose my alignment: Speak DIRECTLY to me using "you" and "your". (NEVER use "The researcher" or third person). Diagnose which zone I am leaning toward (Passion: Love+Good, Mission: Love+Needs, Profession: Good+Paid, Vocation: Needs+Paid) and brutally call out what I am missing or avoiding.
+            2. Synthesize an Impact Mission: Present a highly logical, scientifically grounded 2-to-3 sentence scenario where I translate my expertise into public benefit. 
             
-            - Keep it academic but highly applied.
-            - Do NOT mention "startup", "VCs", or "profit". Focus on "translation" and "impact".
+            CRITICAL RULES FOR SYNTHESIS:
+            - DO NOT lazily mash my keywords together. If my expertise (e.g., Quantum Mechanics) seems totally disconnected from the problem (e.g., Regional Needs), you MUST find a brilliant, non-obvious bridge, or explicitly point out how difficult this translation will be. It MUST make real-world, logical sense.
+            - NEVER start the scenario with "Imagine", "Consider", or "Picture this". State the reality directly.
+            - Do NOT mention "startup", "VCs", or "profit". Focus strictly on "translation" and "impact".
             
             OUTPUT FORMAT:
             You MUST return valid JSON in this exact structure:
             {
-                "scenario": "Your 1-to-2 sentence diagnosis of their Ikigai alignment, followed by the 2-to-3 sentence Impact Mission scenario."
+                "scenario": "Your 1-to-2 sentence diagnosis speaking directly to me, followed by the highly logical 2-to-3 sentence Impact Mission scenario."
             }`;
 
             const response = await fetch(`${baseUrl}/chat/completions`, {
