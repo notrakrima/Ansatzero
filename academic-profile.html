@@ -231,20 +231,23 @@
 
             <!-- Impact Factor Equivalent -->
             <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
-                <h3 class="text-lg font-medium text-isai-heading mb-2">Top Journals by Impact Factor</h3>
-                <p class="text-sm text-isai-body mb-6 border-l-2 border-isai-accent pl-3 italic">Automated extraction of OpenAlex's equivalent metric to Journal Impact Factor.</p>
+                <h3 class="text-lg font-medium text-isai-heading mb-2">Top Journals by Approximate Impact Factor</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
                         <thead>
                             <tr class="border-b border-isai-border">
-                                <th class="pb-2 text-isai-heading w-20">IF</th>
+                                <th class="pb-2 text-isai-heading w-20">IF*</th>
                                 <th class="pb-2 text-isai-heading w-48">Journal</th>
                                 <th class="pb-2 text-isai-heading pl-2">Paper Title</th>
                             </tr>
                         </thead>
                         <tbody id="res-if-papers"></tbody>
                     </table>
-                </div>
+        <div class="mt-20 mb-8 pt-6 border-t border-[#1f1f1f] w-full">
+            <p class="text-xs text-[#cbd5e1]/50 text-left font-mono leading-relaxed max-w-2xl mx-auto px-4">
+                *Approximate Impact Factor Equivalent from OpenAlex.
+            </p>
+        </div>
             </div>
 
         </div>
