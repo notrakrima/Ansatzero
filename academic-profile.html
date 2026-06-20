@@ -4,6 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academic Profile Engine</title>
+    
+    <meta name="description" content="A free, lightning-fast scientometric analytics engine. Generate comprehensive academic profiles, track citation velocity, and analyze top journal without a Google Scholar account.">
+    <meta name="keywords" content="scientometrics, academic profile generator, citation velocity, Google Scholar alternative, Analytics, h-index calculator, free academic tool">
+    <meta property="og:title" content="Academic Profile Engine | Institute for Strategic AI">
+    <meta property="og:description" content="Instantly generate comprehensive academic profiles and advanced scientometric analytics. Completely free, no account required.">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "ISA Academic Profile Engine",
+      "url": "https://www.theisa.ai/academic-profile.html",
+      "description": "A free, fast, and comprehensive scientometric analytics tool. Generate academic profiles instantly without a Google Scholar account.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "creator": {
+        "@type": "Organization",
+        "name": "Institute for Strategic AI (ISA)",
+        "url": "https://www.theisa.ai"
+      }
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -60,8 +88,18 @@
         <div id="search-pane" class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
             <h1 class="text-2xl text-isai-heading font-medium mb-4">Generate Academic Profile</h1>
             <div class="flex gap-4">
-                <input type="text" id="author-input" placeholder="Enter Author Name (e.g. Geoffrey Hinton)" class="flex-1 bg-black/50 border border-isai-border rounded-md px-4 py-2 focus:outline-none focus:border-isai-accent text-isai-heading transition-colors" onkeydown="if(event.key === 'Enter') startSearch()">
+                <input type="text" id="author-input" placeholder="Enter Author Name (e.g. Marie Curie)" class="flex-1 bg-black/50 border border-isai-border rounded-md px-4 py-2 focus:outline-none focus:border-isai-accent text-isai-heading transition-colors" onkeydown="if(event.key === 'Enter') startSearch()">
                 <button onclick="startSearch()" class="bg-isai-accent text-black px-6 py-2 rounded-md font-semibold hover:bg-white transition-colors">Search</button>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-isai-border">
+                <p class="text-sm text-isai-body mb-4 font-semibold uppercase tracking-wider">Why use the ISA Profile Engine?</p>
+                <ul class="text-xs text-isai-body space-y-2 grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                    <li class="flex items-start gap-2"><span class="text-isai-accent">✓</span> Completely free, instant scientometric analysis.</li>
+                    <li class="flex items-start gap-2"><span class="text-isai-accent">✓</span> Locate researchers without a Google Scholar account.</li>
+                    <li class="flex items-start gap-2"><span class="text-isai-accent">✓</span> Filter out the Google Scholar noise to see true high-impact publications.</li>
+                    <li class="flex items-start gap-2"><span class="text-isai-accent">✓</span> Track active "Citation Velocity" and impactful publications.</li>
+                </ul>
             </div>
         </div>
 
@@ -76,129 +114,6 @@
         </div>
 
         <div id="results-pane" class="hidden">
-            
-            <div class="space-y-8">
-                <!-- Standard Metrics -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl">
-                    <h2 id="res-name" class="text-3xl text-isai-heading font-bold mb-1"></h2>
-                    <p id="res-inst" class="text-isai-accent text-lg mb-6"></p>
-
-                    <div class="grid grid-cols-3 gap-4 mb-8">
-                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
-                            <div id="res-cites" class="text-3xl text-isai-heading font-bold"></div>
-                            <div class="text-xs uppercase tracking-widest mt-1">Citations</div>
-                        </div>
-                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
-                            <div id="res-h" class="text-3xl text-isai-heading font-bold"></div>
-                            <div class="text-xs uppercase tracking-widest mt-1">h-index</div>
-                        </div>
-                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
-                            <div id="res-i10" class="text-3xl text-isai-heading font-bold"></div>
-                            <div class="text-xs uppercase tracking-widest mt-1">i10-index</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Core Expertise</h3>
-                        <div id="res-concepts" class="flex flex-wrap gap-2"></div>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Key Collaborators</h3>
-                        <div id="res-collabs" class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1.5 text-xs text-isai-body"></div>
-                    </div>
-                </div>
-
-                <!-- H-Index Papers -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl">
-                    <h3 class="text-lg font-medium text-isai-heading mb-4">H-Index Papers</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="border-b border-isai-border">
-                                    <th class="pb-2 text-isai-heading w-20">Cites</th>
-                                    <th class="pb-2 text-isai-heading w-20">Year</th>
-                                    <th class="pb-2 text-isai-heading">Title</th>
-                                </tr>
-                            </thead>
-                            <tbody id="res-core-papers"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Close to H-Index -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl hidden" id="close-papers-container">
-                    <h3 class="text-lg font-medium text-isai-heading mb-4">Papers Approaching H-Index</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="border-b border-isai-border">
-                                    <th class="pb-2 text-isai-heading w-20">Cites</th>
-                                    <th class="pb-2 text-isai-heading w-20">Year</th>
-                                    <th class="pb-2 text-isai-heading">Title</th>
-                                </tr>
-                            </thead>
-                            <tbody id="res-close-papers"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ADVANCED ANALYTICS SECTION -->
-            <div class="mt-12 mb-6">
-                <h2 class="text-xl text-isai-heading font-medium flex items-center gap-2">
-                    <span class="w-2 h-2 bg-isai-accent rounded-full inline-block animate-pulse"></span>
-                    Advanced Analytics
-                </h2>
-            </div>
-
-            <div class="grid grid-cols-1 gap-8 mb-8">
-                <!-- Global Footprint & Diversity -->
-                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Interdisciplinary Diversity</h3>
-                        <p class="text-xs text-isai-body mb-3">Macro-level domain distribution:</p>
-                        <div id="res-diversity" class="space-y-3 pt-2"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Trending Velocity -->
-            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
-                <h3 class="text-lg font-medium text-isai-heading mb-2">Citation Velocity (Trending Now)</h3>
-                <p class="text-sm text-isai-body mb-6">Papers accumulating the highest citation velocity over the last 24 months.</p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead>
-                            <tr class="border-b border-isai-border">
-                                <th class="pb-2 text-isai-heading w-24">Recent Cites</th>
-                                <th class="pb-2 text-isai-heading w-16">Year</th>
-                                <th class="pb-2 text-isai-heading">Title</th>
-                            </tr>
-                        </thead>
-                        <tbody id="res-velocity-papers"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Impact Factor Equivalent -->
-            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
-                <h3 class="text-lg font-medium text-isai-heading mb-2">Top Journals by Impact Factor</h3>
-                <p class="text-sm text-isai-body mb-6 border-l-2 border-isai-accent pl-3 italic">Automated extraction of OpenAlex's equivalent metric to Journal Impact Factor.</p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead>
-                            <tr class="border-b border-isai-border">
-                                <th class="pb-2 text-isai-heading w-20">IF</th>
-                                <th class="pb-2 text-isai-heading w-48">Journal</th>
-                                <th class="pb-2 text-isai-heading pl-2">Paper Title</th>
-                            </tr>
-                        </thead>
-                        <tbody id="res-if-papers"></tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
     </main>
 
