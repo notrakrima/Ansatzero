@@ -114,6 +114,129 @@
         </div>
 
         <div id="results-pane" class="hidden">
+            
+            <div class="space-y-8">
+                <!-- Standard Metrics -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl">
+                    <h2 id="res-name" class="text-3xl text-isai-heading font-bold mb-1"></h2>
+                    <p id="res-inst" class="text-isai-accent text-lg mb-6"></p>
+
+                    <div class="grid grid-cols-3 gap-4 mb-8">
+                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
+                            <div id="res-cites" class="text-3xl text-isai-heading font-bold"></div>
+                            <div class="text-xs uppercase tracking-widest mt-1">Citations</div>
+                        </div>
+                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
+                            <div id="res-h" class="text-3xl text-isai-heading font-bold"></div>
+                            <div class="text-xs uppercase tracking-widest mt-1">h-index</div>
+                        </div>
+                        <div class="bg-black/40 border border-isai-border rounded-lg p-4 text-center">
+                            <div id="res-i10" class="text-3xl text-isai-heading font-bold"></div>
+                            <div class="text-xs uppercase tracking-widest mt-1">i10-index</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Core Expertise</h3>
+                        <div id="res-concepts" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Key Collaborators</h3>
+                        <div id="res-collabs" class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1.5 text-xs text-isai-body"></div>
+                    </div>
+                </div>
+
+                <!-- H-Index Papers -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl">
+                    <h3 class="text-lg font-medium text-isai-heading mb-4">H-Index Papers</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-isai-border">
+                                    <th class="pb-2 text-isai-heading w-20">Cites</th>
+                                    <th class="pb-2 text-isai-heading w-20">Year</th>
+                                    <th class="pb-2 text-isai-heading">Title</th>
+                                </tr>
+                            </thead>
+                            <tbody id="res-core-papers"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Close to H-Index -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl hidden" id="close-papers-container">
+                    <h3 class="text-lg font-medium text-isai-heading mb-4">Papers Approaching H-Index</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-isai-border">
+                                    <th class="pb-2 text-isai-heading w-20">Cites</th>
+                                    <th class="pb-2 text-isai-heading w-20">Year</th>
+                                    <th class="pb-2 text-isai-heading">Title</th>
+                                </tr>
+                            </thead>
+                            <tbody id="res-close-papers"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADVANCED ANALYTICS SECTION -->
+            <div class="mt-12 mb-6">
+                <h2 class="text-xl text-isai-heading font-medium flex items-center gap-2">
+                    <span class="w-2 h-2 bg-isai-accent rounded-full inline-block animate-pulse"></span>
+                    Advanced Analytics
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 mb-8">
+                <!-- Global Footprint & Diversity -->
+                <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm uppercase tracking-widest text-isai-heading mb-3 border-b border-isai-border pb-2">Interdisciplinary Diversity</h3>
+                        <p class="text-xs text-isai-body mb-3">Macro-level domain distribution:</p>
+                        <div id="res-diversity" class="space-y-3 pt-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trending Velocity -->
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
+                <h3 class="text-lg font-medium text-isai-heading mb-2">Citation Velocity (Trending Now)</h3>
+                <p class="text-sm text-isai-body mb-6">Papers accumulating the highest citation velocity over the last 24 months.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-isai-border">
+                                <th class="pb-2 text-isai-heading w-24">Recent Cites</th>
+                                <th class="pb-2 text-isai-heading w-16">Year</th>
+                                <th class="pb-2 text-isai-heading">Title</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-velocity-papers"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Impact Factor Equivalent -->
+            <div class="bg-isai-bento border border-isai-border rounded-xl p-8 backdrop-blur-md shadow-xl mb-8">
+                <h3 class="text-lg font-medium text-isai-heading mb-2">Top Journals by Impact Factor</h3>
+                <p class="text-sm text-isai-body mb-6 border-l-2 border-isai-accent pl-3 italic">Automated extraction of OpenAlex's equivalent metric to Journal Impact Factor.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-isai-border">
+                                <th class="pb-2 text-isai-heading w-20">IF</th>
+                                <th class="pb-2 text-isai-heading w-48">Journal</th>
+                                <th class="pb-2 text-isai-heading pl-2">Paper Title</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-if-papers"></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </main>
 
