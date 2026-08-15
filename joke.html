@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joke Master</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, #743cff 0%, transparent 35%),
+        radial-gradient(circle at 80% 80%, #ff4fcf 0%, transparent 35%),
+        linear-gradient(135deg, #16002f, #26005c);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* =========================================
+   GAME CONTAINER
+========================================= */
+
+.game {
+    width: min(850px, 94vw);
+    padding: 30px;
+    border-radius: 35px;
+
+    background: rgba(255,255,255,0.10);
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.45),
+        inset 0 1px 0 rgba(255,255,255,0.15);
+
+    backdrop-filter: blur(15px);
+
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    text-align: center;
+}
+
+.logo {
+    font-size: 64px;
+
+    animation:
+        floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-9px);
+    }
+
+}
+
+h1 {
+    margin: 0;
+
+    font-size:
+        clamp(42px, 8vw, 72px);
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffe66d,
+            #ff9df2
+        );
+
+    -webkit-background-clip: text;
+
+    color: transparent;
+}
+
+.subtitle {
+    margin-top: 8px;
+
+    font-size: 19px;
+
+    opacity: 0.8;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+    margin: 25px 0;
+}
+
+.stat {
+
+    min-width: 140px;
+
+    padding: 12px 20px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(0,0,0,0.25);
+
+    border:
+        1px solid rgba(255,255,255,0.1);
+}
+
+.stat-number {
+
+    font-size: 28px;
+
+    font-weight: bold;
+
+    color: #ffe66d;
+}
+
+.stat-label {
+
+    font-size: 13px;
+
+    opacity: 0.7;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   JOKE CARD
+========================================= */
+
+.joke-card {
+
+    position: relative;
+
+    margin-top: 25px;
+
+    padding: 45px 30px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.16),
+            rgba(255,255,255,0.06)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+
+    text-align: center;
+
+    min-height: 330px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.category {
+
+    display: inline-block;
+
+    margin: 0 auto 20px;
+
+    padding: 8px 16px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(255,230,109,0.15);
+
+    color: #ffe66d;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+}
+
+#joke {
+
+    font-size:
+        clamp(25px, 4vw, 39px);
+
+    line-height: 1.3;
+
+    font-weight: bold;
+
+    max-width: 700px;
+
+    margin: auto;
+}
+
+.question {
+
+    margin-top: 20px;
+
+    font-size: 17px;
+
+    opacity: 0.65;
+}
+
+/* =========================================
+   PUNCHLINE
+========================================= */
+
+#punchline {
+
+    margin-top: 25px;
+
+    font-size:
+        clamp(25px, 4vw, 39px);
+
+    line-height: 1.3;
+
+    font-weight: bold;
+
+    color: #ffe66d;
+
+    opacity: 0;
+
+    transform:
+        scale(0.5)
+        translateY(30px);
+
+    max-height: 0;
+
+    overflow: hidden;
+
+    transition:
+        opacity 0.45s ease,
+        transform 0.45s cubic-bezier(.2,1.6,.4,1),
+        max-height 0.45s ease;
+}
+
+#punchline.show {
+
+    opacity: 1;
+
+    transform:
+        scale(1)
+        translateY(0);
+
+    max-height: 220px;
+}
+
+.punchline-label {
+
+    display: block;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+
+    color: white;
+
+    opacity: 0.65;
+}
+
+/* =========================================
+   REVEAL BUTTON
+========================================= */
+
+.buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 25px;
+}
+
+button {
+
+    border: none;
+
+    border-radius: 18px;
+
+    padding: 19px 38px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff4fd8,
+            #8d4dff
+        );
+
+    box-shadow:
+        0 8px 0 #6326b8,
+        0 15px 30px rgba(0,0,0,0.25);
+
+    transition:
+        transform .12s,
+        box-shadow .12s;
+}
+
+button:hover {
+
+    transform:
+        translateY(-4px)
+        scale(1.03);
+}
+
+button:active {
+
+    transform:
+        translateY(3px);
+
+    box-shadow:
+        0 3px 0 #6326b8;
+}
+
+button:disabled {
+
+    opacity: .4;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message {
+
+    text-align: center;
+
+    min-height: 28px;
+
+    margin-top: 20px;
+
+    font-size: 17px;
+
+    color: #ffe66d;
+
+    font-weight: bold;
+}
+
+/* =========================================
+   PROGRESS
+========================================= */
+
+.progress-area {
+
+    margin-top: 25px;
+}
+
+.progress-text {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-size: 13px;
+
+    opacity: .7;
+
+    margin-bottom: 7px;
+}
+
+.progress {
+
+    height: 9px;
+
+    background:
+        rgba(255,255,255,0.12);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.progress-bar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffe66d,
+            #ff4fd8
+        );
+
+    border-radius: 20px;
+
+    transition:
+        width .4s ease;
+}
+
+/* =========================================
+   JOKE ARRIVAL
+========================================= */
+
+.joke-card.new-joke {
+
+    animation:
+        jokeArrival .55s ease;
+}
+
+@keyframes jokeArrival {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            scale(.92)
+            translateY(20px);
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+            scale(1)
+            translateY(0);
+    }
+}
+
+/* =========================================
+   FIREWORK PARTICLES
+========================================= */
+
+.firework {
+
+    position: fixed;
+
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 20;
+
+    box-shadow:
+        0 0 8px currentColor,
+        0 0 18px currentColor;
+
+    animation:
+        explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+
+    0% {
+
+        transform:
+            translate(0,0)
+            scale(1);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            translate(
+                var(--x),
+                var(--y)
+            )
+            scale(.1);
+
+        opacity: 0;
+    }
+}
+
+/* =========================================
+   FIREWORK FLASH
+========================================= */
+
+.flash {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(255,255,255,.25);
+
+    pointer-events: none;
+
+    z-index: 15;
+
+    animation:
+        flashEffect .25s ease-out forwards;
+}
+
+@keyframes flashEffect {
+
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* =========================================
+   FLYING EMOJIS
+========================================= */
+
+.flying-emoji {
+
+    position: fixed;
+
+    font-size: 42px;
+
+    pointer-events: none;
+
+    z-index: 25;
+
+    animation:
+        emojiFly 1.8s cubic-bezier(.2,.8,.3,1)
+        forwards;
+}
+
+@keyframes emojiFly {
+
+    0% {
+
+        transform:
+            translate(0,0)
+            rotate(0deg)
+            scale(.4);
+
+        opacity: 0;
+    }
+
+    15% {
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            translate(
+                var(--x),
+                var(--y)
+            )
+            rotate(
+                var(--rotation)
+            )
+            scale(1.2);
+
+        opacity: 0;
+    }
+}
+
+/* =========================================
+   BIG CENTER EMOJI
+========================================= */
+
+.big-emoji {
+
+    position: fixed;
+
+    left: 50%;
+
+    top: 50%;
+
+    transform:
+        translate(-50%,-50%)
+        scale(.2);
+
+    font-size: 110px;
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    animation:
+        bigEmoji .9s cubic-bezier(.2,1.7,.3,1)
+        forwards;
+}
+
+@keyframes bigEmoji {
+
+    0% {
+
+        transform:
+            translate(-50%,-50%)
+            scale(.2)
+            rotate(-20deg);
+
+        opacity: 0;
+    }
+
+    30% {
+
+        opacity: 1;
+    }
+
+    70% {
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.2)
+            rotate(10deg);
+
+        opacity: 1;
+    }
+
+    100% {
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.6)
+            rotate(-10deg);
+
+        opacity: 0;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .game {
+
+        padding: 20px;
+    }
+
+    .joke-card {
+
+        padding:
+            35px 18px;
+    }
+
+    button {
+
+        width: 100%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<div class="game">
+
+    <div class="header">
+
+        <div class="logo">
+            😂
+        </div>
+
+        <h1>
+            JOKE MASTER
+        </h1>
+
+        <div class="subtitle">
+            Can you guess the punchline?
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="jokesUsed">
+                0
+            </div>
+
+            <div class="stat-label">
+                Jokes Used
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="streak">
+                0
+            </div>
+
+            <div class="stat-label">
+                Streak
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="jokesLeft">
+                0
+            </div>
+
+            <div class="stat-label">
+                Jokes Left
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="joke-card"
+        id="jokeCard">
+
+        <div
+            class="category"
+            id="category">
+            READY
+        </div>
+
+
+        <div id="joke">
+            Loading joke...
+        </div>
+
+
+        <div
+            class="question"
+            id="question">
+            🤔 Think carefully...
+        </div>
+
+
+        <div id="punchline"></div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            id="revealButton">
+
+            💥 REVEAL PUNCHLINE
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="message"
+        id="message">
+
+        🤔 Can you guess it?
+
+    </div>
+
+
+    <div class="progress-area">
+
+        <div class="progress-text">
+
+            <span>
+                Joke round
+            </span>
+
+            <span id="progressText">
+                0%
+            </span>
+
+        </div>
+
+
+        <div class="progress">
+
+            <div
+                class="progress-bar"
+                id="progressBar">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   JOKE BANK
+========================================================= */
+
+const jokes = [
+
+    {
+        category: "Animals",
+        setup: "What do you call a bear with no teeth?",
+        punchline: "A gummy bear!"
+    },
+
+    {
+        category: "Animals",
+        setup: "Why don't fish play basketball?",
+        punchline: "They're afraid of the net!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a sleeping bull?",
+        punchline: "A bulldozer!"
+    },
+
+    {
+        category: "Animals",
+        setup: "Why did the cow cross the road?",
+        punchline: "To get to the udder side!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a fish wearing a bowtie?",
+        punchline: "Sofishticated!"
+    },
+
+    {
+        category: "Animals",
+        setup: "Why did the chicken join a band?",
+        punchline: "Because it had the drumsticks!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a dog magician?",
+        punchline: "A labracadabrador!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a cow with no legs?",
+        punchline: "Ground beef!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a cow with two legs?",
+        punchline: "Lean beef!"
+    },
+
+    {
+        category: "Animals",
+        setup: "Why are fish so smart?",
+        punchline: "Because they live in schools!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call an alligator in a vest?",
+        punchline: "An investigator!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a lazy kangaroo?",
+        punchline: "A pouch potato!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a cow that plays an instrument?",
+        punchline: "A moo-sician!"
+    },
+
+    {
+        category: "Animals",
+        setup: "What do you call a duck that gets all A's?",
+        punchline: "A wise quacker!"
+    },
+
+
+    {
+        category: "School",
+        setup: "Why was the math book sad?",
+        punchline: "Because it had too many problems!"
+    },
+
+    {
+        category: "School",
+        setup: "Why did the teacher wear sunglasses?",
+        punchline: "Because her students were so bright!"
+    },
+
+    {
+        category: "School",
+        setup: "Why did the pencil get promoted?",
+        punchline: "Because it was really sharp!"
+    },
+
+    {
+        category: "School",
+        setup: "Why did the student bring a ladder to school?",
+        punchline: "Because they wanted to go to high school!"
+    },
+
+    {
+        category: "School",
+        setup: "Why did the pencil go to school?",
+        punchline: "To get sharper!"
+    },
+
+    {
+        category: "School",
+        setup: "Why did the student eat his homework?",
+        punchline: "Because the teacher said it was a piece of cake!"
+    },
+
+
+    {
+        category: "Food",
+        setup: "What do you call cheese that isn't yours?",
+        punchline: "Nacho cheese!"
+    },
+
+    {
+        category: "Food",
+        setup: "Why did the banana go to the doctor?",
+        punchline: "Because it wasn't peeling well!"
+    },
+
+    {
+        category: "Food",
+        setup: "Why did the cookie go to the hospital?",
+        punchline: "Because it felt crummy!"
+    },
+
+    {
+        category: "Food",
+        setup: "What do you call a fake noodle?",
+        punchline: "An impasta!"
+    },
+
+    {
+        category: "Food",
+        setup: "Why did the tomato turn red?",
+        punchline: "Because it saw the salad dressing!"
+    },
+
+    {
+        category: "Food",
+        setup: "What did the baby corn say to the mama corn?",
+        punchline: "Where's popcorn?"
+    },
+
+    {
+        category: "Food",
+        setup: "Why did the orange stop rolling?",
+        punchline: "Because it ran out of juice!"
+    },
+
+    {
+        category: "Food",
+        setup: "What do you call a sad strawberry?",
+        punchline: "A blueberry!"
+    },
+
+    {
+        category: "Food",
+        setup: "Why did the tomato get kicked off the team?",
+        punchline: "It couldn't ketchup!"
+    },
+
+
+    {
+        category: "Technology",
+        setup: "Why did the computer go to the doctor?",
+        punchline: "Because it had a virus!"
+    },
+
+    {
+        category: "Technology",
+        setup: "Why was the computer cold?",
+        punchline: "It left its Windows open!"
+    },
+
+    {
+        category: "Technology",
+        setup: "What does a computer eat for a snack?",
+        punchline: "Microchips!"
+    },
+
+    {
+        category: "Technology",
+        setup: "Why did the computer get glasses?",
+        punchline: "Because it couldn't see the website!"
+    },
+
+    {
+        category: "Technology",
+        setup: "What do you call a computer that sings?",
+        punchline: "A Dell-a!"
+    },
+
+    {
+        category: "Technology",
+        setup: "Why did the phone wear glasses?",
+        punchline: "Because it lost its contacts!"
+    },
+
+    {
+        category: "Technology",
+        setup: "Why did the computer sit on the floor?",
+        punchline: "Because it wanted to access the desktop!"
+    },
+
+
+    {
+        category: "Classic",
+        setup: "Why did the bicycle fall over?",
+        punchline: "Because it was two-tired!"
+    },
+
+    {
+        category: "Classic",
+        setup: "Why was six afraid of seven?",
+        punchline: "Because seven ate nine!"
+    },
+
+    {
+        category: "Classic",
+        setup: "What did one wall say to the other wall?",
+        punchline: "I'll meet you at the corner!"
+    },
+
+    {
+        category: "Classic",
+        setup: "What did the zero say to the eight?",
+        punchline: "Nice belt!"
+    },
+
+    {
+        category: "Classic",
+        setup: "What do clouds wear under their shorts?",
+        punchline: "Thunderpants!"
+    },
+
+    {
+        category: "Classic",
+        setup: "What kind of tree fits in your hand?",
+        punchline: "A palm tree!"
+    },
+
+    {
+        category: "Classic",
+        setup: "What kind of music do balloons hate?",
+        punchline: "Pop music!"
+    },
+
+    {
+        category: "Classic",
+        setup: "Why did the stadium get hot after the game?",
+        punchline: "All the fans left!"
+    },
+
+
+    {
+        category: "Dad Joke",
+        setup: "Why don't skeletons fight each other?",
+        punchline: "They don't have the guts!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "What do you call a sleeping dinosaur?",
+        punchline: "A dino-snore!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "What do you call a pile of cats?",
+        punchline: "A meowtain!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "Why couldn't the pirate learn the alphabet?",
+        punchline: "Because he was always stuck at C!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "What did the ocean say to the beach?",
+        punchline: "Nothing. It just waved!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "Why don't scientists trust atoms?",
+        punchline: "Because they make up everything!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "Why was the broom late?",
+        punchline: "It overswept!"
+    },
+
+    {
+        category: "Dad Joke",
+        setup: "Why did the scarecrow win an award?",
+        punchline: "Because he was outstanding in his field!"
+    },
+
+
+    {
+        category: "Sports",
+        setup: "Why did the golfer bring two pairs of pants?",
+        punchline: "In case he got a hole in one!"
+    },
+
+    {
+        category: "Sports",
+        setup: "Why did the baseball player get arrested?",
+        punchline: "Because he stole a base!"
+    },
+
+    {
+        category: "Sports",
+        setup: "Why did the football player bring string to the game?",
+        punchline: "So he could tie the score!"
+    },
+
+    {
+        category: "Sports",
+        setup: "Why was the basketball court wet?",
+        punchline: "Because the players dribbled all over it!"
+    },
+
+
+    {
+        category: "Space",
+        setup: "Why don't aliens eat clowns?",
+        punchline: "Because they taste funny!"
+    },
+
+    {
+        category: "Space",
+        setup: "Why did the astronaut break up with the moon?",
+        punchline: "Because it needed space!"
+    },
+
+    {
+        category: "Space",
+        setup: "How do astronauts organize a party?",
+        punchline: "They planet!"
+    },
+
+    {
+        category: "Space",
+        setup: "What do you call a space magician?",
+        punchline: "A flying saucer-er!"
+    },
+
+
+    {
+        category: "Random",
+        setup: "Why did the clock get hungry?",
+        punchline: "It went back four seconds!"
+    },
+
+    {
+        category: "Random",
+        setup: "What do you call a boomerang that doesn't come back?",
+        punchline: "A stick!"
+    },
+
+    {
+        category: "Random",
+        setup: "What did the left eye say to the right eye?",
+        punchline: "Something smells between us!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the man put his money in the freezer?",
+        punchline: "He wanted cold hard cash!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the picture go to jail?",
+        punchline: "Because it was framed!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the music teacher need a ladder?",
+        punchline: "To reach the high notes!"
+    },
+
+    {
+        category: "Random",
+        setup: "What did one hat say to the other?",
+        punchline: "You stay here. I'll go on ahead!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the man put his shoes in the oven?",
+        punchline: "He wanted to have hot feet!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the barber win the race?",
+        punchline: "He knew all the shortcuts!"
+    },
+
+    {
+        category: "Random",
+        setup: "What do you call a dinosaur that crashes its car?",
+        punchline: "Tyrannosaurus Wrecks!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the man stare at the orange juice?",
+        punchline: "Because it said 'concentrate'!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the broom get promoted?",
+        punchline: "Because it swept the competition!"
+    },
+
+    {
+        category: "Random",
+        setup: "What do you call a dog that can do magic tricks?",
+        punchline: "A hocus-pocus!"
+    },
+
+    {
+        category: "Random",
+        setup: "What did the grape say when it got stepped on?",
+        punchline: "Nothing. It just let out a little wine!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the belt get arrested?",
+        punchline: "Because it held up a pair of pants!"
+    },
+
+    {
+        category: "Random",
+        setup: "What do you call a rabbit with fleas?",
+        punchline: "Bugs Bunny!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the soap fail its test?",
+        punchline: "It washed out!"
+    },
+
+    {
+        category: "Random",
+        setup: "Why did the computer sneeze?",
+        punchline: "It had a bad case of the viruses!"
+    }
+
+];
+
+
+/* =========================================================
+   GAME STATE
+========================================================= */
+
+let remainingJokes = [];
+
+let currentJoke = null;
+
+let jokesUsed = 0;
+
+let streak = 0;
+
+let revealLocked = false;
+
+let celebrationNumber = 0;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const jokeCard =
+    document.getElementById("jokeCard");
+
+const categoryElement =
+    document.getElementById("category");
+
+const jokeElement =
+    document.getElementById("joke");
+
+const questionElement =
+    document.getElementById("question");
+
+const punchlineElement =
+    document.getElementById("punchline");
+
+const revealButton =
+    document.getElementById("revealButton");
+
+const jokesUsedElement =
+    document.getElementById("jokesUsed");
+
+const streakElement =
+    document.getElementById("streak");
+
+const jokesLeftElement =
+    document.getElementById("jokesLeft");
+
+const messageElement =
+    document.getElementById("message");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const progressText =
+    document.getElementById("progressText");
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array) {
+
+    const result = [...array];
+
+    for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            result[i],
+            result[j]
+        ] =
+        [
+            result[j],
+            result[i]
+        ];
+    }
+
+    return result;
+}
+
+
+/* =========================================================
+   START / NEXT JOKE
+========================================================= */
+
+function nextJoke() {
+
+    /*
+       If we've used every joke,
+       shuffle the entire bank again.
+    */
+
+    if (remainingJokes.length === 0) {
+
+        remainingJokes =
+            shuffle(jokes);
+
+        jokesUsed = 0;
+
+        messageElement.textContent =
+            "🎉 You completed the joke round! New jokes incoming!";
+    }
+
+
+    currentJoke =
+        remainingJokes.pop();
+
+    jokesUsed++;
+
+    revealLocked = false;
+
+    /*
+       Reset punchline
+    */
+
+    punchlineElement.classList.remove("show");
+
+    punchlineElement.textContent = "";
+
+    /*
+       Update text
+    */
+
+    categoryElement.textContent =
+        currentJoke.category;
+
+    jokeElement.textContent =
+        currentJoke.setup;
+
+    questionElement.textContent =
+        "🤔 Think you know the punchline?";
+
+    /*
+       Enable reveal
+    */
+
+    revealButton.disabled = false;
+
+    /*
+       Animate card
+    */
+
+    jokeCard.classList.remove(
+        "new-joke"
+    );
+
+    void jokeCard.offsetWidth;
+
+    jokeCard.classList.add(
+        "new-joke"
+    );
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+function revealPunchline() {
+
+    if (
+        !currentJoke ||
+        revealLocked
+    ) {
+        return;
+    }
+
+    revealLocked = true;
+
+    revealButton.disabled = true;
+
+    /*
+       Show punchline
+    */
+
+    punchlineElement.innerHTML =
+        `
+        <span class="punchline-label">
+            🎤 THE PUNCHLINE
+        </span>
+        ${currentJoke.punchline}
+        `;
+
+    punchlineElement.classList.add(
+        "show"
+    );
+
+    questionElement.textContent =
+        "😂 DID YOU GUESS IT?";
+
+    /*
+       Increase streak
+    */
+
+    streak++;
+
+    updateStats();
+
+    /*
+       Message
+    */
+
+    if (streak >= 10) {
+
+        messageElement.textContent =
+            "🔥🔥🔥 LEGENDARY STREAK! 🔥🔥🔥";
+
+    } else if (streak >= 5) {
+
+        messageElement.textContent =
+            "🔥 You're absolutely on fire!";
+
+    } else {
+
+        messageElement.textContent =
+            "😂 HA! Got another one!";
+    }
+
+
+    /*
+       Start a RANDOM celebration
+    */
+
+    celebrationNumber++;
+
+    playRandomCelebration();
+
+
+    /*
+       Automatically move to next joke
+    */
+
+    setTimeout(
+        () => {
+
+            nextJoke();
+
+        },
+        6000
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE STATS
+========================================================= */
+
+function updateStats() {
+
+    jokesUsedElement.textContent =
+        jokesUsed;
+
+    streakElement.textContent =
+        streak;
+
+    jokesLeftElement.textContent =
+        remainingJokes.length;
+
+
+    const percentage =
+        Math.round(
+            (
+                jokesUsed /
+                jokes.length
+            ) * 100
+        );
+
+
+    progressBar.style.width =
+        percentage + "%";
+
+    progressText.textContent =
+        percentage + "%";
+}
+
+
+/* =========================================================
+   RANDOM CELEBRATION
+========================================================= */
+
+function playRandomCelebration() {
+
+    const celebrationTypes = [
+
+        celebrationClassic,
+
+        celebrationEmojiBurst,
+
+        celebrationMega,
+
+        celebrationSideFireworks,
+
+        celebrationDoubleFirework,
+
+        celebrationRainbow
+
+    ];
+
+
+    /*
+       Prevent the exact same celebration
+       twice in a row.
+    */
+
+    let choice;
+
+    do {
+
+        choice =
+            Math.floor(
+                Math.random() *
+                celebrationTypes.length
+            );
+
+    } while (
+        choice ===
+        playRandomCelebration.lastChoice
+    );
+
+
+    playRandomCelebration.lastChoice =
+        choice;
+
+
+    celebrationTypes[choice]();
+
+}
+
+
+/* =========================================================
+   FIREWORK
+========================================================= */
+
+function createFirework(
+    x,
+    y,
+    color,
+    particleCount = 28
+) {
+
+    for (
+        let i = 0;
+        i < particleCount;
+        i++
+    ) {
+
+        const particle =
+            document.createElement(
+                "div"
+            );
+
+        particle.className =
+            "firework";
+
+        particle.style.left =
+            x + "px";
+
+        particle.style.top =
+            y + "px";
+
+        particle.style.color =
+            color;
+
+        particle.style.background =
+            color;
+
+
+        const angle =
+            Math.random() *
+            Math.PI * 2;
+
+        const distance =
+            70 +
+            Math.random() * 180;
+
+
+        particle.style.setProperty(
+            "--x",
+            Math.cos(angle) *
+            distance +
+            "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            Math.sin(angle) *
+            distance +
+            "px"
+        );
+
+
+        document.body.appendChild(
+            particle
+        );
+
+
+        setTimeout(
+            () => particle.remove(),
+            1100
+        );
+    }
+
+}
+
+
+/* =========================================================
+   FLASH
+========================================================= */
+
+function screenFlash() {
+
+    const flash =
+        document.createElement(
+            "div"
+        );
+
+    flash.className =
+        "flash";
+
+    document.body.appendChild(
+        flash
+    );
+
+    setTimeout(
+        () => flash.remove(),
+        300
+    );
+
+}
+
+
+/* =========================================================
+   EMOJI BURST
+========================================================= */
+
+function emojiBurst(
+    emojis,
+    amount = 18
+) {
+
+    for (
+        let i = 0;
+        i < amount;
+        i++
+    ) {
+
+        const emoji =
+            document.createElement(
+                "div"
+            );
+
+        emoji.className =
+            "flying-emoji";
+
+        emoji.textContent =
+            emojis[
+                Math.floor(
+                    Math.random() *
+                    emojis.length
+                )
+            ];
+
+
+const corners = [
+    { left: 8, top: 10 },
+    { left: 92, top: 10 },
+    { left: 8, top: 85 },
+    { left: 92, top: 85 }
+];
+
+const corner =
+    corners[Math.floor(Math.random() * corners.length)];
+
+emoji.style.left =
+    (corner.left + (Math.random() * 8 - 4)) + "vw";
+
+emoji.style.top =
+    (corner.top + (Math.random() * 8 - 4)) + "vh";
+
+
+        emoji.style.setProperty(
+            "--x",
+            (
+                (Math.random() - .5) *
+                700
+            ) +
+            "px"
+        );
+
+
+        emoji.style.setProperty(
+            "--y",
+            (
+                -100 -
+                Math.random() * 500
+            ) +
+            "px"
+        );
+
+
+        emoji.style.setProperty(
+            "--rotation",
+            (
+                Math.random() * 720 -
+                360
+            ) +
+            "deg"
+        );
+
+
+        document.body.appendChild(
+            emoji
+        );
+
+
+        setTimeout(
+            () => emoji.remove(),
+            1900
+        );
+    }
+
+}
+
+
+/* =========================================================
+   BIG CENTER EMOJI
+========================================================= */
+
+function bigEmoji(emoji) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+    element.className =
+        "big-emoji";
+
+    element.textContent =
+        emoji;
+
+    document.body.appendChild(
+        element
+    );
+
+    setTimeout(
+        () => element.remove(),
+        1000
+    );
+
+}
+
+
+/* =========================================================
+   RELEVANT EMOJIS
+========================================================= */
+
+function getRelevantEmojis() {
+
+    const category =
+        currentJoke.category;
+
+
+    if (category === "Animals") {
+
+        return [
+            "😂",
+            "🐶",
+            "🐱",
+            "🐸",
+            "🐵",
+            "🐮",
+            "🐔",
+            "🦆"
+        ];
+    }
+
+
+    if (category === "Food") {
+
+        return [
+            "😂",
+            "🍕",
+            "🍔",
+            "🍌",
+            "🍎",
+            "🍪",
+            "🍓",
+            "🌮"
+        ];
+    }
+
+
+    if (category === "Technology") {
+
+        return [
+            "😂",
+            "💻",
+            "📱",
+            "⌨️",
+            "🖥️",
+            "🤖",
+            "⚡"
+        ];
+    }
+
+
+    if (category === "School") {
+
+        return [
+            "😂",
+            "📚",
+            "✏️",
+            "🎓",
+            "📝",
+            "🏫",
+            "🤓"
+        ];
+    }
+
+
+    if (category === "Sports") {
+
+        return [
+            "😂",
+            "🏀",
+            "⚽",
+            "🏆",
+            "🏈",
+            "🎾",
+            "🥇"
+        ];
+    }
+
+
+    if (category === "Space") {
+
+        return [
+            "😂",
+            "🚀",
+            "🌎",
+            "🌙",
+            "⭐",
+            "🪐",
+            "👽"
+        ];
+    }
+
+
+    if (category === "Dad Joke") {
+
+        return [
+            "😂",
+            "🤣",
+            "😎",
+            "👏",
+            "🎤",
+            "💥",
+            "🤦"
+        ];
+    }
+
+
+    return [
+        "😂",
+        "🤣",
+        "😆",
+        "🎉",
+        "✨",
+        "💥",
+        "👏"
+    ];
+
+}
+
+
+/* =========================================================
+   CELEBRATION 1
+   CLASSIC FIREWORK
+========================================================= */
+
+function celebrationClassic() {
+
+    screenFlash();
+
+    bigEmoji("😂");
+
+    const colors = [
+        "#ffe66d",
+        "#ff4fd8",
+        "#65f6ff",
+        "#8d6cff"
+    ];
+
+
+    setTimeout(
+        () => {
+
+            createFirework(
+                window.innerWidth / 2,
+                window.innerHeight / 2,
+                colors[
+                    Math.floor(
+                        Math.random() *
+                        colors.length
+                    )
+                ],
+                38
+            );
+
+        },
+        150
+    );
+
+
+    emojiBurst(
+        getRelevantEmojis(),
+        20
+    );
+
+}
+
+
+/* =========================================================
+   CELEBRATION 2
+   EMOJI EXPLOSION
+========================================================= */
+
+function celebrationEmojiBurst() {
+
+    bigEmoji(
+        getRelevantEmojis()[1]
+    );
+
+    emojiBurst(
+        getRelevantEmojis(),
+        32
+    );
+
+    setTimeout(
+        () => {
+
+            createFirework(
+                Math.random() *
+                window.innerWidth,
+
+                180 +
+                Math.random() * 250,
+
+                "#ffe66d",
+
+                25
+            );
+
+        },
+        400
+    );
+
+}
+
+
+/* =========================================================
+   CELEBRATION 3
+   MEGA
+========================================================= */
+
+function celebrationMega() {
+
+    screenFlash();
+
+    bigEmoji("🎉");
+
+    const colors = [
+        "#ff4fd8",
+        "#ffe66d",
+        "#65f6ff",
+        "#8d6cff",
+        "#ffffff"
+    ];
+
+
+    for (
+        let i = 0;
+        i < 5;
+        i++
+    ) {
+
+        setTimeout(
+            () => {
+
+                createFirework(
+
+                    100 +
+                    Math.random() *
+                    (
+                        window.innerWidth -
+                        200
+                    ),
+
+                    100 +
+                    Math.random() *
+                    400,
+
+                    colors[
+                        Math.floor(
+                            Math.random() *
+                            colors.length
+                        )
+                    ],
+
+                    30
+                );
+
+            },
+            i * 180
+        );
+    }
+
+
+    emojiBurst(
+        getRelevantEmojis(),
+        35
+    );
+
+}
+
+
+/* =========================================================
+   CELEBRATION 4
+   SIDE FIREWORKS
+========================================================= */
+
+function celebrationSideFireworks() {
+
+    bigEmoji("🤣");
+
+    createFirework(
+        100,
+        window.innerHeight * .45,
+        "#65f6ff",
+        35
+    );
+
+    createFirework(
+        window.innerWidth - 100,
+        window.innerHeight * .45,
+        "#ff4fd8",
+        35
+    );
+
+    emojiBurst(
+        getRelevantEmojis(),
+        24
+    );
+
+}
+
+
+/* =========================================================
+   CELEBRATION 5
+   DOUBLE FIREWORK
+========================================================= */
+
+function celebrationDoubleFirework() {
+
+    screenFlash();
+
+    bigEmoji("💥");
+
+    setTimeout(
+        () => {
+
+            createFirework(
+                window.innerWidth * .32,
+                window.innerHeight * .42,
+                "#ffe66d",
+                45
+            );
+
+        },
+        100
+    );
+
+
+    setTimeout(
+        () => {
+
+            createFirework(
+                window.innerWidth * .68,
+                window.innerHeight * .42,
+                "#ff4fd8",
+                45
+            );
+
+        },
+        350
+    );
+
+
+    emojiBurst(
+        getRelevantEmojis(),
+        25
+    );
+
+}
+
+
+/* =========================================================
+   CELEBRATION 6
+   RAINBOW FIREWORKS
+========================================================= */
+
+function celebrationRainbow() {
+
+    const colors = [
+        "#ff4f81",
+        "#ff9d4f",
+        "#ffe66d",
+        "#65ff8d",
+        "#65f6ff",
+        "#8d6cff",
+        "#ff4fd8"
+    ];
+
+
+    bigEmoji("🌈");
+
+
+    for (
+        let i = 0;
+        i < colors.length;
+        i++
+    ) {
+
+        setTimeout(
+            () => {
+
+                createFirework(
+
+                    80 +
+                    Math.random() *
+                    (
+                        window.innerWidth -
+                        160
+                    ),
+
+                    100 +
+                    Math.random() *
+                    400,
+
+                    colors[i],
+
+                    25
+                );
+
+            },
+            i * 120
+        );
+    }
+
+
+    emojiBurst(
+        getRelevantEmojis(),
+        28
+    );
+
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+revealButton.addEventListener(
+    "click",
+    revealPunchline
+);
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !revealLocked
+        ) {
+
+            revealPunchline();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START GAME
+========================================================= */
+
+remainingJokes =
+    shuffle(jokes);
+
+nextJoke();
+
+</script>
+
+</body>
+</html>
